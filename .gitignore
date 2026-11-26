@@ -1,0 +1,154 @@
+
+# ==================================================
+# VIDEO JOURNALING AWS - .gitignore
+# ==================================================
+
+# ------------------
+# Python
+# ------------------
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ------------------
+# Node.js / React / Vite
+# ------------------
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+.npm/
+*.tsbuildinfo
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Keep package.json and package-lock.json tracked.
+
+# ------------------
+# Environment variables and secrets
+# ------------------
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*credentials*.json
+*secret-value*.txt
+secrets.json
+secrets/
+
+# ------------------
+# AWS deployment generated files
+# ------------------
+infra/.resource-ids.env
+infra/.part2-resource-ids.env
+infra/part2-generated/
+infra/upload-signer.zip
+infra/*.zip
+
+infra/*-policy.json
+infra/*-cors.json
+infra/*-notifications.json
+infra/lambda-trust.json
+
+.aws-sam/
+cdk.out/
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Keep AWS Lambda Python source and deployment
+# shell scripts tracked.
+
+# ------------------
+# Local databases and runtime data
+# ------------------
+data/
+tmp/
+temp/
+.cache/
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+AGENTS.md
+dia.pdf
+
+# # ------------------
+# # Videos and audio recordings
+# # ------------------
+# *.mp4
+# *.mov
+# *.avi
+# *.mkv
+# *.webm
+# *.wav
+# *.mp3
+# *.m4a
+# *.flac
+
+# ------------------
+# Downloaded deployment archives
+# ------------------
+videoJournalingLocalHost.zip
+videojournal-*.zip
+videojournal-*/
+videojournal-part*/
+videojournal-elevenlabs*/
+
+# ------------------
+# IDE and OS
+# ------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+# Part 3 generated AWS resource/config files (add to root .gitignore)
+infra/.phase3-resource-ids.env
+infra/.phase3-cutover.env
+infra/phase3-generated/
+# Cognito / CloudFront non-secret deployment state and generated JSON
+infra/.auth-hosting.env
+infra/.cognito.env
+infra/.phase3-cutover.env
+infra/auth-generated/
+infra/phase3-generated/
+# Local Vite OAuth config (public values, but deployment-specific)
+apps/web/.env.local
+apps/web/.env.production
+infra/.auth-api.env
+
+# Generated v5 deployment backups, policies and temporary builds
+infra/phase5-generated/
+reverie-history-v5.zip
+
+# Issue #7 profile deploy output (env snapshots, backups)
+infra/profile-generated/
+
+# Memory Books deployment output (environment snapshots and Lambda packages)
+infra/memory-books-generated/
+infra/memory-renderer-generated/
