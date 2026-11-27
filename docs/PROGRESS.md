@@ -690,7 +690,7 @@ skills, two distinct successful unhinted days and a current interval of at least
 ```text
 npm run lint                                   -> no findings
 npm run typecheck                              -> exit 0
-npm test                                       -> 23 files, 204 tests passed
+npm test                                       -> 24 files, 207 tests passed
 .venv/bin/python -m unittest discover -s tests/python -> 23 tests passed
 npm run package                                -> packaged app with rebuilt dictionary
 ```
@@ -730,7 +730,7 @@ A fresh reviewer found one Critical and nine Important issues, all fixed with ta
 - Per-word detail, notes, history and server-side kana-normalized library search were added, plus an honest high-due-load suggestion.
 - Undo reversals no longer inflate `reviewsCompleted`.
 
-Final checks: lint clean, typecheck exit 0, TS **204/204**, Python **23/23**.
+Final checks: lint clean, typecheck exit 0, TS **207/207**, Python **23/23**.
 
 ### Known limitations
 
@@ -746,3 +746,26 @@ Final checks: lint clean, typecheck exit 0, TS **204/204**, Python **23/23**.
 Stop for the user to run the Windows GitHub Actions workflow and try the installed app. After that,
 plan M6 (goal editing UI, calendar, statistics and sustainable-workload charts) or M7 (kanji and
 grammar), per the user's instruction.
+
+---
+
+## CI fix after first Windows run
+
+The user ran the Windows workflow after M5. It failed at `npm test`, not at packaging:
+
+```text
+tests/integration/dictionarySearch.test.ts
+Error: spawnSync D:\a\kotoba\kotoba\.venv\bin\python ENOENT
+Test Files: 1 failure / 22 passes; 194 tests passed
+```
+
+Cause: the test that generates a fixture database with Python hard-coded the POSIX venv path
+`.venv/bin/python`. On Windows the venv uses `Scripts\python.exe`, and `actions/setup-python` already
+puts `python` on PATH.
+
+Fix: `tests/support/python.ts` resolves the interpreter from `KOTOBA_PYTHON`, else `python` on
+Windows, else the repo venv on POSIX. The fixture test uses it, and three unit tests pin the
+behaviour (Windows/POSIX/override). Actions were also bumped to the current Node-24-targeting
+majors (`checkout@v7`, `setup-node@v7`, `setup-python@v7`, `cache@v6`) to clear the Node-20
+deprecation warning. Local verification: lint clean, typecheck exit 0, **24 files / 207 tests** pass.
+Windows CI must be re-run by the user; this fix has not been verified on Windows.

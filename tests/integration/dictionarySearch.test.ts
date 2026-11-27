@@ -5,6 +5,7 @@ import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DictionaryService } from '../../src/main/services/dictionary';
 import { AppError } from '../../src/shared/errors';
+import { pythonCommand } from '../support/python';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 
@@ -19,7 +20,7 @@ build_dictionary.build_dictionary(
     Path(${JSON.stringify(path.join(ROOT, 'data/fixtures/dictionary_fixture.json'))}),
     Path(${JSON.stringify(output)}), manifest, fixture=True)
 `;
-  execFileSync(path.join(ROOT, '.venv/bin/python'), ['-c', script], { cwd: ROOT });
+  execFileSync(pythonCommand(ROOT), ['-c', script], { cwd: ROOT });
 }
 
 describe('dictionary service', () => {
