@@ -31,7 +31,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     entries: [
       { kind: 'ready', id: 'hiragana', label: 'Hiragana', path: '/hiragana' },
       { kind: 'ready', id: 'katakana', label: 'Katakana', path: '/katakana' },
-      { kind: 'planned', id: 'vocabulary', label: 'Vocabulary', milestone: 'M5' },
+      { kind: 'ready', id: 'vocabulary', label: 'Vocabulary', path: '/vocabulary' },
       { kind: 'planned', id: 'kanji', label: 'Kanji', milestone: 'M7' },
       { kind: 'planned', id: 'grammar', label: 'Grammar', milestone: 'M7' },
     ],
@@ -40,7 +40,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     id: 'practice',
     title: 'Practice',
     entries: [
-      { kind: 'planned', id: 'reviews', label: 'Reviews', milestone: 'M5' },
+      { kind: 'ready', id: 'reviews', label: 'Reviews', path: '/reviews' },
       { kind: 'planned', id: 'reading', label: 'Reading', milestone: 'M8' },
       { kind: 'planned', id: 'listening', label: 'Listening', milestone: 'M8' },
       { kind: 'planned', id: 'speaking', label: 'Speaking', milestone: 'M8' },
@@ -51,7 +51,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     id: 'tools',
     title: 'Tools',
     entries: [
-      { kind: 'planned', id: 'dictionary', label: 'Dictionary', milestone: 'M5' },
+      { kind: 'ready', id: 'dictionary', label: 'Dictionary', path: '/dictionary' },
       { kind: 'ready', id: 'settings', label: 'Settings', path: '/settings' },
     ],
   },

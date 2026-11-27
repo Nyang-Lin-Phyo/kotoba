@@ -1,0 +1,378 @@
+{
+  "fixture": true,
+  "note": "Synthetic original test data shaped like jmdict-simplified JSON. Never used in a production build.",
+  "entries": [
+    {
+      "id": "1000001",
+      "kanji": [
+        {
+          "common": true,
+          "text": "猫",
+          "tags": [
+            "news1",
+            "ichi1"
+          ]
+        }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "ねこ",
+          "tags": [
+            "news1",
+            "ichi1"
+          ],
+          "appliesToKanji": [
+            "猫"
+          ]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": [
+            "n"
+          ],
+          "appliesToKanji": [
+            "*"
+          ],
+          "appliesToKana": [
+            "*"
+          ],
+          "gloss": [
+            {
+              "lang": "eng",
+              "text": "cat"
+            }
+          ],
+          "misc": []
+        }
+      ]
+    },
+    {
+      "id": "2000001",
+      "kanji": [
+        {
+          "common": true,
+          "text": "食べる",
+          "tags": [
+            "news1",
+            "ichi1"
+          ]
+        }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "たべる",
+          "tags": [
+            "news1",
+            "ichi1"
+          ],
+          "appliesToKanji": [
+            "食べる"
+          ]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": [
+            "v1"
+          ],
+          "appliesToKanji": [
+            "*"
+          ],
+          "appliesToKana": [
+            "*"
+          ],
+          "gloss": [
+            {
+              "lang": "eng",
+              "text": "to eat"
+            }
+          ],
+          "misc": []
+        }
+      ]
+    },
+    {
+      "id": "3000001",
+      "kanji": [
+        {
+          "common": true,
+          "text": "橋",
+          "tags": [
+            "ichi1"
+          ]
+        }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "はし",
+          "tags": [
+            "ichi1"
+          ],
+          "appliesToKanji": [
+            "橋"
+          ]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": [
+            "n"
+          ],
+          "appliesToKanji": [
+            "*"
+          ],
+          "appliesToKana": [
+            "*"
+          ],
+          "gloss": [
+            {
+              "lang": "eng",
+              "text": "bridge"
+            }
+          ],
+          "misc": []
+        }
+      ]
+    },
+    {
+      "id": "3000002",
+      "kanji": [
+        {
+          "common": true,
+          "text": "箸",
+          "tags": [
+            "ichi1"
+          ]
+        }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "はし",
+          "tags": [
+            "ichi1"
+          ],
+          "appliesToKanji": [
+            "箸"
+          ]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": [
+            "n"
+          ],
+          "appliesToKanji": [
+            "*"
+          ],
+          "appliesToKana": [
+            "*"
+          ],
+          "gloss": [
+            {
+              "lang": "eng",
+              "text": "chopsticks"
+            }
+          ],
+          "misc": []
+        }
+      ]
+    },
+    {
+      "id": "4000001",
+      "kanji": [
+        {
+          "common": true,
+          "text": "明日",
+          "tags": [
+            "news1"
+          ]
+        }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "あした",
+          "tags": [
+            "news1"
+          ],
+          "appliesToKanji": [
+            "明日"
+          ]
+        },
+        {
+          "common": false,
+          "text": "あす",
+          "tags": [],
+          "appliesToKanji": [
+            "明日"
+          ]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": [
+            "n",
+            "adv"
+          ],
+          "appliesToKanji": [
+            "*"
+          ],
+          "appliesToKana": [
+            "あした"
+          ],
+          "gloss": [
+            {
+              "lang": "eng",
+              "text": "tomorrow"
+            }
+          ],
+          "misc": []
+        }
+      ]
+    },
+    {
+      "id": "5000001",
+      "kanji": [
+        {
+          "common": true,
+          "text": "馬鹿",
+          "tags": []
+        }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "ばか",
+          "tags": [],
+          "appliesToKanji": [
+            "馬鹿"
+          ]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": [
+            "n"
+          ],
+          "appliesToKanji": [
+            "*"
+          ],
+          "appliesToKana": [
+            "*"
+          ],
+          "misc": [
+            "sl",
+            "vulg"
+          ],
+          "gloss": [
+            {
+              "lang": "eng",
+              "text": "fool"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "literal": "猫",
+      "codepoints": [
+        {
+          "type": "ucs",
+          "value": "732b"
+        }
+      ],
+      "radicals": [
+        {
+          "type": "classical",
+          "value": 94
+        }
+      ],
+      "misc": {
+        "grade": 8,
+        "strokeCounts": [
+          11
+        ],
+        "frequency": 1200
+      },
+      "readingMeaning": {
+        "groups": [
+          {
+            "readings": [
+              {
+                "type": "ja_kun",
+                "value": "ねこ"
+              },
+              {
+                "type": "ja_on",
+                "value": "ビョウ"
+              }
+            ],
+            "meanings": [
+              {
+                "lang": "en",
+                "value": "cat"
+              }
+            ]
+          }
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "literal": "食",
+      "codepoints": [
+        {
+          "type": "ucs",
+          "value": "98df"
+        }
+      ],
+      "radicals": [
+        {
+          "type": "classical",
+          "value": 184
+        }
+      ],
+      "misc": {
+        "grade": 2,
+        "strokeCounts": [
+          9
+        ],
+        "frequency": 320
+      },
+      "readingMeaning": {
+        "groups": [
+          {
+            "readings": [
+              {
+                "type": "ja_kun",
+                "value": "た.べる"
+              },
+              {
+                "type": "ja_on",
+                "value": "ショク"
+              }
+            ],
+            "meanings": [
+              {
+                "lang": "en",
+                "value": "eat"
+              },
+              {
+                "lang": "en",
+                "value": "food"
+              }
+            ]
+          }
+        ],
+        "nanori": []
+      }
+    }
+  ]
+}

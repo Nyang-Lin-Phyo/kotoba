@@ -83,10 +83,10 @@ describe('migration 002', () => {
       },
     });
 
-    expect(LATEST_SCHEMA_VERSION).toBe(2);
-    expect(readSchemaVersion(db)).toBe(2);
+    expect(LATEST_SCHEMA_VERSION).toBeGreaterThanOrEqual(2);
+    expect(readSchemaVersion(db)).toBe(LATEST_SCHEMA_VERSION);
     expect(outcome.from).toBe(1);
-    expect(outcome.applied).toEqual([2]);
+    expect(outcome.applied).toContain(2);
     expect(backups).toBe(1);
     expect(snapshot(db)).toEqual(before);
   });
@@ -114,8 +114,8 @@ describe('migration 002', () => {
     const second = migrate(db, { nowMs: NOW + 1000 });
 
     expect(second.applied).toEqual([]);
-    expect(second.from).toBe(2);
-    expect(second.to).toBe(2);
+    expect(second.from).toBe(LATEST_SCHEMA_VERSION);
+    expect(second.to).toBe(LATEST_SCHEMA_VERSION);
   });
 
   it('refuses a database from a newer build', () => {

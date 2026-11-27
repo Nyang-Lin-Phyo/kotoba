@@ -30,7 +30,7 @@ export function DashboardPage() {
     );
   }
 
-  const { today, horizon, month, week, actual, kana, trackingNote } = state.data;
+  const { today, horizon, month, week, actual, kana, dueReviews, trackingNote } = state.data;
 
   const dayLabel = horizon.beforeStart
     ? `Starts ${formatDayKey(horizon.startDate, undefined, { month: 'long', day: 'numeric' })}`
@@ -109,13 +109,13 @@ export function DashboardPage() {
             {actual.newWords}
             <span className="stat-unit"> / {today.targetWords} words</span>
           </p>
-          <p className="muted">Words are counted once, at first introduction (M5).</p>
+          <p className="muted">Counted once when the first study/recall step is completed.</p>
         </article>
 
         <article className="card">
           <h2>Due reviews</h2>
-          <p className="stat">0</p>
-          <p className="muted">Spaced repetition starts with the review engine (M5).</p>
+          <p className="stat">{dueReviews}</p>
+          <p className="muted">Word review cards due now; kana due is listed separately below.</p>
         </article>
 
         <article className="card">
@@ -125,7 +125,7 @@ export function DashboardPage() {
             <span className="stat-unit"> verified</span>
           </p>
           <p className="muted" title="Struggling: last attempt failed, or two failures in seven days.">
-            {kana.learning} learning · {kana.struggling} struggling · {kana.due} due
+            {kana.learning} learning · {kana.struggling} struggling · {kana.due} kana due
           </p>
         </article>
       </div>
@@ -133,7 +133,12 @@ export function DashboardPage() {
       <article className="card card--wide">
         <h2>Next action</h2>
         <p>
-          {kana.due > 0 ? (
+          {dueReviews > 0 ? (
+            <>
+              <Link to="/reviews">Review {dueReviews} due word card{dueReviews === 1 ? '' : 's'}</Link>{' '}
+              before adding more new words.
+            </>
+          ) : kana.due > 0 ? (
             <>
               <Link to="/hiragana">Review {kana.due} kana character{kana.due === 1 ? '' : 's'}</Link> that
               are due.

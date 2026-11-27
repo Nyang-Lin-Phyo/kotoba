@@ -9,7 +9,9 @@
 | M2 | Native Windows packaging baseline | ✅ **REACHED** 2026-11-26 (verified by user on Windows) |
 | M3 | Persistent profile, onboarding, dates | ✅ **REACHED** 2026-11-26 |
 | M4 | Kana learning | 🔧 code complete — Windows build pending (moved to after M5 by user decision) |
-| M5 | Dictionary pipeline, vocabulary, FSRS | ⬜ not started |
+| M5a | Dictionary pipeline and search | 🔧 code complete — Windows build pending (moved to after M5 by user decision) |
+| M5b | Daily 15-word lesson and personal vocabulary | 🔧 code complete — Windows build pending |
+| M5c | FSRS reviews and verified-knowledge metrics | 🔧 code complete — Windows build pending |
 | M6 | Goals, calendar, statistics | ⬜ not started |
 | M7 | Kanji and grammar | ⬜ not started |
 | M8 | Reading, listening, speaking, immersion | ⬜ not started |
@@ -552,3 +554,195 @@ toggle that the quiz does not implement. They are recorded in the execution ledg
 M5 — dictionary pipeline, vocabulary and FSRS: pin and validate JMdict/KANJIDIC2, build the offline
 dictionary, then add the stable 15-word daily lesson, personal vocabulary and the FSRS review
 engine. The Windows installer will be built and verified by the user after M5.
+
+---
+
+## M5a — Offline dictionary pipeline and search
+
+Date: 2026-11-27
+Status: **code complete and verified on Linux**, dev and packaged. Not marked REACHED because the
+Windows build remains deferred to after M5. Data schema: derived dictionary v1; profile schema v2.
+
+### Source decision and licence
+
+The user asked that everything be free. Kaishi 1.5k was investigated and **rejected**: its GitHub
+repository has no `LICENSE` file (`"license": null`) and its README states the deck was built from
+Core2k/Core10k/Tango N4/N5 data, which `AGENTS.md` forbids copying. No Kaishi data or ordering was
+downloaded, bundled or derived.
+
+Approved sources are JMdict Simplified `3.6.2+20261123231529` (`jmdict-eng-common`) and KANJIDIC2
+from the same release (`kanjidic2-en`), both **CC BY-SA 4.0**. The derived `dictionary.db` is
+CC BY-SA 4.0; the app code is not. Attribution, source URLs and the full licence text are bundled
+in `resources/notices/` and shown in Settings → Sources. Beginner order comes from JMdict priority
+tags plus `data/curriculum/beginner_words.json`, which is original. `jlpt_tags` is empty by design.
+
+### What was built
+
+| Area | Files |
+|---|---|
+| Data contract | `data/manifest.json` (pinned versions, sizes, SHA-256, licences, attribution, update procedure), `data/curriculum/beginner_words.json` (40 original ranks), `data/fixtures/dictionary_fixture.json` (synthetic) |
+| Pipeline | `scripts/kotoba_data.py`, `download_datasets.py`, `build_dictionary.py`, `validate_dictionary.py` — stdlib only, `--help`, `--offline`, `--fixture`, retries/timeouts, checksum verification, path-traversal and size-safe extraction, `.partial` + atomic rename |
+| Generated DB | `resources/dictionaries/dictionary.db` (gitignored): entries/forms/readings/senses with restrictions, entry_kanji, kanji/readings, kana, source-derived frequencies, empty jlpt_tags, FTS5 tables |
+| Read layer | `src/main/dictionary/paths.ts`, `src/main/services/dictionary.ts` — read-only `node:sqlite`, bounded search, exact-match-first ranking, WanaKana normalization |
+| IPC/UI | 5 `dictionary.*` channels, ready `/dictionary` route with debounced search and entry/kanji detail, Settings → Sources screen, no external-link IPC |
+| Packaging/CI | Forge `extraResource` for `resources/dictionaries` and `resources/notices`; Windows workflow gains setup-python, hash-keyed cache, build and `--require-production` validation before packaging |
+| Docs | design and plan under `docs/superpowers/`, `THIRD_PARTY_LICENSES.md`, `README.md`, `docs/ARCHITECTURE.md`, this file |
+
+### Commands executed and actual results
+
+```text
+.venv/bin/python -m unittest discover -s tests/python   -> 20 tests passed
+npm run lint                                             -> no findings
+npm run typecheck                                        -> exit 0
+npm test                                                 -> 18 files, 172 tests passed
+.venv/bin/python scripts/download_datasets.py --offline   -> both assets verified by SHA-256
+.venv/bin/python scripts/build_dictionary.py              -> dictionary.db, 29,868,032 bytes
+.venv/bin/python scripts/validate_dictionary.py --require-production -> dictionary OK
+npm run package                                          -> dictionary.db + both notice files in resources/
+```
+
+Generated database contents:
+
+```text
+entries 22,662   forms 26,595   readings 27,630   senses 37,353
+kanji 10,384     kanji_readings 30,347            kana 217
+frequencies 22,662 (all corpus='jmdict-priority')  jlpt_tags 0
+curriculum ranks applied to 31 entries
+```
+
+### Live verification
+
+Dev window: the Dictionary nav entry is enabled; typing 猫 showed the exact 猫 entry first, then
+猫舌/猫背; selecting it showed readings, meanings and a 猫 kanji link which opened grade/strokes/readings.
+`neko` and `cat` both found 猫; an empty query returned `VALIDATION`; metadata reported release
+`3.6.2+20261123231529`, CC BY-SA 4.0, `fixture: false`, 22,662 entries. Sources showed attribution,
+zero external anchors and the bundled notice path.
+
+Dev with a deliberately missing dictionary (`KOTOBA_DICTIONARY_PATH`): the app still booted and
+dictionary calls returned `DATA_MISSING`.
+
+Packaged `file://` app: dictionary metadata/search worked from
+`<resources>/dictionaries/dictionary.db`; CSP had no `unsafe-inline` or `ws:`; `window.require` and
+`window.process` were undefined; `resources/notices/SOURCES.txt` and `CC-BY-SA-4.0.txt` were in the
+package. A temporarily swapped fixture-marked database made the packaged app exit with
+`dictionary validation failed ... fixture-marked`, and the real database was restored byte-for-byte.
+
+### Whole-branch review and fix pass
+
+A fresh reviewer checked the spec, plan, ledger and working tree. It confirmed the licensing,
+architecture and test coverage, then found four Important issues, all fixed with targeted tests:
+
+| Finding | Fix |
+|---|---|
+| `C:/...` archive members could escape the destination on Windows | Reject drive/UNC/absolute names and verify the resolved target stays inside the destination; new regression test |
+| A checksum failure left bad bytes in the final cache path, blocking recovery | Verify the `.partial` before `os.replace`; bad-then-good download regression test |
+| A manifest version bump could build from stale extracted JSON and mislabel the release | Extract into `data/raw/extracted/<release>/` and read only there; two-version regression test |
+| CI cache key ignored curriculum/fixture inputs | `hashFiles` now includes `data/curriculum/*.json` and `data/fixtures/*.json` |
+
+The validator also now checks release against the manifest, known readings and a live FTS5 query.
+Final checks: lint clean, typecheck exit 0, TS **172/172**, Python **20/20**. Deferred minors are
+recorded in the execution ledger.
+
+### Known limitations
+
+- **Windows CI was not run.** The workflow changes are written and text-inspected (PyYAML was not
+  installed, so no local YAML parse was performed); only the Linux packaged build was exercised.
+- M5b/M5c are not done: no 15-word daily lesson, personal vocabulary, FSRS or verified-knowledge
+  metrics yet. Search results are reference only.
+- No example sentences, audio or furigana alignment are bundled. Some JMdict senses have register
+  notes; M5b must filter unsuitable senses before using them as lesson material.
+- `frequencies` contains only source-derived priority values; no external frequency corpus is used.
+- The Sources screen shows URLs as plain text, not links, because Electron's navigation policy denies
+  new windows and there is no allowlisted external-link handler.
+
+### Next step
+
+M5b — stable 15-word daily lesson with first-introduction transactions, personal vocabulary list,
+familiarity flag and skill separation. M5c follows with FSRS, due queue and honest knowledge metrics.
+
+---
+
+## M5b/M5c — Daily vocabulary and FSRS reviews
+
+Date: 2026-11-27
+Status: **code complete and verified on Linux**, dev and packaged. Not marked REACHED because the
+Windows build remains deferred to after the whole M5 milestone. Profile schema version: **3**.
+
+### What was built
+
+| Area | Files |
+|---|---|
+| M5a extension | `scripts/build_dictionary.py` now persists JMdict `misc` register tags in `sense_tags`; `DictionaryEntry` exposes tags and form/reading/sense restrictions; dictionary rebuilt and revalidated |
+| Schema | `src/main/database/migrations/003_vocabulary.ts` — `user_vocabulary`, `daily_new_items`, `review_cards`, `review_logs`, `familiarity_diagnostics`; immutable, cascade-scoped by `profile_id` |
+| Rules | `src/shared/vocabularyRules.ts` — teaching choice (valid reading for the form, no slang-only sense), stable selection, queue ordering, two-skill verified recognition, struggling and accuracy |
+| M5b service | `src/main/services/learning.ts` — stable daily assignment, one-transaction introduction with snapshot + two cards + event, familiarity diagnostic, opt-in early review, personal library, real summary |
+| M5c service | `src/main/services/{fsrsScheduler,reviews}.ts` — pinned `ts-fsrs@6.0.1` (FSRS-7), main-owned scheduler, atomic ratings, stale-state CONFLICT, recorded undo, bounded due queue |
+| IPC/UI | `learning.*` and `reviews.*` channels; ready Vocabulary and Reviews routes; per-profile desired retention (0.80–0.95); dashboard/profile metrics |
+| Docs/deps | design and plan under `docs/superpowers/`, `THIRD_PARTY_LICENSES.md` (ts-fsrs MIT), README and architecture updated |
+
+A word maps to **two independent cards** (meaning and reading) but is counted once as introduced.
+First introduction requires a recall step in the UI, and a failed first recall still counts as an
+introduction — the word was genuinely introduced, not mastered. Verified recognition requires both
+skills, two distinct successful unhinted days and a current interval of at least seven days.
+
+### Commands and actual results
+
+```text
+npm run lint                                   -> no findings
+npm run typecheck                              -> exit 0
+npm test                                       -> 23 files, 204 tests passed
+.venv/bin/python -m unittest discover -s tests/python -> 23 tests passed
+npm run package                                -> packaged app with rebuilt dictionary
+```
+
+Generated dictionary after the register-tag extension: 30,281,728 bytes, 5,619 `sense_tags` rows,
+22,662 entries and 10,384 kanji, validated with `--require-production`.
+
+### Live verification
+
+The M3/M4 dev database (schema v2) upgraded to v3 with a pre-migration backup and unchanged profile,
+goals, plans and kana progress. In the dev window:
+
+```text
+nav             Dashboard, My Profile, Hiragana, Katakana, Vocabulary, Reviews, Dictionary, Settings
+lesson          stable across reload; 15 items after filtering unteachable entries
+introduction    one user_vocabulary row, two FSRS cards, one study event; a second call returned CONFLICT
+dashboard       newWords 1, dueReviews from word cards, reviewsCompleted from real logs
+queue           two due cards; rating Good moved reps 0 -> 1; undo restored reps 0 and appended a reversal
+metrics         struggling and accuracy now computed from review_logs, not hardcoded zeros
+review UI       prompt, reveal, Again/Hard/Good/Easy buttons, hint logging and undo rendered;
+                clicking Good reduced the queue from 2 to 1
+```
+
+A live issue was found and fixed: entries whose senses were only slang/vulgar were being hidden after
+assignment, leaving 13 of 15 words. Generation now filters unteachable entries before selecting the
+15, with a regression test; a fresh lesson then showed 15.
+
+### Whole-branch review and fix pass
+
+A fresh reviewer found one Critical and nine Important issues, all fixed with targeted tests:
+
+- The personal library returned raw repository rows, so the UI showed blank word columns; it now maps to display DTOs.
+- The beginner sense filter used invented tag names; it now uses the real JMdict codes (`sl`, `obs`, `vulg`, `derog`, `arch`).
+- Dashboard due count was hardcoded; it now renders real FSRS due cards and prioritises them in the next action.
+- Desired retention was inert; schedulers are now keyed by retention and both rating and new-card creation read the profile preference. Existing cards are never rescheduled.
+- CONFLICT now carries a refreshed card, Undo targets the last-rated card, and the familiarity flag is decided by an actual one-question diagnostic.
+- Per-word detail, notes, history and server-side kana-normalized library search were added, plus an honest high-due-load suggestion.
+- Undo reversals no longer inflate `reviewsCompleted`.
+
+Final checks: lint clean, typecheck exit 0, TS **204/204**, Python **23/23**.
+
+### Known limitations
+
+- Windows CI was not run; the user will do that after M5.
+- No sentence examples, audio or furigana alignment. All lesson content comes from the licensed
+  dictionary snapshot; register-tagged senses are skipped.
+- No optimizer/parameter training, no automatic rescheduling on retention change, no JLPT claims.
+- The reviews page has no cross-device sync or cloud anything; everything is local.
+- Kanji/grammar/reading/listening/speaking/immersion remain later milestones.
+
+### Next step
+
+Stop for the user to run the Windows GitHub Actions workflow and try the installed app. After that,
+plan M6 (goal editing UI, calendar, statistics and sustainable-workload charts) or M7 (kanji and
+grammar), per the user's instruction.

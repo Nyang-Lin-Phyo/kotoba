@@ -20,6 +20,8 @@ export type AppErrorPayload = {
   readonly message: string;
   /** Optional field name for form-level validation feedback. */
   readonly field?: string;
+  /** Structured data for recovery, e.g. the refreshed card after a CONFLICT. */
+  readonly data?: unknown;
 };
 
 export type Ok<T> = { readonly ok: true; readonly data: T };
@@ -41,12 +43,14 @@ export function err(code: ErrorCode, message: string, field?: string): Err {
 export class AppError extends Error {
   readonly code: ErrorCode;
   readonly field: string | undefined;
+  readonly data: unknown;
 
-  constructor(code: ErrorCode, message: string, field?: string) {
+  constructor(code: ErrorCode, message: string, field?: string, data?: unknown) {
     super(message);
     this.name = 'AppError';
     this.code = code;
     this.field = field;
+    this.data = data;
   }
 
   static validation(message: string, field?: string): AppError {
@@ -70,9 +74,12 @@ export class AppError extends Error {
   }
 
   toPayload(): AppErrorPayload {
-    return this.field === undefined
-      ? { code: this.code, message: this.message }
-      : { code: this.code, message: this.message, field: this.field };
+    return {
+      code: this.code,
+      message: this.message,
+      ...(this.field === undefined ? {} : { field: this.field }),
+      ...(this.data === undefined ? {} : { data: this.data }),
+    };
   }
 }
 

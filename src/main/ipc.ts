@@ -20,21 +20,42 @@ import { todayInZone } from '../shared/date';
 import {
   appSettingsInputSchema,
   backupRestoreSchema,
+  dictionaryIdSchema,
+  dictionarySearchSchema,
+  familiarSchema,
   goalInputSchema,
+  learningIdSchema,
+  itemOnlySchema,
+  notesSchema,
+  libraryQuerySchema,
   kanaAttemptInputSchema,
   kanaLessonInputSchema,
   noInputSchema,
+  ratingSchema,
+  reviewCardIdSchema,
+  undoReviewSchema,
   profileInputSchema,
   profileUpdateSchema,
   studyStartSchema,
   acknowledgeInterruptedSchema,
   type BackupRestoreInput,
+  type DictionaryIdInput,
+  type DictionarySearchInput,
+  type FamiliarInput,
+  type IntroductionInput,
+  type NotesInput,
   type KanaAttemptInput,
+  type LibraryQueryInput,
+  type RatingInput,
+  type ReviewCardIdInput,
+  type UndoReviewInput,
   type KanaLessonInput,
   type StudyStartInput,
   type AcknowledgeInterruptedInput,
 } from '../shared/schemas';
 import type { DatabaseManager } from './database/manager';
+import type { Db } from './database/connection';
+import { getActiveProfile } from './database/repositories/profiles';
 import type { ResolvedDataRoot } from './paths';
 import { isTrustedSender } from './security.mts';
 import { readAppSettings, writeAppSettings } from './services/appSettings';
@@ -47,6 +68,25 @@ import {
 import { createProfile, getProfileState, updateProfile } from './services/profile';
 import { getDashboard, previewPlan, setGoalVersion } from './services/planner';
 import type { TimerService } from './services/timer';
+import type { DictionaryService } from './services/dictionary';
+import type { CardFactory } from './services/learning';
+import { clearSchedulerCache } from './services/fsrsScheduler';
+import {
+  getCardDetail,
+  getReviewQueue,
+  submitRating,
+  undoLast,
+} from './services/reviews';
+import {
+  getDetail,
+  getLesson,
+  getLibrary,
+  getSummary,
+  introduceWord,
+  scheduleFamiliar,
+  setFamiliar,
+  setNotes,
+} from './services/learning';
 import {
   getKanaCatalog,
   getKanaLesson,
@@ -74,6 +114,8 @@ export type IpcDeps = {
   readonly dataRoot: ResolvedDataRoot;
   readonly now: () => number;
   readonly timer: TimerService;
+  readonly dictionary: DictionaryService;
+  readonly makeCardFactory: (retention?: number) => Promise<CardFactory>;
 };
 
 /**
@@ -93,6 +135,10 @@ type InputSchema<In> = {
         };
       };
 };
+
+function retentionFor(db: Db): number {
+  return getActiveProfile(db)?.preferences.desiredRetention ?? 0.9;
+}
 
 function registerHandler<In, Out>(config: {
   readonly channel: string;
@@ -178,7 +224,11 @@ export function registerIpcHandlers(deps: IpcDeps): void {
     channel: CHANNELS.profileUpdate,
     schema: profileUpdateSchema,
     allowedOrigins,
-    run: (input) => updateProfile(db(), input, deps.now()),
+    run: (input) => {
+      const updated = updateProfile(db(), input, deps.now());
+      if (input.preferences?.desiredRetention !== undefined) clearSchedulerCache();
+      return updated;
+    },
   });
 
   registerHandler<undefined, GoalVersion[]>({
@@ -322,5 +372,128 @@ export function registerIpcHandlers(deps: IpcDeps): void {
     schema: acknowledgeInterruptedSchema,
     allowedOrigins,
     run: (input) => deps.timer.acknowledgeInterrupted(input.sessionId),
+  });
+
+  registerHandler<DictionarySearchInput, ReturnType<DictionaryService['search']>>({
+    channel: CHANNELS.dictionarySearch,
+    schema: dictionarySearchSchema,
+    allowedOrigins,
+    run: (input) => deps.dictionary.search(input),
+  });
+
+  registerHandler<DictionaryIdInput, ReturnType<DictionaryService['getEntry']>>({
+    channel: CHANNELS.dictionaryGetEntry,
+    schema: dictionaryIdSchema,
+    allowedOrigins,
+    run: (input) => deps.dictionary.getEntry(input.id),
+  });
+
+  registerHandler<DictionaryIdInput, ReturnType<DictionaryService['getKanji']>>({
+    channel: CHANNELS.dictionaryGetKanji,
+    schema: dictionaryIdSchema,
+    allowedOrigins,
+    run: (input) => deps.dictionary.getKanji(input.id),
+  });
+
+  registerHandler<DictionaryIdInput, ReturnType<DictionaryService['getKana']>>({
+    channel: CHANNELS.dictionaryGetKana,
+    schema: dictionaryIdSchema,
+    allowedOrigins,
+    run: (input) => deps.dictionary.getKana(input.id),
+  });
+
+  registerHandler<undefined, ReturnType<DictionaryService['metadata']>>({
+    channel: CHANNELS.dictionaryMetadata,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => deps.dictionary.metadata(),
+  });
+
+  registerHandler<undefined, ReturnType<typeof getLesson>>({
+    channel: CHANNELS.learningGetLesson,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => getLesson(db(), deps.dictionary, deps.now()),
+  });
+
+  registerHandler<IntroductionInput, ReturnType<typeof introduceWord>>({
+    channel: CHANNELS.learningIntroduce,
+    schema: learningIdSchema,
+    allowedOrigins,
+    run: async (input) =>
+      introduceWord(
+        db(), deps.dictionary, input, input.eventId, deps.now(),
+        await deps.makeCardFactory(retentionFor(db())),
+      ),
+  });
+
+  registerHandler<FamiliarInput, ReturnType<typeof setFamiliar>>({
+    channel: CHANNELS.learningSetFamiliar,
+    schema: familiarSchema,
+    allowedOrigins,
+    run: (input) => setFamiliar(db(), deps.dictionary, input, deps.now()),
+  });
+
+  registerHandler<IntroductionInput, ReturnType<typeof scheduleFamiliar>>({
+    channel: CHANNELS.learningScheduleFamiliar,
+    schema: learningIdSchema,
+    allowedOrigins,
+    run: async (input) => scheduleFamiliar(db(), await deps.makeCardFactory(retentionFor(db())), input, deps.now()),
+  });
+
+  registerHandler<LibraryQueryInput, ReturnType<typeof getLibrary>>({
+    channel: CHANNELS.learningGetLibrary,
+    schema: libraryQuerySchema,
+    allowedOrigins,
+    run: (input) => getLibrary(db(), input),
+  });
+
+  registerHandler<undefined, ReturnType<typeof getLesson>['summary']>({
+    channel: CHANNELS.learningGetSummary,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => getSummary(db(), deps.now()),
+  });
+
+  registerHandler<{ readonly itemId: string }, ReturnType<typeof getDetail>>({
+    channel: CHANNELS.learningGetDetail,
+    schema: itemOnlySchema,
+    allowedOrigins,
+    run: (input) => getDetail(db(), input.itemId),
+  });
+
+  registerHandler<NotesInput, ReturnType<typeof setNotes>>({
+    channel: CHANNELS.learningSetNotes,
+    schema: notesSchema,
+    allowedOrigins,
+    run: (input) => setNotes(db(), input.itemId, input.notes),
+  });
+
+  registerHandler<undefined, ReturnType<typeof getReviewQueue>>({
+    channel: CHANNELS.reviewsGetQueue,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => getReviewQueue(db(), deps.now(), 20),
+  });
+
+  registerHandler<ReviewCardIdInput, ReturnType<typeof getCardDetail>>({
+    channel: CHANNELS.reviewsGetCard,
+    schema: reviewCardIdSchema,
+    allowedOrigins,
+    run: (input) => getCardDetail(db(), input.cardId),
+  });
+
+  registerHandler<RatingInput, ReturnType<typeof submitRating>>({
+    channel: CHANNELS.reviewsSubmitRating,
+    schema: ratingSchema,
+    allowedOrigins,
+    run: (input) => submitRating(db(), input, input.eventId, deps.now()),
+  });
+
+  registerHandler<UndoReviewInput, ReturnType<typeof undoLast>>({
+    channel: CHANNELS.reviewsUndoLast,
+    schema: undoReviewSchema,
+    allowedOrigins,
+    run: (input) => undoLast(db(), input, deps.now()),
   });
 }

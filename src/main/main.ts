@@ -1,11 +1,15 @@
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { app, BrowserWindow, dialog, powerMonitor, session } from 'electron';
 import started from 'electron-squirrel-startup';
 import { DatabaseManager } from './database/manager';
+import { resolveDictionaryPath } from './dictionary/paths';
 import { registerIpcHandlers } from './ipc';
 import { resolveDataRoot, type ResolvedDataRoot } from './paths';
 import { isTrustedSender, windowOptions } from './security.mts';
 import { createBackup } from './services/backup';
+import { DictionaryService } from './services/dictionary';
+import { createCardFactory } from './services/fsrsScheduler';
 import { TimerService } from './services/timer';
 
 // Windows installer/uninstaller shortcuts must quit immediately.
@@ -67,7 +71,7 @@ function bootstrap(): void {
     mainWindow.focus();
   });
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => {
       callback(false);
     });
@@ -84,6 +88,33 @@ function bootstrap(): void {
     }
 
     manager = opened.database;
+
+    const dictionaryPath = resolveDictionaryPath({
+      isPackaged: app.isPackaged,
+      appPath: app.getAppPath(),
+      resourcesPath: process.resourcesPath,
+    });
+    const dictionary = new DictionaryService(dictionaryPath);
+
+    // A packaged installer must never ship without real licensed data. In dev
+    // the app still opens so kana study works before the Python build runs.
+    if (app.isPackaged) {
+      try {
+        if (!existsSync(dictionaryPath)) {
+          throw new Error(`Dictionary database is missing: ${dictionaryPath}`);
+        }
+        const meta = dictionary.metadata();
+        if (meta.fixture) {
+          throw new Error('The packaged dictionary is fixture-marked, not licensed source data.');
+        }
+      } catch (cause) {
+        const message = cause instanceof Error ? cause.message : String(cause);
+        console.error('[kotoba] dictionary validation failed', cause);
+        dialog.showErrorBox('Kotoba dictionary unavailable', message);
+        app.quit();
+        return;
+      }
+    }
 
     timer = new TimerService(() => opened.database.get());
     // A session still marked running at boot was interrupted by a crash.
@@ -112,6 +143,8 @@ function bootstrap(): void {
       dataRoot: opened.resolved,
       now: () => Date.now(),
       timer,
+      dictionary,
+      makeCardFactory: createCardFactory,
     });
 
     createWindow();

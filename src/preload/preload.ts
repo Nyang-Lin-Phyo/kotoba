@@ -39,6 +39,22 @@ const api: KotobaApi = {
     reviewQueue: () => invoke(CHANNELS.kanaReviewQueue),
     summary: () => invoke(CHANNELS.kanaSummary),
   },
+  learning: {
+    getLesson: () => invoke(CHANNELS.learningGetLesson),
+    introduce: (input) => invoke(CHANNELS.learningIntroduce, input),
+    setFamiliar: (input) => invoke(CHANNELS.learningSetFamiliar, input),
+    scheduleFamiliar: (input) => invoke(CHANNELS.learningScheduleFamiliar, input),
+    getLibrary: (input) => invoke(CHANNELS.learningGetLibrary, input),
+    getSummary: () => invoke(CHANNELS.learningGetSummary),
+    getDetail: (input) => invoke(CHANNELS.learningGetDetail, input),
+    setNotes: (input) => invoke(CHANNELS.learningSetNotes, input),
+  },
+  reviews: {
+    getQueue: () => invoke(CHANNELS.reviewsGetQueue),
+    getCard: (input) => invoke(CHANNELS.reviewsGetCard, input),
+    submitRating: (input) => invoke(CHANNELS.reviewsSubmitRating, input),
+    undoLast: (input) => invoke(CHANNELS.reviewsUndoLast, input),
+  },
   study: {
     start: (input) => invoke(CHANNELS.studyStart, input),
     pause: () => invoke(CHANNELS.studyPause),
@@ -46,6 +62,13 @@ const api: KotobaApi = {
     stop: () => invoke(CHANNELS.studyStop),
     getStatus: () => invoke(CHANNELS.studyGetStatus),
     acknowledgeInterrupted: (input) => invoke(CHANNELS.studyAcknowledgeInterrupted, input),
+  },
+  dictionary: {
+    search: (input) => invoke(CHANNELS.dictionarySearch, input),
+    getEntry: (input) => invoke(CHANNELS.dictionaryGetEntry, input),
+    getKanji: (input) => invoke(CHANNELS.dictionaryGetKanji, input),
+    getKana: (input) => invoke(CHANNELS.dictionaryGetKana, input),
+    metadata: () => invoke(CHANNELS.dictionaryMetadata),
   },
 };
 

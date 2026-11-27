@@ -21,6 +21,35 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache dictionary assets and database
+        id: dictionary-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/raw
+            resources/dictionaries
+          key: ${{ runner.os }}-dictionary-${{ hashFiles('data/manifest.json', 'data/curriculum/*.json', 'data/fixtures/*.json', 'scripts/*.py') }}
+
+      - name: Build licensed dictionary
+        if: steps.dictionary-cache.outputs.cache-hit != 'true'
+        run: |
+          python scripts/download_datasets.py
+          python scripts/build_dictionary.py
+
+      - name: Validate licensed dictionary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if (-not (Test-Path 'resources/dictionaries/dictionary.db')) {
+            throw 'Generated dictionary database is missing; refusing to package.'
+          }
+          python scripts/validate_dictionary.py --require-production
+
       - name: Install dependencies
         run: npm ci
 

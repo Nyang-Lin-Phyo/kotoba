@@ -29,6 +29,7 @@ const DEFAULT_PREFERENCES: ProfilePreferences = {
   romaji: true,
   furigana: true,
   audio: 'off',
+  desiredRetention: 0.9,
 };
 
 function parseJson<T>(raw: string, fallback: T): T {

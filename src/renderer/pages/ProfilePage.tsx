@@ -13,6 +13,7 @@ export function ProfilePage() {
   const { profile, goals } = state;
   const horizonEnd = endDateExclusive(profile.startDate, profile.horizonMonths);
   const kana = useAsync(useCallback(() => window.kotoba.kana.summary(), []));
+  const words = useAsync(useCallback(() => window.kotoba.learning.getSummary(), []));
 
   return (
     <section className="page">
@@ -169,11 +170,51 @@ export function ProfilePage() {
       </article>
 
       <article className="card card--wide">
+        <h2>Vocabulary</h2>
+        {words.state.status === 'loading' && <p className="muted">Loading vocabulary metrics…</p>}
+        {words.state.status === 'error' && <p className="error">{words.state.error}</p>}
+        {words.state.status === 'ready' && (
+          <>
+            <dl className="details">
+              <div>
+                <dt>Introduced</dt>
+                <dd>{words.state.data.introduced} unique words</dd>
+              </div>
+              <div>
+                <dt>Familiar (self-report)</dt>
+                <dd>{words.state.data.familiar}</dd>
+              </div>
+              <div>
+                <dt>Verified recognition / learning / struggling</dt>
+                <dd>
+                  {words.state.data.verified} / {words.state.data.learning} /{' '}
+                  {words.state.data.struggling}
+                </dd>
+              </div>
+              <div>
+                <dt>Due word reviews</dt>
+                <dd>{words.state.data.due}</dd>
+              </div>
+              <div>
+                <dt>Unhinted typed accuracy</dt>
+                <dd>{(words.state.data.accuracy * 100).toFixed(1)}%</dd>
+              </div>
+            </dl>
+            <p className="muted">
+              Introduced means the first study/recall step was completed, even if that first attempt
+              failed. Familiar is only your own report. Verified recognition is defined in the
+              Reviews screen and requires both skills on two different days.
+            </p>
+          </>
+        )}
+      </article>
+
+      <article className="card card--wide">
         <h2>Progress</h2>
         <p className="muted">
-          Introduced words, verified vocabulary and review accuracy are zero because the dictionary
-          and review engine arrive in M5. Kana figures above and measured minutes on the dashboard
-          come from real stored records.
+          Word counts, review history and accuracy above come from stored records. Remaining zeros
+          refer only to modules that do not exist yet. No probability estimate is presented as
+          measured accuracy.
         </p>
       </article>
     </section>

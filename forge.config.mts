@@ -12,6 +12,9 @@ const config: ForgeConfig = {
     // Must match package.json "name": makers look for <name>.exe / <name> in the
     // packaged output, and productName alone produces "Kotoba" instead.
     executableName: 'kotoba',
+    // Generated dictionary.db is immutable runtime data, not JS. It is copied
+    // outside the ASAR so it can be opened read-only with node:sqlite.
+    extraResource: ['resources/dictionaries', 'resources/notices'],
   },
   rebuildConfig: {},
   makers: [

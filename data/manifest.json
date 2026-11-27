@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "release": "3.6.2+20261123231529",
+  "source": {
+    "name": "jmdict-simplified",
+    "url": "https://github.com/scriptin/jmdict-simplified",
+    "release_url": "https://github.com/scriptin/jmdict-simplified/releases/tag/3.6.2%2B20261123231529",
+    "licence": "CC-BY-SA-4.0",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "attribution": "Japanese word and kanji data from JMdict and KANJIDIC2, compiled by the Electronic Dictionary Research and Development Group (EDRDG), used under CC BY-SA 4.0. JSON conversion by scriptin/jmdict-simplified.",
+    "source_urls": [
+      "https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project",
+      "https://www.edrdg.org/wiki/index.php/KANJIDIC_Project",
+      "https://www.edrdg.org/edrdg/licence.html"
+    ]
+  },
+  "assets": [
+    {
+      "name": "jmdict-eng-common-3.6.2+20261123231529.json.tgz",
+      "purpose": "words",
+      "size_bytes": 1451508,
+      "sha256": "6d2fc77c0b586c22b419d3b83fec39d98e69cbe18f1646c2bdc4c93c153605ea",
+      "url": "https://github.com/scriptin/jmdict-simplified/releases/download/3.6.2%2B20261123231529/jmdict-eng-common-3.6.2%2B20261123231529.json.tgz"
+    },
+    {
+      "name": "kanjidic2-en-3.6.2+20261123231529.json.tgz",
+      "purpose": "kanji",
+      "size_bytes": 1253440,
+      "sha256": "0d3057a0e6cb80fe7df6b0d239e994cce2ea73cac8466711d9bcb04dac1180c7",
+      "url": "https://github.com/scriptin/jmdict-simplified/releases/download/3.6.2%2B20261123231529/kanjidic2-en-3.6.2%2B20261123231529.json.tgz"
+    }
+  ],
+  "derived_database": {
+    "path": "resources/dictionaries/dictionary.db",
+    "schema_version": 1,
+    "licence": "CC-BY-SA-4.0",
+    "note": "Derived from the sources above; distributed under the same CC BY-SA 4.0 licence. No copyright is claimed over the source data."
+  },
+  "beginner_list": "data/curriculum/beginner_words.json",
+  "fixture": {
+    "path": "data/fixtures/dictionary_fixture.json",
+    "mark": "fixture",
+    "note": "Synthetic original test data only. A database built from it is marked fixture and must never ship in a packaged build."
+  },
+  "update_procedure": "To update: choose a newer pinned release, record exact asset names/sizes/SHA-256 in this manifest, run scripts/download_datasets.py, scripts/build_dictionary.py and scripts/validate_dictionary.py --require-production, review THIRD_PARTY_LICENSES.md and the in-app Sources text, then rebuild and ship a new installer. Never use 'latest' at runtime or in CI."
+}

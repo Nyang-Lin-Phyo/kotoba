@@ -1,0 +1,18 @@
+Kotoba — dictionary data sources
+
+Japanese word data: JMdict (Electronic Dictionary Research and Development Group, EDRDG).
+Kanji data: KANJIDIC2 (EDRDG).
+JSON conversion: scriptin/jmdict-simplified release 3.6.2+20261123231529.
+
+Licence: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+The derived database resources/dictionaries/dictionary.db is distributed under the same licence.
+No copyright is claimed over the source data.
+
+Source and licence locations:
+https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project
+https://www.edrdg.org/wiki/index.php/KANJIDIC_Project
+https://www.edrdg.org/edrdg/licence.html
+https://github.com/scriptin/jmdict-simplified
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Update procedure: see data/manifest.json in the source repository.

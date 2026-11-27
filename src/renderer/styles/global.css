@@ -1006,3 +1006,95 @@ body {
 .timer-recovery {
   color: #d39c35;
 }
+
+/* ---------- dictionary ---------- */
+
+.dictionary-input {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.dictionary-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.dictionary-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.dictionary-result {
+  display: grid;
+  grid-template-columns: minmax(6ch, auto) minmax(8ch, auto) minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dictionary-result:hover {
+  background: var(--bg-hover);
+}
+
+.dictionary-result--selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.dictionary-word {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.dictionary-gloss {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dictionary-detail-title {
+  margin-top: 0;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.kanji-detail {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-left: 3px solid var(--accent);
+  background: var(--bg-hover);
+}
+
+.source-list {
+  padding-left: 1.2em;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- vocabulary ---------- */
+
+.vocab-word {
+  margin: 0 0 var(--space-1);
+  font-size: 42px;
+  font-weight: 500;
+}

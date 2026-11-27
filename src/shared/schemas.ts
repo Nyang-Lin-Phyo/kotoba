@@ -33,6 +33,7 @@ export const profilePreferencesSchema = z.object({
   romaji: z.boolean(),
   furigana: z.boolean(),
   audio: z.enum(AUDIO_PREFERENCES),
+  desiredRetention: z.number().min(0.8).max(0.95).optional(),
 });
 
 export const profileInputSchema = z.object({
@@ -118,5 +119,68 @@ export type AppSettingsInput = z.infer<typeof appSettingsInputSchema>;
 export type BackupRestoreInput = z.infer<typeof backupRestoreSchema>;
 export type KanaAttemptInput = z.infer<typeof kanaAttemptInputSchema>;
 export type KanaLessonInput = z.infer<typeof kanaLessonInputSchema>;
+export const dictionarySearchSchema = z.object({
+  query: z.string().min(1).max(80),
+  limit: z.number().int().min(1).max(100).default(20),
+  offset: z.number().int().min(0).max(10_000).default(0),
+});
+
+export const dictionaryIdSchema = z.object({
+  id: z.string().min(1).max(64),
+});
+
+export const itemOnlySchema = z.object({
+  itemId: z.string().min(1).max(64),
+});
+
+export const notesSchema = z.object({
+  itemId: z.string().min(1).max(64),
+  notes: z.string().max(4000),
+});
+
+export const ratingSchema = z.object({
+  cardId: z.string().min(1).max(64),
+  rating: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
+  expectedStateJson: z.string().min(1).max(20000),
+  responseMs: z.number().int().min(0).max(600000),
+  hintUsed: z.boolean(),
+  eventId: z.string().uuid(),
+});
+
+export const reviewCardIdSchema = z.object({
+  cardId: z.string().min(1).max(64),
+});
+
+export const undoReviewSchema = z.object({
+  cardId: z.string().min(1).max(64),
+  eventId: z.string().uuid(),
+});
+
+export const learningIdSchema = z.object({
+  itemId: z.string().min(1).max(64),
+  eventId: z.string().uuid(),
+});
+
+export const familiarSchema = z.object({
+  itemId: z.string().min(1).max(64),
+  familiar: z.boolean(),
+  diagnosticCorrect: z.boolean(),
+});
+
+export const libraryQuerySchema = z.object({
+  text: z.string().max(80).optional(),
+  offset: z.number().int().min(0).max(100_000),
+  limit: z.number().int().min(1).max(100),
+});
+
 export type StudyStartInput = z.infer<typeof studyStartSchema>;
 export type AcknowledgeInterruptedInput = z.infer<typeof acknowledgeInterruptedSchema>;
+export type DictionarySearchInput = z.infer<typeof dictionarySearchSchema>;
+export type DictionaryIdInput = z.infer<typeof dictionaryIdSchema>;
+export type IntroductionInput = z.infer<typeof learningIdSchema>;
+export type FamiliarInput = z.infer<typeof familiarSchema>;
+export type LibraryQueryInput = z.infer<typeof libraryQuerySchema>;
+export type RatingInput = z.infer<typeof ratingSchema>;
+export type NotesInput = z.infer<typeof notesSchema>;
+export type UndoReviewInput = z.infer<typeof undoReviewSchema>;
+export type ReviewCardIdInput = z.infer<typeof reviewCardIdSchema>;

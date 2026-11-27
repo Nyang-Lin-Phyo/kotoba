@@ -1,5 +1,11 @@
 import { useCallback, useState } from 'react';
+import {
+  DATA_ATTRIBUTION,
+  DATA_LICENCE_SUMMARY,
+  DATA_SOURCE_URLS,
+} from '../../shared/dataAttribution';
 import { THEME_CHOICES, type ThemeChoice } from '../../shared/enums';
+import { useProfile } from '../lib/profileContext';
 import { useAsync } from '../lib/useAsync';
 import { useTheme } from '../theme';
 
@@ -17,9 +23,11 @@ function formatSize(bytes: number): string {
 
 export function SettingsPage() {
   const { choice, setChoice } = useTheme();
+  const { state: profileState, reload: reloadProfile } = useProfile();
   const appInfo = useAsync(useCallback(() => window.kotoba.appInfo(), []));
   const dataRoot = useAsync(useCallback(() => window.kotoba.dataRoot(), []));
   const backups = useAsync(useCallback(() => window.kotoba.backup.list(), []));
+  const dictionary = useAsync(useCallback(() => window.kotoba.dictionary.metadata(), []));
 
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -189,6 +197,73 @@ export function SettingsPage() {
           Backups are consistent snapshots taken with SQLite&rsquo;s <span className="mono">VACUUM INTO</span>,
           not file copies. The newest 14 daily snapshots and a few safety snapshots are kept; a
           restore always snapshots the current database first.
+        </p>
+      </article>
+
+      <article className="card card--wide">
+        <h2>Review scheduling</h2>
+        <label className="field">
+          <span>Desired retention: {(profileState.profile.preferences.desiredRetention ?? 0.9).toFixed(2)}</span>
+          <input
+            type="range"
+            min={0.8}
+            max={0.95}
+            step={0.01}
+            value={profileState.profile.preferences.desiredRetention ?? 0.9}
+            onChange={(event) => {
+              const value = Number(event.target.value);
+              void window.kotoba.profiles
+                .update({ preferences: { ...profileState.profile.preferences, desiredRetention: value } })
+                .then(reloadProfile);
+            }}
+          />
+        </label>
+        <p className="muted">
+          Higher retention means more reviews. Changing this affects future scheduling only; existing
+          cards are never rescheduled or reset.
+        </p>
+      </article>
+
+      <article className="card card--wide" id="sources">
+        <h2>Sources</h2>
+        <p>{DATA_ATTRIBUTION}</p>
+        <p className="muted">{DATA_LICENCE_SUMMARY}</p>
+        <ul className="source-list">
+          {DATA_SOURCE_URLS.map((url) => (
+            <li key={url} className="mono">
+              {url}
+            </li>
+          ))}
+        </ul>
+        {dictionary.state.status === 'ready' && (
+          <dl className="details">
+            <div>
+              <dt>Data release</dt>
+              <dd>{dictionary.state.data.release}</dd>
+            </div>
+            <div>
+              <dt>Database licence</dt>
+              <dd>{dictionary.state.data.licence}</dd>
+            </div>
+            <div>
+              <dt>Entries / kanji</dt>
+              <dd>
+                {dictionary.state.data.entryCount.toLocaleString()} /{' '}
+                {dictionary.state.data.kanjiCount.toLocaleString()}
+              </dd>
+            </div>
+            <div>
+              <dt>Data kind</dt>
+              <dd>{dictionary.state.data.fixture ? 'Fixture (test data)' : 'Licensed source data'}</dd>
+            </div>
+          </dl>
+        )}
+        {dictionary.state.status === 'error' && (
+          <p className="muted">Dictionary metadata is unavailable: {dictionary.state.error}</p>
+        )}
+        <p className="muted">
+          Full attribution and the CC BY-SA 4.0 licence text are also bundled in the installer under
+          <span className="mono"> resources/notices/</span>.
         </p>
       </article>
 

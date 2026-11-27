@@ -50,6 +50,11 @@ import { hasKanaAttemptOnDay } from '../database/repositories/kana';
 import { deletePlan, findPlan, insertPlan, type StoredPlan } from '../database/repositories/plans';
 import { getActiveProfile } from '../database/repositories/profiles';
 import {
+  countIntroducedOnDay,
+  countReviewsOnDay,
+} from '../database/repositories/vocabulary';
+import { countDueCards } from '../database/repositories/reviewCards';
+import {
   hasSegmentOnDay,
   sumActiveSecondsByActivity,
   sumActiveSecondsForDay,
@@ -57,7 +62,7 @@ import {
 import { getKanaSummary } from './kana';
 
 const TRACKING_NOTE =
-  'Minutes come only from the main-process study timer, attributed to the profile timezone. Kana counts are measured from stored attempts. New words and reviews arrive in M5.';
+  'Minutes come only from the main-process study timer. Kana counts come from stored attempts; word and review counts come from stored vocabulary and review-log rows.';
 
 function relativeTo(dayKey: DateKey, todayKey: DateKey): PlanDay['relative'] {
   if (dayKey < todayKey) return 'past';
@@ -269,14 +274,14 @@ export function getDashboard(db: Db, nowMs: number): DashboardData {
     actual: {
       minutes: Math.floor(sumActiveSecondsForDay(db, profile.id, todayKey) / 60),
       minutesByActivity: sumActiveSecondsByActivity(db, profile.id, todayKey),
-      newWords: 0,
-      reviewsCompleted: 0,
+      newWords: countIntroducedOnDay(db, profile.id, todayKey),
+      reviewsCompleted: countReviewsOnDay(db, profile.id, todayKey),
     },
     kana: getKanaSummary(db, nowMs),
     horizon,
     month: monthProgress(goals, todayKey, start, end),
     week: weekProgress(todayKey, start, end),
-    dueReviews: 0,
+    dueReviews: countDueCards(db, profile.id, nowMs),
     activeGoal,
     goals,
     trackingNote: TRACKING_NOTE,

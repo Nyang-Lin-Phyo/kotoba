@@ -5,6 +5,9 @@ import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { OnboardingWizard } from './features/onboarding/OnboardingWizard';
 import { ProfileContext } from './lib/profileContext';
+import { DictionaryPage } from './features/dictionary/DictionaryPage';
+import { ReviewsPage } from './features/reviews/ReviewsPage';
+import { VocabularyPage } from './features/vocabulary/VocabularyPage';
 import { KanaPage } from './features/kana/KanaPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -93,6 +96,9 @@ export function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/hiragana" element={<KanaPage script="hiragana" />} />
                 <Route path="/katakana" element={<KanaPage script="katakana" />} />
+                <Route path="/dictionary" element={<DictionaryPage />} />
+                <Route path="/vocabulary" element={<VocabularyPage />} />
+                <Route path="/reviews" element={<ReviewsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

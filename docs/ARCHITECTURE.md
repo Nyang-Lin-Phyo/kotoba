@@ -1,7 +1,7 @@
 # Kotoba architecture
 
-Status: milestone **M4** (kana learning and study timer). Everything below describes what exists,
-not what is planned.
+Status: milestone **M5** (dictionary, vocabulary and FSRS reviews). Everything below describes what
+exists, not what is planned.
 
 ## Process model
 
@@ -16,6 +16,8 @@ main process (Node, privileged)                 renderer (sandboxed, no Node)
       sender-origin check (pure, tested)             - ThemeProvider applies the stored theme
   src/main/paths.ts                                src/renderer/features/onboarding/
     - data-root resolution (pure, tested)            - 5-step wizard with a live preview
+  src/main/dictionary/ + services/dictionary.ts    src/renderer/features/dictionary/
+    - read-only generated dictionary, search          - debounced search + entry detail
   src/main/database/                               src/renderer/pages/
     - connection, migrations, repositories           - dashboard / profile / settings
                                                       - features/kana (chart, quiz, queue)
@@ -205,6 +207,8 @@ the production policy ever gains `unsafe-inline`, `unsafe-eval` or a websocket s
 | WanaKana 5.3.1 | MIT, offline, handles Hepburn variants and IME kana without a hand-written synonym list |
 | Simple 7/14/30 kana intervals in M4 | Kana can ship before the FSRS runtime check; `scheduler_version` lets M5 migrate without losing attempts |
 | Main-owned timer with capped checkpoints | A renderer timer cannot survive suspend and cannot be authoritative |
+| `ts-fsrs@6.0.1` for word cards | Maintained, offline, Node ≥24 compatible; library defaults with retention 0.90, no custom algorithm |
+| Two cards per word | Skill separation: being audio-familiar must not imply readability |
 | `temporal-polyfill` 1.0.8 | `Temporal` exists in Electron but not in host Node, which runs the tests |
 | Zod 4.6.7 | One schema per channel, parsed in main before anything touches the database |
 | Multi-profile schema, single-profile UI | Adding profile switching later needs no migration; the UI still shows exactly one |
@@ -245,8 +249,36 @@ before onboarding (it returns an inactive state), because the app checks it on q
 Dashboard minutes are `floor(sum(session_segments.active_seconds for today) / 60)`. Nothing else
 contributes minutes, and kana attempts never fabricate time.
 
+## Dictionary (M5a)
+
+Python stdlib scripts in `scripts/` download two pinned, permitted assets (JMdict Simplified
+`jmdict-eng-common` and KANJIDIC2 `kanjidic2-en`, release `3.6.2+20261123231529`), verify SHA-256,
+and generate one immutable `resources/dictionaries/dictionary.db`. The build is atomic (`.partial`
+plus rename), idempotent, and refuses path traversal, oversized archive members and malformed
+required data. `--offline` uses a verified cache; `--fixture` uses committed synthetic data and
+marks the resulting database so a packaged build refuses it.
+
+The database has entries, forms, readings, senses and their restriction tables, entry_kanji links to
+individual characters, kanji and kanji_readings, the original kana catalogue, source-derived
+`frequencies` (one `jmdict-priority` corpus), an intentionally empty `jlpt_tags` table, and FTS5
+tables for English and Japanese text. Ids are source-prefixed and stable; no row offsets are used.
+
+`src/main/dictionary/paths.ts` resolves `<appPath>/resources/dictionaries/dictionary.db` in dev and
+`<resourcesPath>/dictionaries/dictionary.db` packaged (Forge flattens `extraResource`). A
+`KOTOBA_DICTIONARY_PATH` override is used by tests. `src/main/services/dictionary.ts` opens the file
+read-only, normalizes romaji/katakana with WanaKana, searches Japanese forms/readings and English
+FTS, ranks exact matches first, then curated rank, source priority, fewer senses, shorter form and
+stable id. Results are bounded (20 default, 100 maximum). Nothing is written back and no full
+dictionary is loaded into the renderer.
+
+Licensing is part of the architecture: EDRDG data is CC BY-SA 4.0, the derived database is marked
+CC BY-SA 4.0, notices and the full legalcode ship in `resources/notices/`, and the in-app Sources
+screen shows attribution. EDRDG's update obligation is met by the manifest's pinned versions and
+documented update procedure.
+
 ## Not in this milestone
 
-Dictionary, FSRS reviews, vocabulary, kanji, grammar, reading, listening, speaking, immersion,
-calendar, statistics, profile switching and goal editing UI. Sidebar entries for those carry their
-milestone tag and are not clickable. Vocabulary and review actuals are real zeros, not placeholders.
+FSRS reviews, vocabulary introduction, kanji quizzes, grammar, reading, listening, speaking,
+immersion, calendar, statistics, profile switching and goal editing UI. Sidebar entries for those
+carry their milestone tag and are not clickable. Vocabulary and review actuals are real zeros, not
+placeholders.

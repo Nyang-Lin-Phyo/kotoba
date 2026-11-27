@@ -14,7 +14,12 @@ import type { KanaStatus } from './kanaRules';
 import type {
   AppSettingsInput,
   BackupRestoreInput,
+  DictionaryIdInput,
+  DictionarySearchInput,
+  FamiliarInput,
   GoalInput,
+  IntroductionInput,
+  LibraryQueryInput,
   KanaAttemptInput,
   KanaLessonInput,
   ProfileInput,
@@ -30,7 +35,12 @@ export type { KanaStatus } from './kanaRules';
 export type {
   AppSettingsInput,
   BackupRestoreInput,
+  DictionaryIdInput,
+  DictionarySearchInput,
+  FamiliarInput,
   GoalInput,
+  IntroductionInput,
+  LibraryQueryInput,
   KanaAttemptInput,
   KanaLessonInput,
   ProfileInput,
@@ -64,6 +74,23 @@ export const CHANNELS = {
   studyStop: 'study:stop',
   studyGetStatus: 'study:get-status',
   studyAcknowledgeInterrupted: 'study:acknowledge-interrupted',
+  dictionarySearch: 'dictionary:search',
+  dictionaryGetEntry: 'dictionary:get-entry',
+  dictionaryGetKanji: 'dictionary:get-kanji',
+  dictionaryGetKana: 'dictionary:get-kana',
+  dictionaryMetadata: 'dictionary:metadata',
+  learningGetLesson: 'learning:get-lesson',
+  learningIntroduce: 'learning:introduce',
+  learningSetFamiliar: 'learning:set-familiar',
+  learningScheduleFamiliar: 'learning:schedule-familiar',
+  learningGetLibrary: 'learning:get-library',
+  learningGetSummary: 'learning:get-summary',
+  learningGetDetail: 'learning:get-detail',
+  learningSetNotes: 'learning:set-notes',
+  reviewsGetQueue: 'reviews:get-queue',
+  reviewsGetCard: 'reviews:get-card',
+  reviewsSubmitRating: 'reviews:submit-rating',
+  reviewsUndoLast: 'reviews:undo-last',
 } as const;
 
 export type AppInfo = {
@@ -87,6 +114,7 @@ export type ProfilePreferences = {
   readonly romaji: boolean;
   readonly furigana: boolean;
   readonly audio: AudioPreference;
+  readonly desiredRetention?: number;
 };
 
 export type Profile = {
@@ -276,6 +304,163 @@ export type AttemptResult = {
   readonly duplicate: boolean;
 };
 
+export type DictionaryResult = {
+  readonly id: string;
+  readonly canonicalForm: string;
+  readonly reading: string;
+  readonly english: string;
+  readonly priority: number;
+  readonly curriculumRank: number | null;
+};
+
+export type DictionaryEntry = {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly canonicalForm: string;
+  readonly forms: readonly { readonly text: string; readonly common: boolean }[];
+  readonly readings: readonly {
+    readonly text: string;
+    readonly common: boolean;
+    readonly appliesTo: readonly string[];
+  }[];
+  readonly senses: readonly {
+    readonly partOfSpeech: string;
+    readonly english: string;
+    readonly tags: readonly string[];
+    readonly appliesToForms: readonly string[];
+    readonly appliesToReadings: readonly string[];
+  }[];
+  readonly kanji: readonly string[];
+  readonly priority: number;
+  readonly curriculumRank: number | null;
+};
+
+export type DictionaryKanji = {
+  readonly literal: string;
+  readonly grade: number | null;
+  readonly strokes: number | null;
+  readonly frequency: number | null;
+  readonly meanings: string;
+  readonly readings: readonly { readonly type: string; readonly reading: string }[];
+};
+
+export type DictionaryKana = {
+  readonly character: string;
+  readonly reading: string;
+  readonly script: string;
+  readonly tier: string;
+};
+
+export type DictionaryMetadata = {
+  readonly release: string;
+  readonly licence: string;
+  readonly attribution: string;
+  readonly entryCount: number;
+  readonly kanjiCount: number;
+  readonly fixture: boolean;
+  readonly path: string;
+};
+
+export type LessonItem = {
+  readonly itemKey: string;
+  readonly form: string;
+  readonly reading: string;
+  readonly english: string;
+  readonly state: 'assigned' | 'introduced' | 'deferred' | 'familiar';
+};
+
+export type LearningSummary = {
+  readonly introduced: number;
+  readonly familiar: number;
+  readonly learning: number;
+  readonly struggling: number;
+  readonly verified: number;
+  readonly due: number;
+  readonly accuracy: number;
+};
+
+export type LessonResult = {
+  readonly dayKey: DateKey;
+  readonly items: readonly LessonItem[];
+  readonly summary: LearningSummary;
+};
+
+export type VocabularyLibraryItem = {
+  readonly itemKey: string;
+  readonly form: string;
+  readonly reading: string;
+  readonly english: string;
+  readonly introducedAt: string | null;
+  readonly familiar: boolean;
+};
+
+export type VocabularyLibraryResult = {
+  readonly items: readonly VocabularyLibraryItem[];
+  readonly total: number;
+};
+
+export type ReviewQueueItem = {
+  readonly cardId: string;
+  readonly itemKey: string;
+  readonly skill: 'meaning' | 'reading';
+  readonly form: string;
+  readonly reading: string;
+  readonly english: string;
+  readonly dueAt: string;
+  readonly lapses: number;
+};
+
+export type ReviewCardDetail = {
+  readonly cardId: string;
+  readonly itemKey: string;
+  readonly skill: 'meaning' | 'reading';
+  readonly stateJson: string;
+  readonly dueAt: string;
+  readonly reps: number;
+  readonly lapses: number;
+};
+
+export type VocabularyDetail = {
+  readonly itemKey: string;
+  readonly form: string;
+  readonly reading: string;
+  readonly english: string;
+  readonly senses: readonly string[];
+  readonly notes: string;
+  readonly introducedAt: string | null;
+  readonly familiar: boolean;
+  readonly skills: readonly {
+    readonly skill: 'meaning' | 'reading';
+    readonly dueAt: string | null;
+    readonly reps: number;
+    readonly lapses: number;
+    readonly state: string;
+  }[];
+  readonly history: readonly {
+    readonly reviewedAt: string;
+    readonly dayKey: string;
+    readonly rating: number;
+    readonly correct: boolean;
+    readonly hintUsed: boolean;
+  }[];
+};
+
+export type RatingInput = {
+  readonly cardId: string;
+  readonly rating: 1 | 2 | 3 | 4;
+  readonly expectedStateJson: string;
+  readonly responseMs: number;
+  readonly hintUsed: boolean;
+  readonly eventId: string;
+};
+
+export type RatingResult = {
+  readonly correct: boolean;
+  readonly dueAtMs: number;
+  readonly rating: number;
+  readonly duplicate: boolean;
+};
+
 export type TimerStatus = {
   readonly active: boolean;
   readonly sessionId: string | null;
@@ -334,5 +519,28 @@ export type KotobaApi = {
     stop(): Promise<Result<TimerStatus>>;
     getStatus(): Promise<Result<TimerStatus>>;
     acknowledgeInterrupted(input: AcknowledgeInterruptedInput): Promise<Result<TimerStatus>>;
+  };
+  dictionary: {
+    search(input: DictionarySearchInput): Promise<Result<readonly DictionaryResult[]>>;
+    getEntry(input: DictionaryIdInput): Promise<Result<DictionaryEntry | null>>;
+    getKanji(input: DictionaryIdInput): Promise<Result<DictionaryKanji | null>>;
+    getKana(input: DictionaryIdInput): Promise<Result<DictionaryKana | null>>;
+    metadata(): Promise<Result<DictionaryMetadata>>;
+  };
+  learning: {
+    getLesson(): Promise<Result<LessonResult>>;
+    introduce(input: IntroductionInput): Promise<Result<{ readonly introduced: boolean; readonly duplicate: boolean }>>;
+    setFamiliar(input: FamiliarInput): Promise<Result<LearningSummary>>;
+    scheduleFamiliar(input: IntroductionInput): Promise<Result<{ readonly scheduled: boolean }>>;
+    getLibrary(input: LibraryQueryInput): Promise<Result<VocabularyLibraryResult>>;
+    getSummary(): Promise<Result<LearningSummary>>;
+    getDetail(input: { readonly itemId: string }): Promise<Result<VocabularyDetail | null>>;
+    setNotes(input: { readonly itemId: string; readonly notes: string }): Promise<Result<{ readonly saved: boolean }>>;
+  };
+  reviews: {
+    getQueue(): Promise<Result<{ readonly items: readonly ReviewQueueItem[]; readonly remaining: number }>>;
+    getCard(input: { readonly cardId: string }): Promise<Result<ReviewCardDetail | null>>;
+    submitRating(input: RatingInput): Promise<Result<RatingResult>>;
+    undoLast(input: { readonly cardId: string; readonly eventId: string }): Promise<Result<{ readonly restored: boolean; readonly dueAtMs: number }>>;
   };
 };
