@@ -407,9 +407,10 @@ body {
 /* ---------- boot / first-run ---------- */
 
 .boot {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
   padding: var(--space-6);
   overflow-y: auto;
 }
@@ -439,10 +440,11 @@ body {
 
 .wizard {
   display: flex;
+  flex: 0 0 auto;
   flex-direction: column;
   gap: var(--space-5);
   width: min(780px, 100%);
-  margin: var(--space-6) 0;
+  margin: auto;
   padding: var(--space-6);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1097,4 +1099,134 @@ body {
   margin: 0 0 var(--space-1);
   font-size: 42px;
   font-weight: 500;
+}
+
+/* Onboarding preview must not push the footer off a short screen. */
+.wizard .table-wrap {
+  max-height: 38vh;
+  overflow-y: auto;
+}
+
+/* ---------- guided kana sessions ---------- */
+
+.tab-row {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab--active {
+  border-bottom-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.session-card {
+  max-width: 720px;
+}
+
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.session-character {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-jp);
+  font-size: 76px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.session-progress {
+  min-width: 160px;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.session-progress .progress {
+  margin-top: var(--space-2);
+}
+
+/* ---------- sound chart ---------- */
+
+.reference-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+
+.reference-group h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  gap: var(--space-2);
+}
+
+.reference-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.reference-character {
+  font-size: 34px;
+  line-height: 1.2;
+}
+
+.reference-romaji {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ---------- tutorial ---------- */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tutorial-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 20;
+}
+
+.tutorial-card {
+  width: min(480px, 100%);
+  margin: 0;
 }

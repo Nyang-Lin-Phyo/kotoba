@@ -140,7 +140,7 @@ export function DashboardPage() {
             </>
           ) : kana.due > 0 ? (
             <>
-              <Link to="/hiragana">Review {kana.due} kana character{kana.due === 1 ? '' : 's'}</Link> that
+              <Link to="/hiragana?view=review">Review {kana.due} kana character{kana.due === 1 ? '' : 's'}</Link> that
               are due.
             </>
           ) : (

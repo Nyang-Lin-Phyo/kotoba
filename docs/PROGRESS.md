@@ -690,7 +690,7 @@ skills, two distinct successful unhinted days and a current interval of at least
 ```text
 npm run lint                                   -> no findings
 npm run typecheck                              -> exit 0
-npm test                                       -> 24 files, 208 tests passed
+npm test                                       -> 26 files, 215 tests passed
 .venv/bin/python -m unittest discover -s tests/python -> 23 tests passed
 npm run package                                -> packaged app with rebuilt dictionary
 ```
@@ -787,3 +787,46 @@ Fix: `DictionaryService.close()` releases the handle, `#open()` also closes the 
 path, the fixture suite closes the service before cleanup and retries removal briefly, and a new test
 verifies the file can be reopened after `close()`. Local checks: lint clean, typecheck exit 0,
 **24 files / 208 tests** passing. Windows CI must be re-run by the user; not verified there yet.
+
+---
+
+## Kana learning experience (post-M5 polish)
+
+Date: 2026-11-27
+Status: complete and verified on Linux in dev and packaged builds. No Windows CI run for this change.
+
+### What changed
+
+- Onboarding now scrolls properly on short windows; the preview table has its own bounded scroll area and the Create profile footer is reachable.
+- Hiragana/Katakana pages gained three explicit tabs: **Learn**, **Sound chart**, **Review**.
+- Learn is a guided session: 5 characters from the current group plus 3 reinforcements, one typing prompt at a time, a progress counter, optional hint, an original hiragana-only example word after correct answers, and a **Practice complete** screen. It never claims mastery.
+- Sound chart is reference only: grouped cards with character, romaji and optional audio when a Japanese voice exists.
+- Review is a bounded queue of up to 10 due/missed characters with a finish screen listing what to revisit. Dashboard's kana review link opens that tab directly.
+- A first-visit three-step tutorial explains the modes and that hints do not count; it can be reopened from the page header. Its seen flag is UI-only localStorage, never learning data.
+- `useAsync` preserves data while refreshing so a session cannot be unmounted mid-flow.
+
+### Verification
+
+```text
+npm run lint          -> no findings
+npm run typecheck     -> exit 0
+npm test              -> 26 files, 215 tests passed
+npm run package       -> file:// boot, production CSP, no Node leaks
+```
+
+CDP checks: wizard footer reachable at 1024x700 and 900x600 with no horizontal overflow; tutorial appeared, dismissed and reopened; Learn completed 8 steps with a finish screen; Sound chart rendered 108 cells with romaji (`a`, `i`, `u`); Review completed 10 steps with a finish screen.
+
+### Limitations
+
+No Windows CI run for this change; the hidden tutorial flag is browser-local; voice buttons depend on an installed Japanese voice; the example word list is original curriculum, not dictionary data.
+
+### Final review fixes
+
+A fresh reviewer found no Critical issues and seven Important ones, all fixed: lesson reinforcement
+now uses only earlier groups and never duplicates the new items; hinted-correct answers are no longer
+reported as unhinted successes; Review includes hinted answers in the revisit list and has a retry
+button; the input placeholder no longer suggests "ka" for every character; っ/ッ/ー have usable
+romaji labels with a unit test; voice detection listens for `voiceschanged`; and summary/queue
+refresh failures show an error with Try again. Final checks: lint clean, typecheck exit 0,
+**26 files / 215 tests**. CDP re-verified the finish screens, hint copy, retry button and special
+character labels. Windows CI was not run for this change.

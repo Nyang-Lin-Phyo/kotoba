@@ -3,7 +3,7 @@ import type { Result } from '../../shared/errors';
 
 export type AsyncState<T> =
   | { readonly status: 'loading'; readonly data: null; readonly error: null }
-  | { readonly status: 'ready'; readonly data: T; readonly error: null }
+  | { readonly status: 'ready'; readonly data: T; readonly error: null; readonly refreshing?: boolean }
   | { readonly status: 'error'; readonly data: null; readonly error: string };
 
 /**
@@ -23,7 +23,13 @@ export function useAsync<T>(load: () => Promise<Result<T>>): {
 
   useEffect(() => {
     let cancelled = false;
-    setState({ status: 'loading', data: null, error: null });
+    // Keep the previous data during a refresh so dependent UI does not
+    // unmount and lose local session state (e.g. a kana lesson in progress).
+    setState((previous) =>
+      previous.status === 'ready'
+        ? { ...previous, refreshing: true }
+        : { status: 'loading', data: null, error: null },
+    );
 
     load()
       .then((result) => {

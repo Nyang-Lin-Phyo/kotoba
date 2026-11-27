@@ -53,7 +53,7 @@ The dev server binds to loopback only. There is no browser URL to open; the wind
 ```bash
 npm run lint            # oxlint
 npm run typecheck       # tsc for renderer, then for main/preload/tests
-npm test                # vitest: 208 unit + SQLite integration tests
+npm test                # vitest: 215 unit + SQLite integration tests
 .venv/bin/python -m unittest discover -s tests/python   # 23 pipeline tests
 ```
 
@@ -98,6 +98,13 @@ verified recognition. Multiple choice is available but is always labelled assist
 Start the timer in the top bar before a study session and stop it when you finish. Time is
 checkpointed in the main process; a crash or sleep cannot turn into study minutes. Minutes appear on
 the Dashboard once at least 60 seconds have been measured.
+
+## Kana practice
+
+Hiragana and Katakana pages now have three tabs. **Learn** is a short guided session mixing new
+characters with earlier ones; finishing it is practice, not mastery. **Sound chart** is a reference
+of every character with romaji. **Review** is a bounded queue of due or missed characters with a
+finish screen. A first-visit tutorial explains the modes; use "Show tutorial" to reopen it.
 
 ## Daily study
 
