@@ -19,6 +19,9 @@ __pycache__/
 .coverage
 htmlcov/
 
+# Graphify generated files
+graphify-out/
+
 # ------------------
 # Node.js / Electron / Vite / Forge
 # ------------------

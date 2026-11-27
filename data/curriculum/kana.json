@@ -1,0 +1,2004 @@
+{
+  "groups": [
+    {
+      "id": "vowel",
+      "script": "hiragana",
+      "label": "Vowels",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-a",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "あ",
+          "reading": "あ",
+          "example": {
+            "japanese": "あい",
+            "english": "love"
+          }
+        },
+        {
+          "id": "h-i",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "い",
+          "reading": "い",
+          "example": {
+            "japanese": "いえ",
+            "english": "house"
+          }
+        },
+        {
+          "id": "h-u",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "う",
+          "reading": "う"
+        },
+        {
+          "id": "h-e",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "え",
+          "reading": "え"
+        },
+        {
+          "id": "h-o",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "お",
+          "reading": "お"
+        }
+      ]
+    },
+    {
+      "id": "k",
+      "script": "hiragana",
+      "label": "K row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-ka",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "か",
+          "reading": "か"
+        },
+        {
+          "id": "h-ki",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "き",
+          "reading": "き"
+        },
+        {
+          "id": "h-ku",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "く",
+          "reading": "く",
+          "example": {
+            "japanese": "くつ",
+            "english": "shoes"
+          }
+        },
+        {
+          "id": "h-ke",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "け",
+          "reading": "け"
+        },
+        {
+          "id": "h-ko",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "こ",
+          "reading": "こ",
+          "example": {
+            "japanese": "こんにちは",
+            "english": "hello"
+          }
+        }
+      ]
+    },
+    {
+      "id": "s",
+      "script": "hiragana",
+      "label": "S row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-sa",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "さ",
+          "reading": "さ"
+        },
+        {
+          "id": "h-shi",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "し",
+          "reading": "し",
+          "example": {
+            "japanese": "しお",
+            "english": "salt"
+          }
+        },
+        {
+          "id": "h-su",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "す",
+          "reading": "す"
+        },
+        {
+          "id": "h-se",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "せ",
+          "reading": "せ"
+        },
+        {
+          "id": "h-so",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "そ",
+          "reading": "そ"
+        }
+      ]
+    },
+    {
+      "id": "t",
+      "script": "hiragana",
+      "label": "T row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-ta",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "た",
+          "reading": "た"
+        },
+        {
+          "id": "h-chi",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "ち",
+          "reading": "ち"
+        },
+        {
+          "id": "h-tsu",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "つ",
+          "reading": "つ"
+        },
+        {
+          "id": "h-te",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "て",
+          "reading": "て"
+        },
+        {
+          "id": "h-to",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "と",
+          "reading": "と"
+        }
+      ]
+    },
+    {
+      "id": "n",
+      "script": "hiragana",
+      "label": "N row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-na",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "な",
+          "reading": "な"
+        },
+        {
+          "id": "h-ni",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "に",
+          "reading": "に"
+        },
+        {
+          "id": "h-nu",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ぬ",
+          "reading": "ぬ"
+        },
+        {
+          "id": "h-ne",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ね",
+          "reading": "ね"
+        },
+        {
+          "id": "h-no",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "の",
+          "reading": "の"
+        }
+      ]
+    },
+    {
+      "id": "h",
+      "script": "hiragana",
+      "label": "H row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-ha",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "は",
+          "reading": "は"
+        },
+        {
+          "id": "h-hi",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ひ",
+          "reading": "ひ"
+        },
+        {
+          "id": "h-fu",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ふ",
+          "reading": "ふ"
+        },
+        {
+          "id": "h-he",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "へ",
+          "reading": "へ"
+        },
+        {
+          "id": "h-ho",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ほ",
+          "reading": "ほ"
+        }
+      ]
+    },
+    {
+      "id": "m",
+      "script": "hiragana",
+      "label": "M row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-ma",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "ま",
+          "reading": "ま"
+        },
+        {
+          "id": "h-mi",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "み",
+          "reading": "み"
+        },
+        {
+          "id": "h-mu",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "む",
+          "reading": "む"
+        },
+        {
+          "id": "h-me",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "め",
+          "reading": "め"
+        },
+        {
+          "id": "h-mo",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "も",
+          "reading": "も"
+        }
+      ]
+    },
+    {
+      "id": "y",
+      "script": "hiragana",
+      "label": "Y row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-ya",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "y",
+          "character": "や",
+          "reading": "や"
+        },
+        {
+          "id": "h-yu",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "y",
+          "character": "ゆ",
+          "reading": "ゆ"
+        },
+        {
+          "id": "h-yo",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "y",
+          "character": "よ",
+          "reading": "よ"
+        }
+      ]
+    },
+    {
+      "id": "r",
+      "script": "hiragana",
+      "label": "R row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-ra",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "ら",
+          "reading": "ら"
+        },
+        {
+          "id": "h-ri",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "り",
+          "reading": "り"
+        },
+        {
+          "id": "h-ru",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "る",
+          "reading": "る"
+        },
+        {
+          "id": "h-re",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "れ",
+          "reading": "れ"
+        },
+        {
+          "id": "h-ro",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "ろ",
+          "reading": "ろ"
+        }
+      ]
+    },
+    {
+      "id": "w",
+      "script": "hiragana",
+      "label": "W row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-wa",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "w",
+          "character": "わ",
+          "reading": "わ"
+        },
+        {
+          "id": "h-wo",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "w",
+          "character": "を",
+          "reading": "を"
+        }
+      ]
+    },
+    {
+      "id": "special",
+      "script": "hiragana",
+      "label": "Special characters",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "h-n",
+          "script": "hiragana",
+          "tier": "basic",
+          "groupId": "special",
+          "character": "ん",
+          "reading": "ん"
+        },
+        {
+          "id": "h-sokuon",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "special",
+          "character": "っ",
+          "reading": "っ"
+        }
+      ]
+    },
+    {
+      "id": "dakuten",
+      "script": "hiragana",
+      "label": "Dakuten",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "h-ga",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "が",
+          "reading": "が"
+        },
+        {
+          "id": "h-gi",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぎ",
+          "reading": "ぎ"
+        },
+        {
+          "id": "h-gu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぐ",
+          "reading": "ぐ"
+        },
+        {
+          "id": "h-ge",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "げ",
+          "reading": "げ"
+        },
+        {
+          "id": "h-go",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ご",
+          "reading": "ご"
+        },
+        {
+          "id": "h-za",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ざ",
+          "reading": "ざ"
+        },
+        {
+          "id": "h-ji",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "じ",
+          "reading": "じ"
+        },
+        {
+          "id": "h-zu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ず",
+          "reading": "ず"
+        },
+        {
+          "id": "h-ze",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぜ",
+          "reading": "ぜ"
+        },
+        {
+          "id": "h-zo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぞ",
+          "reading": "ぞ"
+        },
+        {
+          "id": "h-da",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "だ",
+          "reading": "だ"
+        },
+        {
+          "id": "h-dji",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぢ",
+          "reading": "ぢ"
+        },
+        {
+          "id": "h-dzu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "づ",
+          "reading": "づ"
+        },
+        {
+          "id": "h-de",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "で",
+          "reading": "で"
+        },
+        {
+          "id": "h-do",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ど",
+          "reading": "ど"
+        },
+        {
+          "id": "h-ba",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ば",
+          "reading": "ば"
+        },
+        {
+          "id": "h-bi",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "び",
+          "reading": "び"
+        },
+        {
+          "id": "h-bu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぶ",
+          "reading": "ぶ"
+        },
+        {
+          "id": "h-be",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "べ",
+          "reading": "べ"
+        },
+        {
+          "id": "h-bo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ぼ",
+          "reading": "ぼ"
+        }
+      ]
+    },
+    {
+      "id": "handakuten",
+      "script": "hiragana",
+      "label": "Handakuten",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "h-pa",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ぱ",
+          "reading": "ぱ"
+        },
+        {
+          "id": "h-pi",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ぴ",
+          "reading": "ぴ"
+        },
+        {
+          "id": "h-pu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ぷ",
+          "reading": "ぷ"
+        },
+        {
+          "id": "h-pe",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ぺ",
+          "reading": "ぺ"
+        },
+        {
+          "id": "h-po",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ぽ",
+          "reading": "ぽ"
+        }
+      ]
+    },
+    {
+      "id": "yoon",
+      "script": "hiragana",
+      "label": "Yōon combinations",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "h-kya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "きゃ",
+          "reading": "きゃ"
+        },
+        {
+          "id": "h-kyu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "きゅ",
+          "reading": "きゅ"
+        },
+        {
+          "id": "h-kyo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "きょ",
+          "reading": "きょ"
+        },
+        {
+          "id": "h-sha",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "しゃ",
+          "reading": "しゃ"
+        },
+        {
+          "id": "h-shu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "しゅ",
+          "reading": "しゅ"
+        },
+        {
+          "id": "h-sho",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "しょ",
+          "reading": "しょ"
+        },
+        {
+          "id": "h-cha",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ちゃ",
+          "reading": "ちゃ"
+        },
+        {
+          "id": "h-chu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ちゅ",
+          "reading": "ちゅ"
+        },
+        {
+          "id": "h-cho",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ちょ",
+          "reading": "ちょ"
+        },
+        {
+          "id": "h-nya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "にゃ",
+          "reading": "にゃ"
+        },
+        {
+          "id": "h-nyu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "にゅ",
+          "reading": "にゅ"
+        },
+        {
+          "id": "h-nyo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "にょ",
+          "reading": "にょ"
+        },
+        {
+          "id": "h-hya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ひゃ",
+          "reading": "ひゃ"
+        },
+        {
+          "id": "h-hyu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ひゅ",
+          "reading": "ひゅ"
+        },
+        {
+          "id": "h-hyo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ひょ",
+          "reading": "ひょ"
+        },
+        {
+          "id": "h-mya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "みゃ",
+          "reading": "みゃ"
+        },
+        {
+          "id": "h-myu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "みゅ",
+          "reading": "みゅ"
+        },
+        {
+          "id": "h-myo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "みょ",
+          "reading": "みょ"
+        },
+        {
+          "id": "h-rya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "りゃ",
+          "reading": "りゃ"
+        },
+        {
+          "id": "h-ryu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "りゅ",
+          "reading": "りゅ"
+        },
+        {
+          "id": "h-ryo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "りょ",
+          "reading": "りょ"
+        },
+        {
+          "id": "h-gya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぎゃ",
+          "reading": "ぎゃ"
+        },
+        {
+          "id": "h-gyu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぎゅ",
+          "reading": "ぎゅ"
+        },
+        {
+          "id": "h-gyo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぎょ",
+          "reading": "ぎょ"
+        },
+        {
+          "id": "h-bya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "びゃ",
+          "reading": "びゃ"
+        },
+        {
+          "id": "h-byu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "びゅ",
+          "reading": "びゅ"
+        },
+        {
+          "id": "h-byo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "びょ",
+          "reading": "びょ"
+        },
+        {
+          "id": "h-pya",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぴゃ",
+          "reading": "ぴゃ"
+        },
+        {
+          "id": "h-pyu",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぴゅ",
+          "reading": "ぴゅ"
+        },
+        {
+          "id": "h-pyo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぴょ",
+          "reading": "ぴょ"
+        },
+        {
+          "id": "h-ja",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "じゃ",
+          "reading": "じゃ"
+        },
+        {
+          "id": "h-ju",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "じゅ",
+          "reading": "じゅ"
+        },
+        {
+          "id": "h-jo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "じょ",
+          "reading": "じょ"
+        },
+        {
+          "id": "h-dja",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぢゃ",
+          "reading": "ぢゃ"
+        },
+        {
+          "id": "h-dju",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぢゅ",
+          "reading": "ぢゅ"
+        },
+        {
+          "id": "h-djo",
+          "script": "hiragana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ぢょ",
+          "reading": "ぢょ"
+        }
+      ]
+    },
+    {
+      "id": "vowel",
+      "script": "katakana",
+      "label": "Vowels",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-a",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "ア",
+          "reading": "ア"
+        },
+        {
+          "id": "k-i",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "イ",
+          "reading": "イ"
+        },
+        {
+          "id": "k-u",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "ウ",
+          "reading": "ウ"
+        },
+        {
+          "id": "k-e",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "エ",
+          "reading": "エ"
+        },
+        {
+          "id": "k-o",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "vowel",
+          "character": "オ",
+          "reading": "オ"
+        }
+      ]
+    },
+    {
+      "id": "k",
+      "script": "katakana",
+      "label": "K row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-ka",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "カ",
+          "reading": "カ"
+        },
+        {
+          "id": "k-ki",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "キ",
+          "reading": "キ"
+        },
+        {
+          "id": "k-ku",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "ク",
+          "reading": "ク"
+        },
+        {
+          "id": "k-ke",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "ケ",
+          "reading": "ケ"
+        },
+        {
+          "id": "k-ko",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "k",
+          "character": "コ",
+          "reading": "コ",
+          "example": {
+            "japanese": "コーヒー",
+            "english": "coffee"
+          }
+        }
+      ]
+    },
+    {
+      "id": "s",
+      "script": "katakana",
+      "label": "S row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-sa",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "サ",
+          "reading": "サ"
+        },
+        {
+          "id": "k-shi",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "シ",
+          "reading": "シ"
+        },
+        {
+          "id": "k-su",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "ス",
+          "reading": "ス"
+        },
+        {
+          "id": "k-se",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "セ",
+          "reading": "セ"
+        },
+        {
+          "id": "k-so",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "s",
+          "character": "ソ",
+          "reading": "ソ"
+        }
+      ]
+    },
+    {
+      "id": "t",
+      "script": "katakana",
+      "label": "T row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-ta",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "タ",
+          "reading": "タ"
+        },
+        {
+          "id": "k-chi",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "チ",
+          "reading": "チ"
+        },
+        {
+          "id": "k-tsu",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "ツ",
+          "reading": "ツ"
+        },
+        {
+          "id": "k-te",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "テ",
+          "reading": "テ",
+          "example": {
+            "japanese": "テレビ",
+            "english": "television"
+          }
+        },
+        {
+          "id": "k-to",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "t",
+          "character": "ト",
+          "reading": "ト"
+        }
+      ]
+    },
+    {
+      "id": "n",
+      "script": "katakana",
+      "label": "N row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-na",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ナ",
+          "reading": "ナ"
+        },
+        {
+          "id": "k-ni",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ニ",
+          "reading": "ニ"
+        },
+        {
+          "id": "k-nu",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ヌ",
+          "reading": "ヌ"
+        },
+        {
+          "id": "k-ne",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ネ",
+          "reading": "ネ"
+        },
+        {
+          "id": "k-no",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "n",
+          "character": "ノ",
+          "reading": "ノ"
+        }
+      ]
+    },
+    {
+      "id": "h",
+      "script": "katakana",
+      "label": "H row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-ha",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ハ",
+          "reading": "ハ"
+        },
+        {
+          "id": "k-hi",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ヒ",
+          "reading": "ヒ"
+        },
+        {
+          "id": "k-fu",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "フ",
+          "reading": "フ"
+        },
+        {
+          "id": "k-he",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ヘ",
+          "reading": "ヘ"
+        },
+        {
+          "id": "k-ho",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "h",
+          "character": "ホ",
+          "reading": "ホ"
+        }
+      ]
+    },
+    {
+      "id": "m",
+      "script": "katakana",
+      "label": "M row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-ma",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "マ",
+          "reading": "マ"
+        },
+        {
+          "id": "k-mi",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "ミ",
+          "reading": "ミ"
+        },
+        {
+          "id": "k-mu",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "ム",
+          "reading": "ム"
+        },
+        {
+          "id": "k-me",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "メ",
+          "reading": "メ"
+        },
+        {
+          "id": "k-mo",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "m",
+          "character": "モ",
+          "reading": "モ"
+        }
+      ]
+    },
+    {
+      "id": "y",
+      "script": "katakana",
+      "label": "Y row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-ya",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "y",
+          "character": "ヤ",
+          "reading": "ヤ"
+        },
+        {
+          "id": "k-yu",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "y",
+          "character": "ユ",
+          "reading": "ユ"
+        },
+        {
+          "id": "k-yo",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "y",
+          "character": "ヨ",
+          "reading": "ヨ"
+        }
+      ]
+    },
+    {
+      "id": "r",
+      "script": "katakana",
+      "label": "R row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-ra",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "ラ",
+          "reading": "ラ",
+          "example": {
+            "japanese": "ラジオ",
+            "english": "radio"
+          }
+        },
+        {
+          "id": "k-ri",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "リ",
+          "reading": "リ"
+        },
+        {
+          "id": "k-ru",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "ル",
+          "reading": "ル"
+        },
+        {
+          "id": "k-re",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "レ",
+          "reading": "レ"
+        },
+        {
+          "id": "k-ro",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "r",
+          "character": "ロ",
+          "reading": "ロ"
+        }
+      ]
+    },
+    {
+      "id": "w",
+      "script": "katakana",
+      "label": "W row",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-wa",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "w",
+          "character": "ワ",
+          "reading": "ワ"
+        },
+        {
+          "id": "k-wo",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "w",
+          "character": "ヲ",
+          "reading": "ヲ"
+        }
+      ]
+    },
+    {
+      "id": "special",
+      "script": "katakana",
+      "label": "Special characters",
+      "tier": "basic",
+      "items": [
+        {
+          "id": "k-n",
+          "script": "katakana",
+          "tier": "basic",
+          "groupId": "special",
+          "character": "ン",
+          "reading": "ン"
+        },
+        {
+          "id": "k-sokuon",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "special",
+          "character": "ッ",
+          "reading": "ッ"
+        }
+      ]
+    },
+    {
+      "id": "dakuten",
+      "script": "katakana",
+      "label": "Dakuten",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "k-ga",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ガ",
+          "reading": "ガ"
+        },
+        {
+          "id": "k-gi",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ギ",
+          "reading": "ギ"
+        },
+        {
+          "id": "k-gu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "グ",
+          "reading": "グ"
+        },
+        {
+          "id": "k-ge",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ゲ",
+          "reading": "ゲ"
+        },
+        {
+          "id": "k-go",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ゴ",
+          "reading": "ゴ"
+        },
+        {
+          "id": "k-za",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ザ",
+          "reading": "ザ"
+        },
+        {
+          "id": "k-ji",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ジ",
+          "reading": "ジ"
+        },
+        {
+          "id": "k-zu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ズ",
+          "reading": "ズ"
+        },
+        {
+          "id": "k-ze",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ゼ",
+          "reading": "ゼ"
+        },
+        {
+          "id": "k-zo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ゾ",
+          "reading": "ゾ"
+        },
+        {
+          "id": "k-da",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ダ",
+          "reading": "ダ"
+        },
+        {
+          "id": "k-dji",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ヂ",
+          "reading": "ヂ"
+        },
+        {
+          "id": "k-dzu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ヅ",
+          "reading": "ヅ"
+        },
+        {
+          "id": "k-de",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "デ",
+          "reading": "デ"
+        },
+        {
+          "id": "k-do",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ド",
+          "reading": "ド"
+        },
+        {
+          "id": "k-ba",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "バ",
+          "reading": "バ"
+        },
+        {
+          "id": "k-bi",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ビ",
+          "reading": "ビ"
+        },
+        {
+          "id": "k-bu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ブ",
+          "reading": "ブ"
+        },
+        {
+          "id": "k-be",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ベ",
+          "reading": "ベ"
+        },
+        {
+          "id": "k-bo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "dakuten",
+          "character": "ボ",
+          "reading": "ボ"
+        }
+      ]
+    },
+    {
+      "id": "handakuten",
+      "script": "katakana",
+      "label": "Handakuten",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "k-pa",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "パ",
+          "reading": "パ"
+        },
+        {
+          "id": "k-pi",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ピ",
+          "reading": "ピ"
+        },
+        {
+          "id": "k-pu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "プ",
+          "reading": "プ"
+        },
+        {
+          "id": "k-pe",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ペ",
+          "reading": "ペ"
+        },
+        {
+          "id": "k-po",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "handakuten",
+          "character": "ポ",
+          "reading": "ポ"
+        }
+      ]
+    },
+    {
+      "id": "yoon",
+      "script": "katakana",
+      "label": "Yōon combinations",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "k-kya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "キャ",
+          "reading": "キャ"
+        },
+        {
+          "id": "k-kyu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "キュ",
+          "reading": "キュ"
+        },
+        {
+          "id": "k-kyo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "キョ",
+          "reading": "キョ"
+        },
+        {
+          "id": "k-sha",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "シャ",
+          "reading": "シャ"
+        },
+        {
+          "id": "k-shu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "シュ",
+          "reading": "シュ"
+        },
+        {
+          "id": "k-sho",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ショ",
+          "reading": "ショ"
+        },
+        {
+          "id": "k-cha",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "チャ",
+          "reading": "チャ"
+        },
+        {
+          "id": "k-chu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "チュ",
+          "reading": "チュ"
+        },
+        {
+          "id": "k-cho",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "チョ",
+          "reading": "チョ"
+        },
+        {
+          "id": "k-nya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ニャ",
+          "reading": "ニャ"
+        },
+        {
+          "id": "k-nyu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ニュ",
+          "reading": "ニュ"
+        },
+        {
+          "id": "k-nyo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ニョ",
+          "reading": "ニョ"
+        },
+        {
+          "id": "k-hya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ヒャ",
+          "reading": "ヒャ"
+        },
+        {
+          "id": "k-hyu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ヒュ",
+          "reading": "ヒュ"
+        },
+        {
+          "id": "k-hyo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ヒョ",
+          "reading": "ヒョ"
+        },
+        {
+          "id": "k-mya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ミャ",
+          "reading": "ミャ"
+        },
+        {
+          "id": "k-myu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ミュ",
+          "reading": "ミュ"
+        },
+        {
+          "id": "k-myo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ミョ",
+          "reading": "ミョ"
+        },
+        {
+          "id": "k-rya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "リャ",
+          "reading": "リャ"
+        },
+        {
+          "id": "k-ryu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "リュ",
+          "reading": "リュ"
+        },
+        {
+          "id": "k-ryo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "リョ",
+          "reading": "リョ"
+        },
+        {
+          "id": "k-gya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ギャ",
+          "reading": "ギャ"
+        },
+        {
+          "id": "k-gyu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ギュ",
+          "reading": "ギュ"
+        },
+        {
+          "id": "k-gyo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ギョ",
+          "reading": "ギョ"
+        },
+        {
+          "id": "k-bya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ビャ",
+          "reading": "ビャ"
+        },
+        {
+          "id": "k-byu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ビュ",
+          "reading": "ビュ"
+        },
+        {
+          "id": "k-byo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ビョ",
+          "reading": "ビョ"
+        },
+        {
+          "id": "k-pya",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ピャ",
+          "reading": "ピャ"
+        },
+        {
+          "id": "k-pyu",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ピュ",
+          "reading": "ピュ"
+        },
+        {
+          "id": "k-pyo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ピョ",
+          "reading": "ピョ"
+        },
+        {
+          "id": "k-ja",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ジャ",
+          "reading": "ジャ"
+        },
+        {
+          "id": "k-ju",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ジュ",
+          "reading": "ジュ"
+        },
+        {
+          "id": "k-jo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ジョ",
+          "reading": "ジョ"
+        },
+        {
+          "id": "k-dja",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ヂャ",
+          "reading": "ヂャ"
+        },
+        {
+          "id": "k-dju",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ヂュ",
+          "reading": "ヂュ"
+        },
+        {
+          "id": "k-djo",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "yoon",
+          "character": "ヂョ",
+          "reading": "ヂョ"
+        }
+      ]
+    },
+    {
+      "id": "prolonged",
+      "script": "katakana",
+      "label": "Prolonged sound mark",
+      "tier": "extended",
+      "items": [
+        {
+          "id": "k-long",
+          "script": "katakana",
+          "tier": "extended",
+          "groupId": "prolonged",
+          "character": "ー",
+          "reading": "ー"
+        }
+      ]
+    }
+  ]
+}

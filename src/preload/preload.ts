@@ -1,9 +1,52 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { CHANNELS, type AppInfo, type KotobaApi } from '../shared/contracts';
+import { CHANNELS, type KotobaApi } from '../shared/contracts';
+import type { Result } from '../shared/errors';
 
 // The renderer gets this object and nothing else: no ipcRenderer, no Node, no paths.
+function invoke<T>(channel: string, payload?: unknown): Promise<Result<T>> {
+  return ipcRenderer.invoke(channel, payload) as Promise<Result<T>>;
+}
+
 const api: KotobaApi = {
-  appInfo: () => ipcRenderer.invoke(CHANNELS.appInfo) as Promise<AppInfo>,
+  appInfo: () => invoke(CHANNELS.appInfo),
+  dataRoot: () => invoke(CHANNELS.dataRoot),
+  profiles: {
+    create: (input) => invoke(CHANNELS.profileCreate, input),
+    getActive: () => invoke(CHANNELS.profileGetActive),
+    update: (input) => invoke(CHANNELS.profileUpdate, input),
+  },
+  goals: {
+    list: () => invoke(CHANNELS.goalsList),
+    set: (input) => invoke(CHANNELS.goalsSet, input),
+  },
+  planner: {
+    getToday: () => invoke(CHANNELS.plannerGetToday),
+    preview: (input) => invoke(CHANNELS.plannerPreview, input),
+  },
+  settings: {
+    get: () => invoke(CHANNELS.settingsGet),
+    set: (input) => invoke(CHANNELS.settingsSet, input),
+  },
+  backup: {
+    create: () => invoke(CHANNELS.backupCreate),
+    list: () => invoke(CHANNELS.backupList),
+    restore: (input) => invoke(CHANNELS.backupRestore, input),
+  },
+  kana: {
+    catalog: () => invoke(CHANNELS.kanaCatalog),
+    lesson: (input) => invoke(CHANNELS.kanaLesson, input),
+    submitAttempt: (input) => invoke(CHANNELS.kanaSubmitAttempt, input),
+    reviewQueue: () => invoke(CHANNELS.kanaReviewQueue),
+    summary: () => invoke(CHANNELS.kanaSummary),
+  },
+  study: {
+    start: (input) => invoke(CHANNELS.studyStart, input),
+    pause: () => invoke(CHANNELS.studyPause),
+    resume: () => invoke(CHANNELS.studyResume),
+    stop: () => invoke(CHANNELS.studyStop),
+    getStatus: () => invoke(CHANNELS.studyGetStatus),
+    acknowledgeInterrupted: (input) => invoke(CHANNELS.studyAcknowledgeInterrupted, input),
+  },
 };
 
 contextBridge.exposeInMainWorld('kotoba', api);
