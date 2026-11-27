@@ -1,0 +1,7 @@
+{
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "ignorePatterns": ["out/**", ".vite/**", "node_modules/**", "coverage/**"]
+}

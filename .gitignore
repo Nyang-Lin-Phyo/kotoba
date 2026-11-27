@@ -1,10 +1,9 @@
-
 # ==================================================
-# VIDEO JOURNALING AWS - .gitignore
+# KOTOBA - .gitignore
 # ==================================================
 
 # ------------------
-# Python
+# Python (build-time data pipeline only)
 # ------------------
 .venv/
 venv/
@@ -21,11 +20,12 @@ __pycache__/
 htmlcov/
 
 # ------------------
-# Node.js / React / Vite
+# Node.js / Electron / Vite / Forge
 # ------------------
 node_modules/
 dist/
 dist-ssr/
+out/
 coverage/
 .vite/
 .npm/
@@ -57,32 +57,17 @@ secrets.json
 secrets/
 
 # ------------------
-# AWS deployment generated files
+# Generated data
+# Tracked instead: data/manifest.json, data/curriculum/, data/fixtures/
 # ------------------
-infra/.resource-ids.env
-infra/.part2-resource-ids.env
-infra/part2-generated/
-infra/upload-signer.zip
-infra/*.zip
-
-infra/*-policy.json
-infra/*-cors.json
-infra/*-notifications.json
-infra/lambda-trust.json
-
-.aws-sam/
-cdk.out/
-.terraform/
-*.tfstate
-*.tfstate.*
-
-# Keep AWS Lambda Python source and deployment
-# shell scripts tracked.
+data/raw/
+data/processed/
+resources/dictionaries/
 
 # ------------------
-# Local databases and runtime data
+# Local databases, backups and runtime data
 # ------------------
-data/
+backups/
 tmp/
 temp/
 .cache/
@@ -91,31 +76,18 @@ logs/
 *.db
 *.sqlite
 *.sqlite3
-*.db-journal
+*-journal
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+
+# ------------------
+# Local-only project spec
+# ------------------
 AGENTS.md
-dia.pdf
-
-# # ------------------
-# # Videos and audio recordings
-# # ------------------
-# *.mp4
-# *.mov
-# *.avi
-# *.mkv
-# *.webm
-# *.wav
-# *.mp3
-# *.m4a
-# *.flac
-
-# ------------------
-# Downloaded deployment archives
-# ------------------
-videoJournalingLocalHost.zip
-videojournal-*.zip
-videojournal-*/
-videojournal-part*/
-videojournal-elevenlabs*/
 
 # ------------------
 # IDE and OS
@@ -127,28 +99,3 @@ Thumbs.db
 *.swp
 *.swo
 *~
-# Part 3 generated AWS resource/config files (add to root .gitignore)
-infra/.phase3-resource-ids.env
-infra/.phase3-cutover.env
-infra/phase3-generated/
-# Cognito / CloudFront non-secret deployment state and generated JSON
-infra/.auth-hosting.env
-infra/.cognito.env
-infra/.phase3-cutover.env
-infra/auth-generated/
-infra/phase3-generated/
-# Local Vite OAuth config (public values, but deployment-specific)
-apps/web/.env.local
-apps/web/.env.production
-infra/.auth-api.env
-
-# Generated v5 deployment backups, policies and temporary builds
-infra/phase5-generated/
-reverie-history-v5.zip
-
-# Issue #7 profile deploy output (env snapshots, backups)
-infra/profile-generated/
-
-# Memory Books deployment output (environment snapshots and Lambda packages)
-infra/memory-books-generated/
-infra/memory-renderer-generated/
