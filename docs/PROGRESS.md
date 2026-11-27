@@ -690,7 +690,7 @@ skills, two distinct successful unhinted days and a current interval of at least
 ```text
 npm run lint                                   -> no findings
 npm run typecheck                              -> exit 0
-npm test                                       -> 26 files, 215 tests passed
+npm test                                       -> 27 files, 217 tests passed
 .venv/bin/python -m unittest discover -s tests/python -> 23 tests passed
 npm run package                                -> packaged app with rebuilt dictionary
 ```
@@ -810,7 +810,7 @@ Status: complete and verified on Linux in dev and packaged builds. No Windows CI
 ```text
 npm run lint          -> no findings
 npm run typecheck     -> exit 0
-npm test              -> 26 files, 215 tests passed
+npm test              -> 27 files, 217 tests passed
 npm run package       -> file:// boot, production CSP, no Node leaks
 ```
 
@@ -830,3 +830,46 @@ romaji labels with a unit test; voice detection listens for `voiceschanged`; and
 refresh failures show an error with Try again. Final checks: lint clean, typecheck exit 0,
 **26 files / 215 tests**. CDP re-verified the finish screens, hint copy, retry button and special
 character labels. Windows CI was not run for this change.
+
+### Sound and word practice fixes
+
+The user reported that the hint only repeated the character, the example word had no readable sound,
+the Sound chart appeared to do nothing, and asked that learning be tied to sounds and that a correct
+character be followed by writing its example word.
+
+Investigation: the Sound chart tab rendered correctly in a packaged build with no app errors; the
+real problem was no Japanese voice on the machine, so no sound was produced and no Listen button was
+shown. Fixes:
+
+- Hint now shows the sound in romaji plus the kana, e.g. `Sound: na (な)`, in Learn and Review.
+- Example words show their reading, e.g. `Small word: なつ (natsu) — summer`.
+- After a correct character, a second step asks the learner to type the small word's reading, with the
+  sound shown and an optional Listen button. This step is practice only and never changes kana verification.
+- Sound chart explains when no Japanese voice is installed: the romaji column is the sound guide; no
+  audio is invented or downloaded. Voice detection listens for `voiceschanged` so the Listen button
+  appears when a voice loads later.
+- Added `kanaWordCorrect` and its tests; romaji helper tests cover っ/ッ/ー.
+
+Verification: lint clean, typecheck exit 0, **27 files / 217 tests**, CDP confirmed the hint sound,
+the なつ/natsu word step, correct word checking, and the Sound chart fallback message. Windows CI was
+not run for this change.
+
+### Hint removal and sound-first feedback
+
+The user rejected the hint toggle entirely and reported that wrong answers showed only kana, and that
+example words did not say how they sound.
+
+- Removed the Show hint toggle from Learn and Review. Answers are always unhinted; `hintUsed` is sent as false.
+- Wrong/correct feedback now shows both kana and romaji, e.g. `Not quite — ね (ne)`, `Correct — こ (ko)`.
+- Example word feedback now always includes `Sounds like: kodomo`; the word-writing step repeats it.
+- Sound chart tells the user exactly how to install a Japanese speech voice in Windows. No voice is
+  installed on the current Windows machine (only en-US David/Zira), so bundled audio is treated as a
+  separate milestone with a licensed source; the app never invents or downloads audio.
+
+Verified: CDP shows zero hint toggles, `Not quite — ね (ne)`, `Correct — こ (ko) … Sounds like: kodomo`,
+and the Windows voice instructions. Lint/typecheck clean, 27 files / 217 tests.
+
+### Known limitation: audio assets
+
+Real offline audio needs either an installed Japanese OS voice (Listen buttons appear automatically)
+or a separately sourced, licensed set of kana/word audio files. Neither exists in this build.

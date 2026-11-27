@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import type { AttemptResult, KanaReviewItem, KanaScript } from '../../../shared/contracts';
+import { kanaRomaji } from '../../../shared/kanaRomaji';
 
 type Props = {
   readonly script: KanaScript;
@@ -11,7 +12,6 @@ export function KanaReviewSession({ script, items, onAnswered }: Props) {
   const [queue, setQueue] = useState(() => items.slice(0, 10));
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState('');
-  const [hint, setHint] = useState(false);
   const [feedback, setFeedback] = useState<AttemptResult | null>(null);
   const [missed, setMissed] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +40,7 @@ export function KanaReviewSession({ script, items, onAnswered }: Props) {
       kanaId: item.kanaId,
       mode: 'typed',
       raw: answer,
-      hintUsed: hint,
+      hintUsed: false,
       responseMs: Math.max(0, Math.min(600_000, Date.now() - startedAt.current)),
       eventId: crypto.randomUUID(),
     });
@@ -50,14 +50,13 @@ export function KanaReviewSession({ script, items, onAnswered }: Props) {
       return;
     }
     setFeedback(result.data);
-    if (!result.data.correct || hint) setMissed((values) => [...values, item.kanaId]);
+    if (!result.data.correct) setMissed((values) => [...values, item.kanaId]);
   };
 
   const next = () => {
     setIndex((value) => value + 1);
     setAnswer('');
     setFeedback(null);
-    setHint(false);
     startedAt.current = Date.now();
     if (index + 1 === queue.length) onAnswered();
   };
@@ -130,11 +129,7 @@ export function KanaReviewSession({ script, items, onAnswered }: Props) {
         />
       </label>
 
-      <label className="checkbox-row">
-        <input type="checkbox" checked={hint} onChange={(event) => setHint(event.target.checked)} />
-        <span>Show hint (hinted answers cannot be verified)</span>
-      </label>
-      {hint && <p className="quiz-hint">{item.reading}</p>}
+      <p className="muted">No hints here — you either know the sound or you review it again.</p>
 
       <div className="button-row">
         {feedback === null ? (
@@ -155,8 +150,10 @@ export function KanaReviewSession({ script, items, onAnswered }: Props) {
 
       {feedback !== null && (
         <div className={`quiz-feedback ${feedback.correct ? 'quiz-feedback--ok' : 'quiz-feedback--bad'}`}>
-          <strong>{feedback.correct ? 'Correct' : `Not quite — ${feedback.expected}`}</strong>
-          {hint && <span className="muted">Hint was on, so this is only practice.</span>}
+          <strong>
+            {feedback.correct ? 'Correct' : 'Not quite'} — <span className="jp">{feedback.expected}</span>{' '}
+            ({kanaRomaji(feedback.expected)})
+          </strong>
         </div>
       )}
       {error !== null && <p className="error">{error}</p>}

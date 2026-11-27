@@ -2,7 +2,9 @@ import { useRef, useState } from 'react';
 import type { AttemptResult, KanaStatus } from '../../../shared/contracts';
 import type { KanaGroup, KanaScript } from '../../../shared/kanaData';
 import { buildKanaLesson, type KanaLesson } from '../../../shared/kanaLesson';
-import { findKanaWord } from '../../../shared/kanaWords';
+import { kanaRomaji } from '../../../shared/kanaRomaji';
+import { findKanaWord, kanaWordCorrect } from '../../../shared/kanaWords';
+import { SpeakButton } from './sound';
 
 type Props = {
   readonly script: KanaScript;
@@ -17,27 +19,36 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
   );
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState('');
-  const [hint, setHint] = useState(false);
   const [feedback, setFeedback] = useState<AttemptResult | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
-  const [hintedCount, setHintedCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [wordMode, setWordMode] = useState(false);
+  const [wordAnswer, setWordAnswer] = useState('');
+  const [wordResult, setWordResult] = useState<boolean | null>(null);
   const startedAt = useRef(Date.now());
 
   const step = lesson.steps[index];
   const finished = index >= lesson.steps.length;
+  const example = step !== undefined && feedback?.correct === true
+    ? findKanaWord(step.character)
+    : undefined;
+
+  const resetStepState = () => {
+    setAnswer('');
+    setFeedback(null);
+    setWordMode(false);
+    setWordAnswer('');
+    setWordResult(null);
+    setError(null);
+    startedAt.current = Date.now();
+  };
 
   const restart = () => {
     setLesson(buildKanaLesson({ script, groups, statuses }));
     setIndex(0);
-    setAnswer('');
-    setHint(false);
-    setFeedback(null);
     setCorrectCount(0);
-    setHintedCount(0);
-    setError(null);
-    startedAt.current = Date.now();
+    resetStepState();
   };
 
   const submit = async () => {
@@ -48,7 +59,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
       kanaId: step.kanaId,
       mode: 'typed',
       raw: answer,
-      hintUsed: hint,
+      hintUsed: false,
       responseMs: Math.max(0, Math.min(600_000, Date.now() - startedAt.current)),
       eventId: crypto.randomUUID(),
     });
@@ -58,16 +69,17 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
       return;
     }
     setFeedback(result.data);
-    if (result.data.correct && !hint) setCorrectCount((value) => value + 1);
-    else if (result.data.correct && hint) setHintedCount((value) => value + 1);
+    if (result.data.correct) setCorrectCount((value) => value + 1);
+  };
+
+  const checkWord = () => {
+    if (example === undefined || wordAnswer.trim().length === 0) return;
+    setWordResult(kanaWordCorrect(wordAnswer, example.word));
   };
 
   const next = () => {
     setIndex((value) => value + 1);
-    setAnswer('');
-    setFeedback(null);
-    setHint(false);
-    startedAt.current = Date.now();
+    resetStepState();
     if (index + 1 === lesson.steps.length) onAnswered();
   };
 
@@ -77,9 +89,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
         <p className="eyebrow">Session finished</p>
         <h2>Practice complete</h2>
         <p>
-          You worked through {lesson.steps.length} characters and got {correctCount} right without
-          looking at the hint.
-          {hintedCount > 0 && ` ${hintedCount} more were right with the hint shown.`}
+          You worked through {lesson.steps.length} characters and got {correctCount} right.
         </p>
         <p className="muted">
           This is practice, not mastery. A character is verified only after unhinted correct answers
@@ -94,8 +104,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
     );
   }
 
-  const example = step !== null && feedback?.correct === true ? findKanaWord(step?.character ?? '') : undefined;
-  const progress = lesson.steps.length === 0 ? 0 : (index / lesson.steps.length) * 100;
+  const progress = lesson.steps.length === 0 ? 0 : ((index + 1) / lesson.steps.length) * 100;
 
   return (
     <article className="card card--wide session-card">
@@ -112,68 +121,130 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
               : 'Type its sound in romaji or kana.'}
           </p>
         </div>
-        <div className="session-progress">
-          <span>
-            {index + 1} of {lesson.steps.length}
-          </span>
-          <div className="progress" role="presentation">
-            <div className="progress-fill" style={{ width: `${progress}%` }} />
+        <div className="header-actions">
+          {step !== undefined && <SpeakButton text={step.reading} label="Hear character" />}
+          <div className="session-progress">
+            <span>
+              {index + 1} of {lesson.steps.length}
+            </span>
+            <div className="progress" role="presentation">
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
+            </div>
           </div>
         </div>
       </header>
 
-      <label className="field">
-        <span>Reading</span>
-        <input
-          className="quiz-input"
-          value={answer}
-          maxLength={80}
-          autoComplete="off"
-          placeholder="type the reading…"
-          onChange={(event) => setAnswer(event.target.value)}
-          aria-label="Kana reading"
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' && feedback === null) void submit();
-          }}
-        />
-      </label>
+      {!wordMode && (
+        <>
+          <label className="field">
+            <span>Reading</span>
+            <input
+              className="quiz-input"
+              value={answer}
+              maxLength={80}
+              autoComplete="off"
+              placeholder="type the reading…"
+              onChange={(event) => setAnswer(event.target.value)}
+              aria-label="Kana reading"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && feedback === null) void submit();
+              }}
+            />
+          </label>
 
-      <label className="checkbox-row">
-        <input type="checkbox" checked={hint} onChange={(event) => setHint(event.target.checked)} />
-        <span>Show hint (answer with a hint does not count toward mastery)</span>
-      </label>
-      {hint && <p className="quiz-hint">{step?.reading}</p>}
+          <div className="button-row">
+            {feedback === null ? (
+              <button
+                type="button"
+                className="button"
+                disabled={busy || answer.trim().length === 0}
+                onClick={() => void submit()}
+              >
+                {busy ? 'Checking…' : 'Check answer'}
+              </button>
+            ) : (
+              <>
+                {example !== undefined && (
+                  <button type="button" className="button" onClick={() => setWordMode(true)}>
+                    Write the small word
+                  </button>
+                )}
+                <button type="button" className="button button--ghost" onClick={next}>
+                  {index + 1 === lesson.steps.length ? 'Finish' : 'Next character'}
+                </button>
+              </>
+            )}
+          </div>
 
-      <div className="button-row">
-        {feedback === null ? (
-          <button
-            type="button"
-            className="button"
-            disabled={busy || answer.trim().length === 0}
-            onClick={() => void submit()}
-          >
-            {busy ? 'Checking…' : 'Check answer'}
-          </button>
-        ) : (
-          <button type="button" className="button" onClick={next}>
-            {index + 1 === lesson.steps.length ? 'Finish' : 'Next character'}
-          </button>
-        )}
-      </div>
-
-      {feedback !== null && (
-        <div className={`quiz-feedback ${feedback.correct ? 'quiz-feedback--ok' : 'quiz-feedback--bad'}`}>
-          <strong>
-            {feedback.correct ? 'Correct' : `Not quite — ${feedback.expected}`}
-          </strong>
-          {hint && <span className="muted">Hint was on, so this cannot count as verified recall.</span>}
-          {example !== undefined && (
-            <span className="muted">
-              Small word: <span className="jp">{example.word}</span> — {example.meaning}
-            </span>
+          {feedback !== null && (
+            <div className={`quiz-feedback ${feedback.correct ? 'quiz-feedback--ok' : 'quiz-feedback--bad'}`}>
+              <strong>
+                {feedback.correct ? 'Correct' : 'Not quite'} — <span className="jp">{feedback.expected}</span>{' '}
+                ({kanaRomaji(feedback.expected)})
+              </strong>
+              {example !== undefined && (
+                <span className="muted">
+                  Small word: <span className="jp">{example.word}</span> — {example.meaning}
+                  <br />
+                  Sounds like: <strong>{kanaRomaji(example.word)}</strong>
+                </span>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
+
+      {wordMode && example !== undefined && (
+        <section className="word-step">
+          <p className="eyebrow">Now use it in a word</p>
+          <p>
+            <span className="jp word-step-word">{example.word}</span> — {example.meaning}
+          </p>
+          <p className="muted">
+            Sounds like: <strong>{kanaRomaji(example.word)}</strong>. Type that reading in romaji or kana.
+          </p>
+          <SpeakButton text={example.word} label="Hear word" />
+          <label className="field">
+            <span>Word reading</span>
+            <input
+              className="quiz-input"
+              value={wordAnswer}
+              maxLength={80}
+              autoComplete="off"
+              placeholder="e.g. kawa"
+              aria-label="Word reading"
+              onChange={(event) => setWordAnswer(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') checkWord();
+              }}
+            />
+          </label>
+          <div className="button-row">
+            <button
+              type="button"
+              className="button"
+              disabled={wordAnswer.trim().length === 0}
+              onClick={checkWord}
+            >
+              Check word
+            </button>
+            <button type="button" className="button button--ghost" onClick={next}>
+              {index + 1 === lesson.steps.length ? 'Finish' : 'Next character'}
+            </button>
+          </div>
+          {wordResult !== null && (
+            <div className={`quiz-feedback ${wordResult ? 'quiz-feedback--ok' : 'quiz-feedback--bad'}`}>
+              <strong>
+                {wordResult ? 'Correct' : `Not quite — ${kanaRomaji(example.word)}`}
+              </strong>
+              <span className="muted">
+                This word step is practice; it does not change your kana verification count.
+              </span>
+            </div>
+          )}
+        </section>
+      )}
+
       {error !== null && <p className="error">{error}</p>}
     </article>
   );

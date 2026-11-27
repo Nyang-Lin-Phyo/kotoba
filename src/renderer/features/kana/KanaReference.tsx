@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-
 import type { KanaGroup, KanaScript } from '../../../shared/kanaData';
 import { kanaRomaji } from '../../../shared/kanaRomaji';
+import { useJapaneseVoice } from './sound';
 
 type Props = {
   readonly script: KanaScript;
@@ -9,22 +8,7 @@ type Props = {
 };
 
 export function KanaReference({ script, groups }: Props) {
-  const [voiceAvailable, setVoiceAvailable] = useState(false);
-
-  useEffect(() => {
-    const update = () => {
-      setVoiceAvailable(
-        typeof speechSynthesis !== 'undefined' &&
-          speechSynthesis
-            .getVoices()
-            .some((voice) => voice.lang.toLowerCase().startsWith('ja')),
-      );
-    };
-    update();
-    if (typeof speechSynthesis === 'undefined') return;
-    speechSynthesis.addEventListener('voiceschanged', update);
-    return () => speechSynthesis.removeEventListener('voiceschanged', update);
-  }, []);
+  const voiceAvailable = useJapaneseVoice();
 
   const speak = (text: string) => {
     if (!voiceAvailable) return;
@@ -37,9 +21,17 @@ export function KanaReference({ script, groups }: Props) {
     <article className="card card--wide">
       <h2>Sound chart</h2>
       <p className="muted">
-        {script === 'hiragana' ? 'Hiragana' : 'Katakana'} sounds, in teaching order. This is a
-        reference — nothing here is scored. Use Learn when you want to practise.
+        {script === 'hiragana' ? 'Hiragana' : 'Katakana'} sounds, in teaching order. Nothing here is
+        scored — use Learn when you want to practise.
       </p>
+      {!voiceAvailable && (
+        <p className="card--notice">
+          No Japanese voice is installed on this computer, so there is no real audio to play. The
+          romaji under each character is its sound guide; the app never invents or downloads audio.
+          To enable Listen buttons: Windows Settings → Time &amp; language → Language &amp; region →
+          Japanese → Speech, then restart Kotoba.
+        </p>
+      )}
       <div className="reference-groups">
         {groups.map((group) => (
           <section key={group.id} className="reference-group">

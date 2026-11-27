@@ -1230,3 +1230,16 @@ body {
   width: min(480px, 100%);
   margin: 0;
 }
+
+.word-step {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg-hover);
+}
+
+.word-step-word {
+  font-size: 28px;
+  font-weight: 600;
+}

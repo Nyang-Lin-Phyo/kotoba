@@ -53,7 +53,7 @@ The dev server binds to loopback only. There is no browser URL to open; the wind
 ```bash
 npm run lint            # oxlint
 npm run typecheck       # tsc for renderer, then for main/preload/tests
-npm test                # vitest: 215 unit + SQLite integration tests
+npm test                # vitest: 217 unit + SQLite integration tests
 .venv/bin/python -m unittest discover -s tests/python   # 23 pipeline tests
 ```
 
@@ -102,9 +102,14 @@ the Dashboard once at least 60 seconds have been measured.
 ## Kana practice
 
 Hiragana and Katakana pages now have three tabs. **Learn** is a short guided session mixing new
-characters with earlier ones; finishing it is practice, not mastery. **Sound chart** is a reference
-of every character with romaji. **Review** is a bounded queue of due or missed characters with a
-finish screen. A first-visit tutorial explains the modes; use "Show tutorial" to reopen it.
+characters with earlier ones. Every answer shows the kana **and** its romaji sound, and a correct
+answer is followed by a second step where you type the example word's reading with its sound shown.
+There is no hint toggle. Finishing is practice, not mastery. **Sound chart** is a reference of every
+character with romaji. **Review** is a bounded queue with a finish screen. A first-visit tutorial
+explains the modes; use "Show tutorial" to reopen it.
+
+Audio: Listen buttons appear only if a Japanese speech voice is installed on Windows. Without one,
+romaji is the sound guide. Bundled audio assets are a separate milestone.
 
 ## Daily study
 
