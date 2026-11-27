@@ -53,6 +53,9 @@ the production policy ever gains `unsafe-inline`, `unsafe-eval` or a websocket s
   `src/main/main.ts` → `.vite/build/main.cjs` and `src/preload/preload.ts` →
   `.vite/build/preload.cjs`. The two entries must never share a basename or they overwrite each
   other. `package.json` `main` and the preload path in `src/main/main.ts` depend on this.
+- **`packagerConfig.executableName` must be `kotoba`.** Electron Packager otherwise derives the
+  binary name from `productName` (`Kotoba`), while makers look for the package `name` (`kotoba`).
+  Without it `npm run make` fails with "could not find the Electron app binary".
 - Main and preload are built to `.vite/build/*.cjs`; the renderer to `.vite/renderer/main_window`.
 - `MAIN_WINDOW_VITE_DEV_SERVER_URL` is defined by the plugin in dev and undefined when packaged.
 - `src/main/security.mts` is `.mts` so the Vite config (ESM) can import the CSP builder without

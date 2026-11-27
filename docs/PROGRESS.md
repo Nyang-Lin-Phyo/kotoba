@@ -6,7 +6,7 @@
 |---|---|---|
 | M0 | Python environment and repository verification | ✅ **REACHED** 2026-11-26 |
 | M1 | Electron foundation and desktop shell | ✅ **REACHED** 2026-11-26 |
-| M2 | Native Windows packaging baseline | ⬜ not started |
+| M2 | Native Windows packaging baseline | ⏳ code complete — awaiting CI run and manual Windows install |
 | M3 | Persistent profile, onboarding, dates | ⬜ not started |
 | M4 | Kana learning | ⬜ not started |
 | M5 | Dictionary pipeline, vocabulary, FSRS | ⬜ not started |
@@ -207,3 +207,66 @@ data, and the packaged build.
 M2 — native Windows packaging baseline: extend the existing workflow with lint/typecheck, produce
 the Squirrel installer and an unpacked artifact, and verify `npm ci` + packaging on
 `windows-latest`.
+
+---
+
+## M2 — Native Windows packaging baseline
+
+Date: 2026-11-26
+Status: **code complete, not yet verified.** Windows CI has not run and no Windows artifact has
+been installed, so M2 is not marked reached.
+
+### What changed
+
+| File | Change |
+|---|---|
+| `.github/workflows/build-windows.yml` | Added lint, typecheck and unit-test steps before packaging; kept `npm ci`, Node 24, `windows-latest`, `contents: read`, 7-day retention. Added a PowerShell smoke test that launches the packaged exe with `--remote-debugging-port`, waits for a renderer target, asserts the URL is `file://`, and kills the process. Added a second artifact upload for the unpacked app (`Kotoba-Windows-x64-unpacked`). Timeout raised to 45 minutes. |
+| `forge.config.mts` | Added `packagerConfig.executableName: 'kotoba'`. |
+
+### Bug found and fixed locally
+
+`npm run make` failed with:
+
+```
+could not find the Electron app binary at ".../out/Kotoba-linux-x64/kotoba"
+```
+
+Electron Packager named the binary from `productName` (`Kotoba`) while makers look for the package
+`name` (`kotoba`). The same mismatch would have broken Squirrel on Windows. Setting
+`executableName: 'kotoba'` fixes both. This is exactly the class of failure that would otherwise
+have appeared only in CI.
+
+### Verified locally (Linux)
+
+```text
+python3 yaml.safe_load(workflow)   -> parses; 10 steps; runs-on windows-latest; timeout 45
+npm run make                       -> Making a deb distributable for linux/x64: OK
+out/Kotoba-linux-x64/kotoba        -> binary present with the new executableName
+packaged app (remote debugging)    -> file:// URL, prod CSP without unsafe-inline,
+                                      appInfo isDev:false, routing #/profile OK, no Node leaks
+window.close()                     -> process exits
+npm run lint / typecheck / test    -> clean / exit 0 / 15 passed
+```
+
+### Not verified (must not be claimed)
+
+- The GitHub Actions run itself (no CI execution from this environment).
+- Squirrel installer creation, installation, Start-menu shortcut, upgrade identity.
+- The Windows smoke test step; it is written but has never executed.
+- Japanese font rendering on Windows (Yu Gothic/Meiryo expected, unconfirmed).
+- Whether `npm ci` on the runner honours the `allowScripts` entries that `electron-winstaller`
+  needs for its 7z step.
+
+### Steps to close M2
+
+1. Push the changes and run the `Build Windows App` workflow manually.
+2. Download `Kotoba-Windows-x64` and `Kotoba-Windows-x64-unpacked`.
+3. Launch the unpacked `kotoba.exe`, confirm the window, sidebar, Settings version data and
+   Japanese glyphs.
+4. Install `KotobaSetup.exe`, launch from the Start menu, close, relaunch, confirm it still works.
+5. Record the outcome here; only then mark M2 reached.
+
+### Deferred
+
+- App icon and publisher metadata polish (later milestone).
+- SQLite backend smoke test on both platforms — no database exists until M3/M5.

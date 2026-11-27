@@ -9,7 +9,7 @@ permissions:
 jobs:
   build-windows:
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -24,16 +24,62 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm run test --if-present
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
 
       - name: Build Windows installer
         run: npm run make -- --arch=x64
+
+      - name: Smoke test packaged app
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $exe = Get-ChildItem -Path 'out' -Filter 'kotoba.exe' -Recurse -ErrorAction SilentlyContinue |
+            Where-Object { $_.DirectoryName -like '*win32-x64*' } |
+            Select-Object -First 1
+          if (-not $exe) { throw 'Packaged app executable not found under out/*win32-x64*' }
+
+          $proc = Start-Process -FilePath $exe.FullName -ArgumentList '--remote-debugging-port=9222' -PassThru
+          $page = $null
+          for ($i = 0; $i -lt 40; $i++) {
+            Start-Sleep -Seconds 1
+            try {
+              $targets = Invoke-RestMethod -Uri 'http://127.0.0.1:9222/json' -TimeoutSec 2
+              $candidate = $targets | Where-Object { $_.type -eq 'page' }
+              if ($candidate) { $page = $candidate | Select-Object -First 1; break }
+            } catch { }
+          }
+
+          if (-not $page) {
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+            throw 'Packaged app did not expose a renderer within 40s'
+          }
+          if ($page.url -notlike 'file://*') {
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+            throw "Packaged app loaded unexpected URL: $($page.url)"
+          }
+
+          Write-Host "Renderer loaded: $($page.url)"
+          Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
 
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
           name: Kotoba-Windows-x64
           path: out/make/**/*
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Upload unpacked app
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kotoba-Windows-x64-unpacked
+          path: out/Kotoba-win32-x64/**
           retention-days: 7
           if-no-files-found: error
