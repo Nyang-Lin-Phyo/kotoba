@@ -690,7 +690,7 @@ skills, two distinct successful unhinted days and a current interval of at least
 ```text
 npm run lint                                   -> no findings
 npm run typecheck                              -> exit 0
-npm test                                       -> 24 files, 207 tests passed
+npm test                                       -> 24 files, 208 tests passed
 .venv/bin/python -m unittest discover -s tests/python -> 23 tests passed
 npm run package                                -> packaged app with rebuilt dictionary
 ```
@@ -730,7 +730,7 @@ A fresh reviewer found one Critical and nine Important issues, all fixed with ta
 - Per-word detail, notes, history and server-side kana-normalized library search were added, plus an honest high-due-load suggestion.
 - Undo reversals no longer inflate `reviewsCompleted`.
 
-Final checks: lint clean, typecheck exit 0, TS **207/207**, Python **23/23**.
+Final checks: lint clean, typecheck exit 0, TS **208/208**, Python **23/23**.
 
 ### Known limitations
 
@@ -769,3 +769,21 @@ behaviour (Windows/POSIX/override). Actions were also bumped to the current Node
 majors (`checkout@v7`, `setup-node@v7`, `setup-python@v7`, `cache@v6`) to clear the Node-20
 deprecation warning. Local verification: lint clean, typecheck exit 0, **24 files / 207 tests** pass.
 Windows CI must be re-run by the user; this fix has not been verified on Windows.
+
+### Second Windows CI run — temp-directory cleanup
+
+The user re-ran the workflow. All 207 tests passed and the 10 previously skipped dictionary tests now
+passed, but the suite still failed in `afterAll`:
+
+```text
+Error: EPERM, Permission denied: 'C:\...\kotoba-dict-...'
+at rmSync(dir, { recursive: true, force: true })   syscall: 'rm'
+```
+
+Cause: `DictionaryService` kept a read-only SQLite handle open while the test removed its temp
+directory. Windows refuses to delete an open file; Linux allows it, so local runs never caught it.
+
+Fix: `DictionaryService.close()` releases the handle, `#open()` also closes the handle on any error
+path, the fixture suite closes the service before cleanup and retries removal briefly, and a new test
+verifies the file can be reopened after `close()`. Local checks: lint clean, typecheck exit 0,
+**24 files / 208 tests** passing. Windows CI must be re-run by the user; not verified there yet.

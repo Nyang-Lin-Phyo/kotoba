@@ -53,7 +53,7 @@ The dev server binds to loopback only. There is no browser URL to open; the wind
 ```bash
 npm run lint            # oxlint
 npm run typecheck       # tsc for renderer, then for main/preload/tests
-npm test                # vitest: 207 unit + SQLite integration tests
+npm test                # vitest: 208 unit + SQLite integration tests
 .venv/bin/python -m unittest discover -s tests/python   # 23 pipeline tests
 ```
 

@@ -98,19 +98,28 @@ export class DictionaryService {
     if (!existsSync(this.#path)) {
       throw AppError.dataMissing('The offline dictionary is not installed.');
     }
+    let db: DatabaseSync | null = null;
     try {
-      const db = new DatabaseSync(this.#path, { readOnly: true });
+      db = new DatabaseSync(this.#path, { readOnly: true });
       const row = db.prepare('select count(*) as total from entries').get() as { total: number };
       if (row.total === 0) {
-        db.close();
         throw AppError.dataMissing('The offline dictionary is empty.');
       }
       this.#db = db;
       return db;
     } catch (cause) {
+      // Windows cannot delete a file with an open handle, so never leak one
+      // even when the database turns out to be invalid.
+      db?.close();
       if (cause instanceof AppError) throw cause;
       throw AppError.dataMissing('The offline dictionary could not be opened.');
     }
+  }
+
+  /** Release the read-only handle. Required before deleting a temp database on Windows. */
+  close(): void {
+    this.#db?.close();
+    this.#db = null;
   }
 
   #rowsForIds(ids: readonly string[]): EntryRow[] {

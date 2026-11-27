@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { DatabaseSync } from 'node:sqlite';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -35,8 +36,19 @@ describe('dictionary service', () => {
     service = new DictionaryService(dbPath);
   });
 
-  afterAll(() => {
-    rmSync(dir, { recursive: true, force: true });
+  afterAll(async () => {
+    service.close();
+    // Windows refuses to delete a file while any handle is open; retry briefly
+    // in case the runtime keeps the descriptor alive for a tick.
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      try {
+        rmSync(dir, { recursive: true, force: true });
+        return;
+      } catch {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      }
+    }
+    throw new Error(`Could not clean up ${dir}`);
   });
 
   it('finds 猫 through kanji, hiragana, katakana and romaji', () => {
@@ -98,6 +110,15 @@ describe('dictionary service', () => {
     const corrupt = path.join(dir, 'corrupt.db');
     writeFileSync(corrupt, 'not sqlite');
     expect(() => new DictionaryService(corrupt).metadata()).toThrowError(AppError);
+  });
+
+  it('releases the handle so the database file can be reopened', () => {
+    expect(service.raw).toBeDefined();
+    service.close();
+    const probe = new DatabaseSync(dbPath, { readOnly: true });
+    const row = probe.prepare('select count(*) c from entries').get() as { c: number };
+    probe.close();
+    expect(row.c).toBe(6);
   });
 
   it('exposes fixture metadata from the built database', () => {
