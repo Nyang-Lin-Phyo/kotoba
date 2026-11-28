@@ -129,6 +129,39 @@ export const dictionaryIdSchema = z.object({
   id: z.string().min(1).max(64),
 });
 
+export const immersionAddSchema = z.object({
+  eventId: z.string().uuid(),
+  durationSeconds: z.number().int().min(1).max(86400),
+  activityType: z.enum(ACTIVITY_TYPES),
+  title: z.string().max(120),
+  notes: z.string().max(4000),
+  deliberate: z.boolean(),
+});
+
+export const immersionCorrectSchema = z.object({
+  eventId: z.string().uuid(),
+  id: z.string().min(1).max(64),
+  reason: z.string().trim().min(2).max(200),
+  durationSeconds: z.number().int().min(1).max(86400).optional(),
+  title: z.string().max(120).optional(),
+  notes: z.string().max(4000).optional(),
+  deliberate: z.boolean().optional(),
+});
+
+export const paginationSchema = z.object({
+  offset: z.number().int().min(0).max(100000),
+  limit: z.number().int().min(1).max(200),
+});
+
+export const exportInputSchema = z.object({
+  format: z.enum(['json', 'csv']),
+  includeNotes: z.boolean(),
+});
+
+export const calendarDaySchema = z.object({
+  dayKey: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD'),
+});
+
 export const itemOnlySchema = z.object({
   itemId: z.string().min(1).max(64),
 });

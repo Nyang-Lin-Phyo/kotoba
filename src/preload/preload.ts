@@ -22,6 +22,8 @@ const api: KotobaApi = {
   planner: {
     getToday: () => invoke(CHANNELS.plannerGetToday),
     preview: (input) => invoke(CHANNELS.plannerPreview, input),
+    getCalendarDay: (input) => invoke(CHANNELS.plannerGetCalendarDay, input),
+    getStats: () => invoke(CHANNELS.plannerGetStats),
   },
   settings: {
     get: () => invoke(CHANNELS.settingsGet),
@@ -31,6 +33,12 @@ const api: KotobaApi = {
     create: () => invoke(CHANNELS.backupCreate),
     list: () => invoke(CHANNELS.backupList),
     restore: (input) => invoke(CHANNELS.backupRestore, input),
+    exportProgress: (input) => invoke(CHANNELS.backupExportProgress, input),
+  },
+  immersion: {
+    add: (input) => invoke(CHANNELS.immersionAdd, input),
+    list: (input) => invoke(CHANNELS.immersionList, input),
+    correct: (input) => invoke(CHANNELS.immersionCorrect, input),
   },
   kana: {
     catalog: () => invoke(CHANNELS.kanaCatalog),

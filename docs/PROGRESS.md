@@ -690,7 +690,7 @@ skills, two distinct successful unhinted days and a current interval of at least
 ```text
 npm run lint                                   -> no findings
 npm run typecheck                              -> exit 0
-npm test                                       -> 27 files, 217 tests passed
+npm test                                       -> 34 files, 245 tests passed
 .venv/bin/python -m unittest discover -s tests/python -> 23 tests passed
 npm run package                                -> packaged app with rebuilt dictionary
 ```
@@ -810,7 +810,7 @@ Status: complete and verified on Linux in dev and packaged builds. No Windows CI
 ```text
 npm run lint          -> no findings
 npm run typecheck     -> exit 0
-npm test              -> 27 files, 217 tests passed
+npm test              -> 34 files, 245 tests passed
 npm run package       -> file:// boot, production CSP, no Node leaks
 ```
 
@@ -873,3 +873,92 @@ and the Windows voice instructions. Lint/typecheck clean, 27 files / 217 tests.
 
 Real offline audio needs either an installed Japanese OS voice (Listen buttons appear automatically)
 or a separately sourced, licensed set of kana/word audio files. Neither exists in this build.
+
+### Syllable sounds and retry-before-reveal
+
+The user asked that word sounds be split per kana (`ka-wa`, not `kawa`) and that a wrong answer get one
+retry before the answer is revealed, after which typing the revealed sound proceeds to the small word.
+
+- Added an original `sound` field to every entry in `data/curriculum/kana_words.json`, e.g. かわ → `ka-wa`, きって → `ki-t-te`. Added words for all remaining basic kana so no character skips the word step.
+- Learn feedback and the word-writing step now display the syllable sound (`Sounds like: ka-wa`).
+- Learn flow: correct answer jumps straight to the word step; first wrong answer shows red feedback and a Try again button; second wrong answer reveals kana + romaji and requires typing that sound before continuing. Still no hint toggle.
+- Added tests for the sound field and per-word syllable separation.
+
+Verified with CDP: `correctJumpsToWord`, `wordSound: ni-ku`, `firstWrongTryAgain`, `revealed`, and
+`afterConfirmWordStep` all true. Lint/typecheck clean, 27 files / 219 tests.
+
+### Transition to M6
+
+These fixes close the post-M5 UX work. Next milestone: M6 (goal editing UI, calendar, statistics,
+adaptive plan, timer/session segmentation as specified in AGENTS.md).
+
+---
+
+## M6 slice 1 — Calendar, statistics and goal editing
+
+Status: complete on Linux; Windows CI not run for this slice.
+
+### Implemented
+
+- Calendar route: Monday–Sunday month grid, eligible/outside-plan styling, per-day target vs actual from stored plans and events, date detail panel.
+- Statistics route: streak, target-to-date, horizon phase, week/month bars, and tooltips with versioned `stats-v1` definitions.
+- Pure `statsRules` (streak-v1: both goals, future days excluded, unfinished today leaves yesterday's streak) and `getDailyActivity` repository aggregating minutes, introductions, reviews (excluding undos) and kana attempts.
+- Goal editor on Profile: effective date defaults to tomorrow, preview, old→new, conflict handling; `setGoalVersion` already prevents rewriting past days.
+- Long-history test with an injected clock beyond a 12-month horizon; series bounded to 365 days.
+
+### Verification
+
+lint clean, typecheck exit 0, **30 files / 230 tests**, packaged build succeeds. CDP: Calendar renders 30 cells and a day detail; Statistics shows streak and definitions; goal edit added a 90-minute effective-dated row while the original 120-minute row stayed unchanged.
+
+### Deferred to the next M6 slice
+
+Timer/session segmentation and crash/idle handling; manual external immersion logs and corrections; optional JSON/CSV export with privacy prompt.
+
+### Known limitations
+
+No Windows CI run for this slice. Month navigation in Calendar issues one bounded IPC call per day (max 31). Statistics history is capped at 365 days; the horizon total still comes from the profile.
+
+### Final review fixes for M6 slice 1
+
+A fresh reviewer found one Critical and four Important issues, all fixed:
+
+- `getStats` used an end-exclusive day range, so day 1 had zero week/month/target-to-date figures and today's activity never appeared. Fixed with an inclusive `to`; regression test pins day-1 numbers.
+- Undo reversals left the original review row with `undo_of = null`, so undone reviews were still counted. Both `getDailyActivity` and `countReviewsOnDay` now exclude originals that have a reversal; two-row regression test added.
+- The goal form was seeded with hardcoded 120/15 rather than the active goal. It now initializes and resyncs from the stored goal.
+- Calendar's initial month came from host UTC; it now uses the profile timezone.
+- Target-to-date was capped at the 365-day chart window; it now covers the full horizon, with actuals aggregated over the same range.
+
+Final checks: lint clean, typecheck exit 0, **30 files / 232 tests**, packaged successfully. Deferred minors are in the execution ledger.
+
+---
+
+## M6 remainder — external logs, workload, export
+
+Status: complete on Linux; Windows CI not run for this change. Profile schema version **4**.
+
+### Implemented
+
+- Migration v4: `immersion_logs` and append-only `immersion_corrections`. Corrections keep before/after JSON and a reason in the same transaction as the update.
+- Manual external study log on Dashboard: duration, activity type, title, notes, deliberate/passive. Only deliberate minutes count toward the daily goal; passive logs are shown but excluded.
+- Workload rule (`workload-v1`): when due word reviews exceed twice the daily review allocation, Dashboard shows an honest suggestion to reduce new words. Goals are never edited automatically.
+- Progress export in Settings: JSON or CSV, with a privacy prompt and an off-by-default "include personal notes" checkbox. The main process opens a native save dialog; the renderer never supplies a path.
+- Statistic/calendar actuals include deliberate external minutes, so Dashboard and Statistics agree.
+
+### Verification
+
+lint clean, typecheck exit 0, **34 files / 241 tests**, packaged successfully. Live CDP: schema upgraded v3→v4 with a pre-migration backup; deliberate 30-minute log raised today's minutes 0→30; passive 30-minute log left it at 30; a correction changed 30→40 minutes and preserved the audit row; Settings showed the export/privacy UI.
+
+### Known limitations
+
+No Windows CI run for this change. The native save dialog path cannot be automated through CDP, so only the pure serializers and UI presence were verified. JSON/CSV exports are user-owned files, not backups of the SQLite database.
+
+### Final review fixes
+
+A fresh reviewer found one Critical and three Important issues, all fixed with tests:
+
+- Timer minutes and deliberate external minutes overwrote each other in daily aggregation; they are now summed as raw seconds before flooring. Regression test uses both sources on one day.
+- Progress export silently included only the current week and month; it now exports the full stored history via `getFullHistoryDays`.
+- Manual log add/correct had no idempotency key; both now take a UUID `eventId`, replay returns the existing row, and buttons are disabled while pending.
+- The tracking disclosure now states that deliberate manual logs are included and passive ones excluded. SQL ranges were made half-open so tomorrow's activity cannot leak into today's stats.
+
+Final checks: lint clean, typecheck exit 0, **34 files / 245 tests**, packaged successfully. CDP confirmed Dashboard and Statistics both report 40 deliberate minutes for the current day.

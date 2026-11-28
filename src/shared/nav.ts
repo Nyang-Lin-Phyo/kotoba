@@ -21,8 +21,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     entries: [
       { kind: 'ready', id: 'dashboard', label: 'Dashboard', path: '/' },
       { kind: 'ready', id: 'profile', label: 'My Profile', path: '/profile' },
-      { kind: 'planned', id: 'calendar', label: 'Calendar', milestone: 'M6' },
-      { kind: 'planned', id: 'statistics', label: 'Statistics', milestone: 'M6' },
+      { kind: 'ready', id: 'calendar', label: 'Calendar', path: '/calendar' },
+      { kind: 'ready', id: 'statistics', label: 'Statistics', path: '/statistics' },
     ],
   },
   {

@@ -58,11 +58,14 @@ export const CHANNELS = {
   goalsSet: 'goals:set',
   plannerGetToday: 'planner:get-today',
   plannerPreview: 'planner:preview',
+  plannerGetCalendarDay: 'planner:get-calendar-day',
+  plannerGetStats: 'planner:get-stats',
   settingsGet: 'settings:get',
   settingsSet: 'settings:set',
   backupCreate: 'backup:create',
   backupList: 'backup:list',
   backupRestore: 'backup:restore',
+  backupExportProgress: 'backup:export-progress',
   kanaCatalog: 'kana:catalog',
   kanaLesson: 'kana:lesson',
   kanaSubmitAttempt: 'kana:submit-attempt',
@@ -74,6 +77,9 @@ export const CHANNELS = {
   studyStop: 'study:stop',
   studyGetStatus: 'study:get-status',
   studyAcknowledgeInterrupted: 'study:acknowledge-interrupted',
+  immersionAdd: 'immersion:add',
+  immersionList: 'immersion:list',
+  immersionCorrect: 'immersion:correct',
   dictionarySearch: 'dictionary:search',
   dictionaryGetEntry: 'dictionary:get-entry',
   dictionaryGetKanji: 'dictionary:get-kanji',
@@ -361,6 +367,83 @@ export type DictionaryMetadata = {
   readonly path: string;
 };
 
+export type DayFactsDTO = {
+  readonly dayKey: DateKey;
+  readonly eligible: boolean;
+  readonly targetMinutes: number;
+  readonly targetWords: number;
+  readonly minutes: number;
+  readonly newWords: number;
+  readonly reviews: number;
+  readonly kanaAttempts: number;
+};
+
+export type CalendarDayResult = {
+  readonly day: DayFactsDTO;
+  readonly curriculumDay: number | null;
+  readonly curriculumWeek: number | null;
+  readonly phase: CurriculumPhase | null;
+  readonly status: 'before-start' | 'scheduled' | 'after-horizon';
+};
+
+export type StatsResult = {
+  readonly version: 'stats-v1';
+  readonly week: { readonly weekStart: DateKey; readonly days: readonly DayFactsDTO[] };
+  readonly month: { readonly monthKey: string; readonly days: readonly DayFactsDTO[] };
+  readonly horizon: {
+    readonly totalDays: number;
+    readonly dayIndex: number | null;
+    readonly remainingDays: number;
+    readonly completed: boolean;
+    readonly beforeStart: boolean;
+  };
+  readonly streak: number;
+  readonly phase: CurriculumPhase;
+  readonly toDate: {
+    readonly targetMinutes: number;
+    readonly targetWords: number;
+    readonly actualMinutes: number;
+    readonly actualWords: number;
+  };
+  readonly definitions: {
+    readonly streak: string;
+    readonly accuracy: string;
+    readonly verifiedRecognition: string;
+  };
+};
+
+export type ImmersionLogDTO = {
+  readonly id: string;
+  readonly dayKey: string;
+  readonly startedAt: string;
+  readonly durationSeconds: number;
+  readonly activityType: ActivityType;
+  readonly title: string;
+  readonly notes: string;
+  readonly deliberate: boolean;
+};
+
+export type ImmersionAddDTO = {
+  readonly eventId: string;
+  readonly durationSeconds: number;
+  readonly activityType: ActivityType;
+  readonly title: string;
+  readonly notes: string;
+  readonly deliberate: boolean;
+};
+
+export type ImmersionCorrectDTO = {
+  readonly eventId: string;
+  readonly id: string;
+  readonly reason: string;
+  readonly durationSeconds?: number;
+  readonly title?: string;
+  readonly notes?: string;
+  readonly deliberate?: boolean;
+};
+
+export type ExportInput = { readonly format: 'json' | 'csv'; readonly includeNotes: boolean };
+
 export type LessonItem = {
   readonly itemKey: string;
   readonly form: string;
@@ -495,6 +578,8 @@ export type KotobaApi = {
   planner: {
     getToday(): Promise<Result<DashboardData>>;
     preview(input: ProfileInput): Promise<Result<PlanPreview>>;
+    getCalendarDay(input: { readonly dayKey: DateKey }): Promise<Result<CalendarDayResult>>;
+    getStats(): Promise<Result<StatsResult>>;
   };
   settings: {
     get(): Promise<Result<AppSettings>>;
@@ -504,6 +589,7 @@ export type KotobaApi = {
     create(): Promise<Result<BackupInfo>>;
     list(): Promise<Result<BackupInfo[]>>;
     restore(input: BackupRestoreInput): Promise<Result<RestoreResult>>;
+    exportProgress(input: ExportInput): Promise<Result<{ readonly saved: boolean }>>;
   };
   kana: {
     catalog(): Promise<Result<readonly KanaGroup[]>>;
@@ -519,6 +605,11 @@ export type KotobaApi = {
     stop(): Promise<Result<TimerStatus>>;
     getStatus(): Promise<Result<TimerStatus>>;
     acknowledgeInterrupted(input: AcknowledgeInterruptedInput): Promise<Result<TimerStatus>>;
+  };
+  immersion: {
+    add(input: ImmersionAddDTO): Promise<Result<ImmersionLogDTO>>;
+    list(input: { readonly offset: number; readonly limit: number }): Promise<Result<readonly ImmersionLogDTO[]>>;
+    correct(input: ImmersionCorrectDTO): Promise<Result<ImmersionLogDTO>>;
   };
   dictionary: {
     search(input: DictionarySearchInput): Promise<Result<readonly DictionaryResult[]>>;

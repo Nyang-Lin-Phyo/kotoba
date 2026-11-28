@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import type { ProfileState } from '../shared/contracts';
+import { StatisticsPage } from './features/statistics/StatisticsPage';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { OnboardingWizard } from './features/onboarding/OnboardingWizard';
 import { ProfileContext } from './lib/profileContext';
+import { CalendarPage } from './features/calendar/CalendarPage';
 import { DictionaryPage } from './features/dictionary/DictionaryPage';
 import { ReviewsPage } from './features/reviews/ReviewsPage';
 import { VocabularyPage } from './features/vocabulary/VocabularyPage';
@@ -97,6 +99,8 @@ export function App() {
                 <Route path="/hiragana" element={<KanaPage script="hiragana" />} />
                 <Route path="/katakana" element={<KanaPage script="katakana" />} />
                 <Route path="/dictionary" element={<DictionaryPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/statistics" element={<StatisticsPage />} />
                 <Route path="/vocabulary" element={<VocabularyPage />} />
                 <Route path="/reviews" element={<ReviewsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />

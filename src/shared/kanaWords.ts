@@ -7,6 +7,7 @@ export type KanaWord = {
   readonly character: string;
   readonly word: string;
   readonly meaning: string;
+  readonly sound: string;
 };
 
 export const KANA_WORDS: readonly KanaWord[] = words.words;

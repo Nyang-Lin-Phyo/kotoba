@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
+import { suggestReducedNewWords } from '../../shared/workloadRules';
 import { Link } from 'react-router-dom';
 import { formatDayKey } from '../../shared/date';
 import { ACTIVITY_LABELS, PHASE_LABELS } from '../../shared/goals';
+import { ExternalLogCard } from '../features/immersion/ExternalLogCard';
 import { useAsync } from '../lib/useAsync';
 
 export function DashboardPage() {
@@ -30,7 +32,7 @@ export function DashboardPage() {
     );
   }
 
-  const { today, horizon, month, week, actual, kana, dueReviews, trackingNote } = state.data;
+  const { today, horizon, month, week, actual, kana, dueReviews, activeGoal, trackingNote } = state.data;
 
   const dayLabel = horizon.beforeStart
     ? `Starts ${formatDayKey(horizon.startDate, undefined, { month: 'long', day: 'numeric' })}`
@@ -100,7 +102,7 @@ export function DashboardPage() {
             {actual.minutes}
             <span className="stat-unit"> / {today.targetMinutes} min</span>
           </p>
-          <p className="muted">Measured time starts with the study timer (M4).</p>
+          <p className="muted">Measured time includes the timer and deliberate external logs; passive logs are excluded.</p>
         </article>
 
         <article className="card">
@@ -244,6 +246,18 @@ export function DashboardPage() {
           </p>
         </article>
       </div>
+
+      {suggestReducedNewWords(dueReviews, activeGoal.dailyMinutes, activeGoal.dailyNewWords).needed && (
+        <article className="card card--wide card--notice">
+          <h2>Review load is high</h2>
+          <p className="muted">
+            {suggestReducedNewWords(dueReviews, activeGoal.dailyMinutes, activeGoal.dailyNewWords).reason}{' '}
+            Your goal has not been changed — this is only a suggestion.
+          </p>
+        </article>
+      )}
+
+      <ExternalLogCard />
 
       <p className="muted footnote">{trackingNote}</p>
     </section>

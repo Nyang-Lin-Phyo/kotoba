@@ -6,11 +6,14 @@
  * and an unexpected failure never leaks a stack trace or a filesystem path.
  */
 
-import { app, ipcMain } from 'electron';
+import { app, dialog, ipcMain } from 'electron';
 import {
   CHANNELS,
   type AppInfo,
   type DataRootInfo,
+  type ExportInput,
+  type ImmersionAddDTO,
+  type ImmersionCorrectDTO,
   type GoalVersion,
   type PlanPreview,
   type ProfileState,
@@ -23,7 +26,12 @@ import {
   dictionaryIdSchema,
   dictionarySearchSchema,
   familiarSchema,
+  exportInputSchema,
+  immersionAddSchema,
+  immersionCorrectSchema,
+  paginationSchema,
   goalInputSchema,
+  calendarDaySchema,
   learningIdSchema,
   itemOnlySchema,
   notesSchema,
@@ -67,10 +75,13 @@ import {
 } from './services/backup';
 import { createProfile, getProfileState, updateProfile } from './services/profile';
 import { getDashboard, previewPlan, setGoalVersion } from './services/planner';
+import { getCalendarDay, getStats } from './services/stats';
 import type { TimerService } from './services/timer';
 import type { DictionaryService } from './services/dictionary';
 import type { CardFactory } from './services/learning';
 import { clearSchedulerCache } from './services/fsrsScheduler';
+import { addExternalLog, correctExternalLog, listExternalLogs } from './services/immersion';
+import { buildExportPayload, writeProgressExport } from './services/progressExport';
 import {
   getCardDetail,
   getReviewQueue,
@@ -374,6 +385,48 @@ export function registerIpcHandlers(deps: IpcDeps): void {
     run: (input) => deps.timer.acknowledgeInterrupted(input.sessionId),
   });
 
+  registerHandler<ImmersionAddDTO, ReturnType<typeof addExternalLog>>({
+    channel: CHANNELS.immersionAdd,
+    schema: immersionAddSchema,
+    allowedOrigins,
+    run: (input) => addExternalLog(db(), input, input.eventId, deps.now()),
+  });
+
+  registerHandler<{ readonly offset: number; readonly limit: number }, ReturnType<typeof listExternalLogs>>({
+    channel: CHANNELS.immersionList,
+    schema: paginationSchema,
+    allowedOrigins,
+    run: (input) => listExternalLogs(db(), input.offset, input.limit),
+  });
+
+  registerHandler<ImmersionCorrectDTO, ReturnType<typeof correctExternalLog>>({
+    channel: CHANNELS.immersionCorrect,
+    schema: immersionCorrectSchema,
+    allowedOrigins,
+    run: (input) => {
+      const { id, reason, ...patch } = input;
+      return correctExternalLog(db(), id, { ...patch, reason }, input.eventId, deps.now());
+    },
+  });
+
+  registerHandler<ExportInput, { readonly saved: boolean }>({
+    channel: CHANNELS.backupExportProgress,
+    schema: exportInputSchema,
+    allowedOrigins,
+    run: async (input) => {
+      const extension = input.format === 'json' ? 'json' : 'csv';
+      const result = await dialog.showSaveDialog({
+        title: 'Export Kotoba progress',
+        defaultPath: `kotoba-progress-${new Date(deps.now()).toISOString().slice(0, 10)}.${extension}`,
+        filters: [{ name: extension.toUpperCase(), extensions: [extension] }],
+      });
+      if (result.canceled || result.filePath === undefined) return { saved: false };
+      const payload = buildExportPayload(db(), deps.now());
+      writeProgressExport(payload, input.format, input.includeNotes, result.filePath);
+      return { saved: true };
+    },
+  });
+
   registerHandler<DictionarySearchInput, ReturnType<DictionaryService['search']>>({
     channel: CHANNELS.dictionarySearch,
     schema: dictionarySearchSchema,
@@ -400,6 +453,20 @@ export function registerIpcHandlers(deps: IpcDeps): void {
     schema: dictionaryIdSchema,
     allowedOrigins,
     run: (input) => deps.dictionary.getKana(input.id),
+  });
+
+  registerHandler<{ readonly dayKey: string }, ReturnType<typeof getCalendarDay>>({
+    channel: CHANNELS.plannerGetCalendarDay,
+    schema: calendarDaySchema,
+    allowedOrigins,
+    run: (input) => getCalendarDay(db(), input.dayKey),
+  });
+
+  registerHandler<undefined, ReturnType<typeof getStats>>({
+    channel: CHANNELS.plannerGetStats,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => getStats(db(), deps.now()),
   });
 
   registerHandler<undefined, ReturnType<DictionaryService['metadata']>>({

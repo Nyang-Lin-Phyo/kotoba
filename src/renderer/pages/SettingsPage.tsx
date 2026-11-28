@@ -31,6 +31,9 @@ export function SettingsPage() {
 
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [exportFormat, setExportFormat] = useState<'json' | 'csv'>('json');
+  const [includeNotes, setIncludeNotes] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const createBackup = async () => {
     setBusy('create');
@@ -222,6 +225,45 @@ export function SettingsPage() {
           Higher retention means more reviews. Changing this affects future scheduling only; existing
           cards are never rescheduled or reset.
         </p>
+      </article>
+
+      <article className="card card--wide">
+        <h2>Export progress</h2>
+        <p className="muted">
+          Your profile, goals, daily totals, personal words and manual study logs can be saved to a
+          file you choose. Nothing is uploaded and no cloud account is involved.
+        </p>
+        <div className="field-row">
+          <label className="field">
+            <span>Format</span>
+            <select value={exportFormat} onChange={(event) => setExportFormat(event.target.value as 'json' | 'csv')}>
+              <option value="json">JSON</option>
+              <option value="csv">CSV</option>
+            </select>
+          </label>
+          <label className="checkbox-row">
+            <input type="checkbox" checked={includeNotes} onChange={(event) => setIncludeNotes(event.target.checked)} />
+            <span>Include my personal notes (off by default)</span>
+          </label>
+        </div>
+        <div className="button-row">
+          <button
+            type="button"
+            className="button"
+            disabled={exporting}
+            onClick={() => {
+              setExporting(true);
+              void window.kotoba.backup
+                .exportProgress({ format: exportFormat, includeNotes })
+                .then((result) => {
+                  setExporting(false);
+                  setNotice(result.ok ? (result.data.saved ? 'Export saved.' : 'Export cancelled.') : result.error.message);
+                });
+            }}
+          >
+            {exporting ? 'Exporting…' : 'Choose file and export'}
+          </button>
+        </div>
       </article>
 
       <article className="card card--wide" id="sources">

@@ -60,9 +60,9 @@ describe('migration 003', () => {
       },
     });
 
-    expect(LATEST_SCHEMA_VERSION).toBe(3);
-    expect(outcome.applied).toEqual([3]);
-    expect(readSchemaVersion(db)).toBe(3);
+    expect(LATEST_SCHEMA_VERSION).toBeGreaterThanOrEqual(3);
+    expect(outcome.applied).toContain(3);
+    expect(readSchemaVersion(db)).toBe(LATEST_SCHEMA_VERSION);
     expect(backups).toBe(1);
     expect({
       profile: db.prepare('select * from profiles').all(),

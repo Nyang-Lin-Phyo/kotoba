@@ -53,7 +53,7 @@ The dev server binds to loopback only. There is no browser URL to open; the wind
 ```bash
 npm run lint            # oxlint
 npm run typecheck       # tsc for renderer, then for main/preload/tests
-npm test                # vitest: 217 unit + SQLite integration tests
+npm test                # vitest: 245 unit + SQLite integration tests
 .venv/bin/python -m unittest discover -s tests/python   # 23 pipeline tests
 ```
 
@@ -110,6 +110,19 @@ explains the modes; use "Show tutorial" to reopen it.
 
 Audio: Listen buttons appear only if a Japanese speech voice is installed on Windows. Without one,
 romaji is the sound guide. Bundled audio assets are a separate milestone.
+
+## External study and export
+
+Use **External study log** on the Dashboard to record study done outside Kotoba. Mark it deliberate
+to count toward the day's goal; passive exposure is stored but excluded. Corrections keep an audit
+record. In **Settings → Export progress** you can save JSON or CSV with a native dialog; personal
+notes are excluded unless you opt in.
+
+## Calendar and statistics
+
+**Calendar** shows real daily logs against the targets frozen for each day; click a day for details.
+**Statistics** explains how streak, accuracy and verified recognition are computed. On **My Profile**
+you can add an effective-dated goal change; past days never change.
 
 ## Daily study
 

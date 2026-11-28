@@ -20,6 +20,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState<AttemptResult | null>(null);
+  const [attempts, setAttempts] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -30,13 +31,12 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
 
   const step = lesson.steps[index];
   const finished = index >= lesson.steps.length;
-  const example = step !== undefined && feedback?.correct === true
-    ? findKanaWord(step.character)
-    : undefined;
+  const example = step !== undefined ? findKanaWord(step.character) : undefined;
 
   const resetStepState = () => {
     setAnswer('');
     setFeedback(null);
+    setAttempts(0);
     setWordMode(false);
     setWordAnswer('');
     setWordResult(null);
@@ -49,6 +49,14 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
     setIndex(0);
     setCorrectCount(0);
     resetStepState();
+  };
+
+  const proceedToWordOrNext = () => {
+    if (example !== undefined) {
+      setWordMode(true);
+    } else {
+      next();
+    }
   };
 
   const submit = async () => {
@@ -69,7 +77,28 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
       return;
     }
     setFeedback(result.data);
-    if (result.data.correct) setCorrectCount((value) => value + 1);
+    if (result.data.correct) {
+      setCorrectCount((value) => value + 1);
+      proceedToWordOrNext();
+    } else {
+      setAttempts((value) => value + 1);
+    }
+  };
+
+  const tryAgain = () => {
+    setFeedback(null);
+    setAnswer('');
+    startedAt.current = Date.now();
+  };
+
+  const confirmRevealedAnswer = () => {
+    if (step === undefined || answer.trim().length === 0) return;
+    if (kanaWordCorrect(answer, step.reading)) {
+      proceedToWordOrNext();
+    } else {
+      setAnswer('');
+      setError(`Type the sound you see: ${step.reading} (${kanaRomaji(step.reading)})`);
+    }
   };
 
   const checkWord = () => {
@@ -88,9 +117,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
       <article className="card card--wide session-card">
         <p className="eyebrow">Session finished</p>
         <h2>Practice complete</h2>
-        <p>
-          You worked through {lesson.steps.length} characters and got {correctCount} right.
-        </p>
+        <p>You worked through {lesson.steps.length} characters and got {correctCount} right.</p>
         <p className="muted">
           This is practice, not mastery. A character is verified only after unhinted correct answers
           on two different study days.
@@ -104,6 +131,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
     );
   }
 
+  const revealed = feedback !== null && !feedback.correct && attempts >= 2;
   const progress = lesson.steps.length === 0 ? 0 : ((index + 1) / lesson.steps.length) * 100;
 
   return (
@@ -115,18 +143,12 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
             {script === 'hiragana' ? 'Hiragana' : 'Katakana'}
           </p>
           <h2 className="session-character">{step?.character}</h2>
-          <p className="muted">
-            {step?.kind === 'review'
-              ? 'Seen before — type its sound again.'
-              : 'Type its sound in romaji or kana.'}
-          </p>
+          <p className="muted">Type its sound in romaji or kana.</p>
         </div>
         <div className="header-actions">
           {step !== undefined && <SpeakButton text={step.reading} label="Hear character" />}
           <div className="session-progress">
-            <span>
-              {index + 1} of {lesson.steps.length}
-            </span>
+            <span>{index + 1} of {lesson.steps.length}</span>
             <div className="progress" role="presentation">
               <div className="progress-fill" style={{ width: `${progress}%` }} />
             </div>
@@ -136,24 +158,50 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
 
       {!wordMode && (
         <>
-          <label className="field">
-            <span>Reading</span>
-            <input
-              className="quiz-input"
-              value={answer}
-              maxLength={80}
-              autoComplete="off"
-              placeholder="type the reading…"
-              onChange={(event) => setAnswer(event.target.value)}
-              aria-label="Kana reading"
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' && feedback === null) void submit();
-              }}
-            />
-          </label>
+          {revealed && (
+            <div className="quiz-feedback quiz-feedback--bad">
+              <strong>
+                Answer: <span className="jp">{step?.reading}</span> ({kanaRomaji(step?.reading ?? '')})
+              </strong>
+              <span className="muted">Type that sound below to continue.</span>
+            </div>
+          )}
+
+          {feedback === null || !feedback.correct ? (
+            <label className="field">
+              <span>{revealed ? 'Type the sound you see' : 'Reading'}</span>
+              <input
+                className="quiz-input"
+                value={answer}
+                maxLength={80}
+                autoComplete="off"
+                placeholder={revealed ? step?.reading : 'type the reading…'}
+                aria-label="Kana reading"
+                onChange={(event) => {
+                  setAnswer(event.target.value);
+                  setError(null);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    if (revealed) confirmRevealedAnswer();
+                    else void submit();
+                  }
+                }}
+              />
+            </label>
+          ) : null}
 
           <div className="button-row">
-            {feedback === null ? (
+            {revealed ? (
+              <button
+                type="button"
+                className="button"
+                disabled={answer.trim().length === 0}
+                onClick={confirmRevealedAnswer}
+              >
+                I typed the sound
+              </button>
+            ) : feedback === null ? (
               <button
                 type="button"
                 className="button"
@@ -163,45 +211,42 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
                 {busy ? 'Checking…' : 'Check answer'}
               </button>
             ) : (
-              <>
-                {example !== undefined && (
-                  <button type="button" className="button" onClick={() => setWordMode(true)}>
-                    Write the small word
-                  </button>
-                )}
-                <button type="button" className="button button--ghost" onClick={next}>
-                  {index + 1 === lesson.steps.length ? 'Finish' : 'Next character'}
-                </button>
-              </>
+              <button type="button" className="button" onClick={tryAgain}>
+                Try again
+              </button>
             )}
           </div>
 
-          {feedback !== null && (
+          {feedback !== null && !revealed && (
             <div className={`quiz-feedback ${feedback.correct ? 'quiz-feedback--ok' : 'quiz-feedback--bad'}`}>
               <strong>
-                {feedback.correct ? 'Correct' : 'Not quite'} — <span className="jp">{feedback.expected}</span>{' '}
-                ({kanaRomaji(feedback.expected)})
+                {feedback.correct ? 'Correct' : 'Not quite'} —{' '}
+                <span className="jp">{feedback.expected}</span> ({kanaRomaji(feedback.expected)})
               </strong>
-              {example !== undefined && (
+              {!feedback.correct && (
                 <span className="muted">
-                  Small word: <span className="jp">{example.word}</span> — {example.meaning}
-                  <br />
-                  Sounds like: <strong>{kanaRomaji(example.word)}</strong>
+                  {attempts >= 2 ? 'Next wrong answer reveals the sound.' : 'One more try — type its sound.'}
                 </span>
               )}
             </div>
           )}
+          {error !== null && <p className="error">{error}</p>}
         </>
       )}
 
       {wordMode && example !== undefined && (
         <section className="word-step">
+          {feedback !== null && (
+            <p className="quiz-feedback quiz-feedback--ok">
+              Correct — <span className="jp">{feedback.expected}</span> ({kanaRomaji(feedback.expected)})
+            </p>
+          )}
           <p className="eyebrow">Now use it in a word</p>
           <p>
             <span className="jp word-step-word">{example.word}</span> — {example.meaning}
           </p>
           <p className="muted">
-            Sounds like: <strong>{kanaRomaji(example.word)}</strong>. Type that reading in romaji or kana.
+            Sounds like: <strong>{example.sound}</strong>. Type that reading in romaji or kana.
           </p>
           <SpeakButton text={example.word} label="Hear word" />
           <label className="field">
@@ -234,9 +279,7 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
           </div>
           {wordResult !== null && (
             <div className={`quiz-feedback ${wordResult ? 'quiz-feedback--ok' : 'quiz-feedback--bad'}`}>
-              <strong>
-                {wordResult ? 'Correct' : `Not quite — ${kanaRomaji(example.word)}`}
-              </strong>
+              <strong>{wordResult ? 'Correct' : `Not quite — ${example.sound}`}</strong>
               <span className="muted">
                 This word step is practice; it does not change your kana verification count.
               </span>
@@ -244,8 +287,6 @@ export function KanaLearn({ script, groups, statuses, onAnswered }: Props) {
           )}
         </section>
       )}
-
-      {error !== null && <p className="error">{error}</p>}
     </article>
   );
 }

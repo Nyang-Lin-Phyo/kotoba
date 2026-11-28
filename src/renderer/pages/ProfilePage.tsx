@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { endDateExclusive, formatDayKey } from '../../shared/date';
+import { useCallback, useEffect, useState } from 'react';
+import { addDays, endDateExclusive, formatDayKey, todayInZone } from '../../shared/date';
 import { INTEREST_LABELS } from '../../shared/enums';
 import { useProfile } from '../lib/profileContext';
 import { useAsync } from '../lib/useAsync';
@@ -9,9 +9,39 @@ function yesNo(value: boolean): string {
 }
 
 export function ProfilePage() {
-  const { state } = useProfile();
+  const { state, reload } = useProfile();
   const { profile, goals } = state;
   const horizonEnd = endDateExclusive(profile.startDate, profile.horizonMonths);
+  const [effectiveDate, setEffectiveDate] = useState(() =>
+    addDays(todayInZone(profile.timezone, Date.now()), 1),
+  );
+  const [minutes, setMinutes] = useState(goals.at(-1)?.dailyMinutes ?? 120);
+  const [newWordsGoal, setNewWordsGoal] = useState(goals.at(-1)?.dailyNewWords ?? 15);
+  const [goalError, setGoalError] = useState<string | null>(null);
+  const [goalNotice, setGoalNotice] = useState<string | null>(null);
+  const [savingGoal, setSavingGoal] = useState(false);
+
+  useEffect(() => {
+    const latest = goals.at(-1);
+    if (latest !== undefined) {
+      setMinutes(latest.dailyMinutes);
+      setNewWordsGoal(latest.dailyNewWords);
+    }
+  }, [goals]);
+
+  const saveGoal = async () => {
+    setSavingGoal(true);
+    setGoalError(null);
+    setGoalNotice(null);
+    const result = await window.kotoba.goals.set({ effectiveDate, dailyMinutes: minutes, dailyNewWords: newWordsGoal });
+    setSavingGoal(false);
+    if (!result.ok) {
+      setGoalError(result.error.message);
+      return;
+    }
+    await reload();
+    setGoalNotice(`Goal updated from ${effectiveDate}. Earlier days were not changed.`);
+  };
   const kana = useAsync(useCallback(() => window.kotoba.kana.summary(), []));
   const words = useAsync(useCallback(() => window.kotoba.learning.getSummary(), []));
 
@@ -91,6 +121,38 @@ export function ProfilePage() {
             <dd>{profile.preferences.audio === 'off' ? 'Off' : 'System Japanese voice'}</dd>
           </div>
         </dl>
+      </article>
+
+      <article className="card card--wide">
+        <h2>Change daily goal</h2>
+        <p className="muted">
+          A goal change takes effect on a chosen date. Past days keep their original targets.
+        </p>
+        <div className="field-row">
+          <label className="field">
+            <span>Effective date</span>
+            <input type="date" value={effectiveDate} onChange={(event) => setEffectiveDate(event.target.value)} />
+          </label>
+          <label className="field">
+            <span>Minutes per day</span>
+            <input type="number" min={10} max={600} value={minutes} onChange={(event) => setMinutes(Number(event.target.value))} />
+          </label>
+          <label className="field">
+            <span>New words per day</span>
+            <input type="number" min={0} max={100} value={newWordsGoal} onChange={(event) => setNewWordsGoal(Number(event.target.value))} />
+          </label>
+        </div>
+        <p className="muted">
+          Preview: from {effectiveDate}, {minutes} min · {newWordsGoal} words instead of{' '}
+          {goals.at(-1)?.dailyMinutes ?? 120} min · {goals.at(-1)?.dailyNewWords ?? 15} words.
+        </p>
+        <div className="button-row">
+          <button type="button" className="button" disabled={savingGoal} onClick={() => void saveGoal()}>
+            {savingGoal ? 'Saving…' : 'Save goal change'}
+          </button>
+        </div>
+        {goalError !== null && <p className="error">{goalError}</p>}
+        {goalNotice !== null && <p className="muted">{goalNotice}</p>}
       </article>
 
       <article className="card card--wide">

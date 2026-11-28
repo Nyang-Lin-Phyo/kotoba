@@ -183,8 +183,10 @@ export function countIntroducedOnDay(db: Db, profileId: string, dayKey: string):
 export function countReviewsOnDay(db: Db, profileId: string, dayKey: string): number {
   return (
     db
-      .prepare('select count(*) c from review_logs where profile_id = ? and day_key = ? and undo_of is null')
-      .get(profileId, dayKey) as { c: number }
+      .prepare(`select count(*) c from review_logs
+       where profile_id = ? and day_key = ? and undo_of is null
+         and id not in (select undo_of from review_logs where profile_id = ? and undo_of is not null)`)
+      .get(profileId, dayKey, profileId) as { c: number }
   ).c;
 }
 

@@ -55,6 +55,10 @@ import {
 } from '../database/repositories/vocabulary';
 import { countDueCards } from '../database/repositories/reviewCards';
 import {
+  immersionSecondsByActivity,
+  sumDeliberateImmersionSeconds,
+} from '../database/repositories/immersion';
+import {
   hasSegmentOnDay,
   sumActiveSecondsByActivity,
   sumActiveSecondsForDay,
@@ -272,8 +276,17 @@ export function getDashboard(db: Db, nowMs: number): DashboardData {
     profile,
     today,
     actual: {
-      minutes: Math.floor(sumActiveSecondsForDay(db, profile.id, todayKey) / 60),
-      minutesByActivity: sumActiveSecondsByActivity(db, profile.id, todayKey),
+      minutes: Math.floor(
+        (sumActiveSecondsForDay(db, profile.id, todayKey) +
+          sumDeliberateImmersionSeconds(db, profile.id, todayKey)) / 60,
+      ),
+      minutesByActivity: (() => {
+        const base = { ...sumActiveSecondsByActivity(db, profile.id, todayKey) };
+        for (const [activity, minutes] of Object.entries(immersionSecondsByActivity(db, profile.id, todayKey))) {
+          base[activity as keyof typeof base] = (base[activity as keyof typeof base] ?? 0) + minutes;
+        }
+        return base;
+      })(),
       newWords: countIntroducedOnDay(db, profile.id, todayKey),
       reviewsCompleted: countReviewsOnDay(db, profile.id, todayKey),
     },

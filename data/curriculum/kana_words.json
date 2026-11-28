@@ -1,41 +1,287 @@
 {
   "note": "Original hiragana-only example words for guided kana practice. These are curriculum examples, not dictionary entries; meanings are plain English glosses.",
   "words": [
-    { "character": "あ", "word": "あい", "meaning": "love" },
-    { "character": "い", "word": "いえ", "meaning": "house" },
-    { "character": "う", "word": "うみ", "meaning": "sea" },
-    { "character": "え", "word": "えほん", "meaning": "picture book" },
-    { "character": "お", "word": "おかね", "meaning": "money" },
-    { "character": "か", "word": "かわ", "meaning": "river" },
-    { "character": "き", "word": "きって", "meaning": "stamp" },
-    { "character": "く", "word": "くつ", "meaning": "shoes" },
-    { "character": "け", "word": "けさ", "meaning": "this morning" },
-    { "character": "こ", "word": "こども", "meaning": "child" },
-    { "character": "さ", "word": "さけ", "meaning": "salmon" },
-    { "character": "し", "word": "しお", "meaning": "salt" },
-    { "character": "す", "word": "すし", "meaning": "sushi" },
-    { "character": "せ", "word": "せかい", "meaning": "world" },
-    { "character": "そ", "word": "そら", "meaning": "sky" },
-    { "character": "た", "word": "たべる", "meaning": "to eat" },
-    { "character": "つ", "word": "つき", "meaning": "moon" },
-    { "character": "て", "word": "てがみ", "meaning": "letter" },
-    { "character": "と", "word": "とけい", "meaning": "clock" },
-    { "character": "な", "word": "なつ", "meaning": "summer" },
-    { "character": "に", "word": "にく", "meaning": "meat" },
-    { "character": "ね", "word": "ねこ", "meaning": "cat" },
-    { "character": "の", "word": "のり", "meaning": "seaweed" },
-    { "character": "は", "word": "はな", "meaning": "flower" },
-    { "character": "ひ", "word": "ひと", "meaning": "person" },
-    { "character": "ふ", "word": "ふゆ", "meaning": "winter" },
-    { "character": "へ", "word": "へや", "meaning": "room" },
-    { "character": "ほ", "word": "ほん", "meaning": "book" },
-    { "character": "ま", "word": "まど", "meaning": "window" },
-    { "character": "み", "word": "みず", "meaning": "water" },
-    { "character": "や", "word": "やま", "meaning": "mountain" },
-    { "character": "ゆ", "word": "ゆき", "meaning": "snow" },
-    { "character": "よ", "word": "よる", "meaning": "night" },
-    { "character": "り", "word": "りんご", "meaning": "apple" },
-    { "character": "わ", "word": "わたし", "meaning": "I / me" },
-    { "character": "ん", "word": "にほん", "meaning": "Japan" }
+    {
+      "character": "あ",
+      "word": "あい",
+      "meaning": "love",
+      "sound": "a-i"
+    },
+    {
+      "character": "い",
+      "word": "いえ",
+      "meaning": "house",
+      "sound": "i-e"
+    },
+    {
+      "character": "う",
+      "word": "うみ",
+      "meaning": "sea",
+      "sound": "u-mi"
+    },
+    {
+      "character": "え",
+      "word": "えほん",
+      "meaning": "picture book",
+      "sound": "e-ho-n"
+    },
+    {
+      "character": "お",
+      "word": "おかね",
+      "meaning": "money",
+      "sound": "o-ka-ne"
+    },
+    {
+      "character": "か",
+      "word": "かわ",
+      "meaning": "river",
+      "sound": "ka-wa"
+    },
+    {
+      "character": "き",
+      "word": "きって",
+      "meaning": "stamp",
+      "sound": "ki-t-te"
+    },
+    {
+      "character": "く",
+      "word": "くつ",
+      "meaning": "shoes",
+      "sound": "ku-tsu"
+    },
+    {
+      "character": "け",
+      "word": "けさ",
+      "meaning": "this morning",
+      "sound": "ke-sa"
+    },
+    {
+      "character": "こ",
+      "word": "こども",
+      "meaning": "child",
+      "sound": "ko-do-mo"
+    },
+    {
+      "character": "さ",
+      "word": "さけ",
+      "meaning": "salmon",
+      "sound": "sa-ke"
+    },
+    {
+      "character": "し",
+      "word": "しお",
+      "meaning": "salt",
+      "sound": "shi-o"
+    },
+    {
+      "character": "す",
+      "word": "すし",
+      "meaning": "sushi",
+      "sound": "su-shi"
+    },
+    {
+      "character": "せ",
+      "word": "せかい",
+      "meaning": "world",
+      "sound": "se-ka-i"
+    },
+    {
+      "character": "そ",
+      "word": "そら",
+      "meaning": "sky",
+      "sound": "so-ra"
+    },
+    {
+      "character": "た",
+      "word": "たべる",
+      "meaning": "to eat",
+      "sound": "ta-be-ru"
+    },
+    {
+      "character": "つ",
+      "word": "つき",
+      "meaning": "moon",
+      "sound": "tsu-ki"
+    },
+    {
+      "character": "て",
+      "word": "てがみ",
+      "meaning": "letter",
+      "sound": "te-ga-mi"
+    },
+    {
+      "character": "と",
+      "word": "とけい",
+      "meaning": "clock",
+      "sound": "to-ke-i"
+    },
+    {
+      "character": "な",
+      "word": "なつ",
+      "meaning": "summer",
+      "sound": "na-tsu"
+    },
+    {
+      "character": "に",
+      "word": "にく",
+      "meaning": "meat",
+      "sound": "ni-ku"
+    },
+    {
+      "character": "ね",
+      "word": "ねこ",
+      "meaning": "cat",
+      "sound": "ne-ko"
+    },
+    {
+      "character": "の",
+      "word": "のり",
+      "meaning": "seaweed",
+      "sound": "no-ri"
+    },
+    {
+      "character": "は",
+      "word": "はな",
+      "meaning": "flower",
+      "sound": "ha-na"
+    },
+    {
+      "character": "ひ",
+      "word": "ひと",
+      "meaning": "person",
+      "sound": "hi-to"
+    },
+    {
+      "character": "ふ",
+      "word": "ふゆ",
+      "meaning": "winter",
+      "sound": "fu-yu"
+    },
+    {
+      "character": "へ",
+      "word": "へや",
+      "meaning": "room",
+      "sound": "he-ya"
+    },
+    {
+      "character": "ほ",
+      "word": "ほん",
+      "meaning": "book",
+      "sound": "ho-n"
+    },
+    {
+      "character": "ま",
+      "word": "まど",
+      "meaning": "window",
+      "sound": "ma-do"
+    },
+    {
+      "character": "み",
+      "word": "みず",
+      "meaning": "water",
+      "sound": "mi-zu"
+    },
+    {
+      "character": "や",
+      "word": "やま",
+      "meaning": "mountain",
+      "sound": "ya-ma"
+    },
+    {
+      "character": "ゆ",
+      "word": "ゆき",
+      "meaning": "snow",
+      "sound": "yu-ki"
+    },
+    {
+      "character": "よ",
+      "word": "よる",
+      "meaning": "night",
+      "sound": "yo-ru"
+    },
+    {
+      "character": "り",
+      "word": "りんご",
+      "meaning": "apple",
+      "sound": "ri-n-go"
+    },
+    {
+      "character": "わ",
+      "word": "わたし",
+      "meaning": "I / me",
+      "sound": "wa-ta-shi"
+    },
+    {
+      "character": "ん",
+      "word": "にほん",
+      "meaning": "Japan",
+      "sound": "ni-ho-n"
+    },
+    {
+      "character": "ち",
+      "word": "ちず",
+      "meaning": "map",
+      "sound": "chi-zu"
+    },
+    {
+      "character": "ぬ",
+      "word": "ぬの",
+      "meaning": "cloth",
+      "sound": "nu-no"
+    },
+    {
+      "character": "む",
+      "word": "むし",
+      "meaning": "insect",
+      "sound": "mu-shi"
+    },
+    {
+      "character": "め",
+      "word": "めがね",
+      "meaning": "glasses",
+      "sound": "me-ga-ne"
+    },
+    {
+      "character": "も",
+      "word": "もの",
+      "meaning": "thing",
+      "sound": "mo-no"
+    },
+    {
+      "character": "ら",
+      "word": "らく",
+      "meaning": "easy",
+      "sound": "ra-ku"
+    },
+    {
+      "character": "る",
+      "word": "るす",
+      "meaning": "away from home",
+      "sound": "ru-su"
+    },
+    {
+      "character": "れ",
+      "word": "れい",
+      "meaning": "cold",
+      "sound": "re-i"
+    },
+    {
+      "character": "ろ",
+      "word": "ろく",
+      "meaning": "six",
+      "sound": "ro-ku"
+    },
+    {
+      "character": "を",
+      "word": "を",
+      "meaning": "object-marker particle",
+      "sound": "o"
+    },
+    {
+      "character": "っ",
+      "word": "がっこう",
+      "meaning": "school",
+      "sound": "ga-k-ko-u"
+    }
   ]
 }
