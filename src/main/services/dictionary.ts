@@ -185,6 +185,67 @@ export class DictionaryService {
     }));
   }
 
+  /**
+   * Exact form/reading lookup for offline tokenization. Bounded and chunked so
+   * a long pasted text cannot create an oversized SQL statement.
+   */
+  resolveForms(texts: readonly string[]): Map<string, DictionaryResult[]> {
+    const unique = [...new Set(texts.map((text) => text.trim()).filter((text) => text.length > 0))]
+      .slice(0, 500);
+    const result = new Map<string, DictionaryResult[]>();
+    if (unique.length === 0) return result;
+
+    const db = this.#open();
+    const byEntry = new Map<string, DictionaryResult>();
+    const matchToEntries = new Map<string, Set<string>>();
+
+    for (let offset = 0; offset < unique.length; offset += 100) {
+      const chunk = unique.slice(offset, offset + 100);
+      const placeholders = chunk.map(() => '?').join(', ');
+      for (const table of ['forms', 'readings'] as const) {
+        const rows = db
+          .prepare(`select text, entry_id from ${table} where text in (${placeholders})`)
+          .all(...chunk) as { text: string; entry_id: string }[];
+        for (const row of rows) {
+          const set = matchToEntries.get(row.text) ?? new Set<string>();
+          set.add(row.entry_id);
+          matchToEntries.set(row.text, set);
+        }
+      }
+    }
+
+    const ids = [...new Set([...matchToEntries.values()].flatMap((set) => [...set]))];
+    for (let offset = 0; offset < ids.length; offset += 100) {
+      const chunk = ids.slice(offset, offset + 100);
+      for (const row of this.#rowsForIds(chunk)) {
+        byEntry.set(row.id, {
+          id: row.id,
+          canonicalForm: row.canonical_form,
+          reading: row.reading ?? '',
+          english: row.english ?? '',
+          priority: row.priority,
+          curriculumRank: row.curriculum_rank,
+        });
+      }
+    }
+
+    for (const [text, entryIds] of matchToEntries) {
+      result.set(
+        text,
+        [...entryIds]
+          .map((id) => byEntry.get(id))
+          .filter((entry): entry is DictionaryResult => entry !== undefined)
+          .toSorted((a, b) =>
+            (a.curriculumRank ?? Number.MAX_SAFE_INTEGER) -
+              (b.curriculumRank ?? Number.MAX_SAFE_INTEGER) ||
+            b.priority - a.priority ||
+            a.id.localeCompare(b.id),
+          ),
+      );
+    }
+    return result;
+  }
+
   /** Stable candidate order for daily lessons: original rank, then source priority. */
   listCandidateIds(limit: number): string[] {
     const rows = this.#open()

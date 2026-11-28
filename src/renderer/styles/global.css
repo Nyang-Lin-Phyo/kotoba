@@ -1539,3 +1539,152 @@ body {
 .lesson-choice:hover {
   border-color: var(--accent);
 }
+
+/* ---------- immersion and passages (M8) ---------- */
+
+.immersion-input,
+textarea.field {
+  width: 100%;
+  min-height: 132px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-family: var(--font-jp);
+  font-size: 16px;
+  line-height: 1.8;
+  resize: vertical;
+}
+
+.token-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 2px;
+  margin: var(--space-4) 0 var(--space-2);
+  font-family: var(--font-jp);
+  font-size: 21px;
+  line-height: 1.7;
+}
+
+.token {
+  padding: 0 2px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.token:hover,
+.token[aria-pressed='true'] {
+  background: var(--bg-hover);
+}
+
+.token--known {
+  border-bottom: 2px solid var(--accent);
+}
+
+.token--learning {
+  border-bottom: 2px solid var(--text-muted);
+}
+
+.token--unseen {
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.token--unknown {
+  border-bottom: 1px dotted var(--text-muted);
+}
+
+.status-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.status-key li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.key-line {
+  display: inline-block;
+  width: 20px;
+  height: 0;
+  border-top: 2px solid var(--accent);
+}
+
+.key-line--learning {
+  border-color: var(--text-muted);
+}
+
+.key-line--unseen {
+  border-color: var(--border-strong);
+}
+
+.key-line--unknown {
+  border-top-style: dotted;
+}
+
+.candidate-list {
+  margin: var(--space-3) 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.passage-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.passage-line {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border);
+}
+
+.passage-kana {
+  color: var(--text-muted);
+  font-family: var(--font-jp);
+  font-size: 12px;
+}
+
+.passage-jp {
+  font-family: var(--font-jp);
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+.passage-en {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.passage-romaji {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.exercise {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.exercise:last-child {
+  border-bottom: 0;
+}

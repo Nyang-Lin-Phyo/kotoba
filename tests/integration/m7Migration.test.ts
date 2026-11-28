@@ -38,7 +38,7 @@ describe('M7 migration and repositories', () => {
   });
 
   it('upgrades to v5 without losing existing data', () => {
-    expect(LATEST_SCHEMA_VERSION).toBe(5);
+    expect(LATEST_SCHEMA_VERSION).toBeGreaterThanOrEqual(5);
     expect(db.prepare('select count(*) c from profiles').get()).toEqual({ c: 1 });
     const second = migrate(db, { nowMs: DAY1 + 1000 });
     expect(second.applied).toEqual([]);
@@ -98,7 +98,7 @@ describe('v4 to v5 upgrade with real data', () => {
 
     let backups = 0;
     const outcome = migrate(upgradeDb, { nowMs: Date.UTC(2026, 4, 17, 12), backupBeforeUpgrade: () => { backups += 1; } });
-    expect(outcome.applied).toEqual([5]);
+    expect(outcome.applied).toContain(5);
     expect(backups).toBe(1);
     expect(upgradeDb.prepare('select count(*) c from profiles').get()).toEqual({ c: 2 });
     expect(upgradeDb.prepare('select title from immersion_logs where id = ?').get('i1')).toEqual({ title: 'Anime' });

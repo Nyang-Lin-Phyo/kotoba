@@ -1003,3 +1003,46 @@ A fresh code review found three Important issues, all fixed with regression test
 Minors fixed: attempts for characters not discovered in introduced words are rejected, replayed event ids are type-checked, the submit response uses the same status as list/detail, `firstDayKey` comes from the word's introduction day, the Dashboard next-kanji action is due-aware, and the summary has a real error state. The rule note in the app now discloses lapse behavior.
 
 Final checks after fixes: lint clean, typecheck exit 0, **39 files / 265 tests**, packaged successfully.
+
+---
+
+## M8 — Reading, listening, speaking and immersion
+
+Status: complete on Linux; Windows CI not re-run for this change. Profile schema version **6**.
+
+### Implemented
+
+- Migration v6: `mined_items`, `media_items`, `media_tokens` and `comprehension_attempts`. Mined items dedupe on `(profile, entry, sentence, item_key)`, and introducing a word removes matching queued items so nothing is counted twice.
+- Offline tokenizer: `kuromoji@0.1.2` with IPADIC assets generated into `resources/tokenizer/dict` by `npm run prepare:tokenizer` and bundled as a Forge extra resource. Licences and notices are bundled. Assets are gitignored; CI regenerates and verifies them before packaging.
+- `/immersion`: paste text or import a user-chosen local `.srt`/`.ass`/`.txt` via a native dialog; token tap shows dictionary candidates; mining has a daily cap of 3 and UUID event-id idempotency. Token statuses use thin underlines, never bright badges.
+- Coverage (`coverageRules.ts`): denominator is content-word tokens (nouns, verbs, adjectives, adverbs, determiners); particles and symbols are reported separately; unmapped tokens are counted, not guessed. Reading/meaning "known" uses the existing verified-recognition threshold per skill. The UI states the denominator, dictionary release, tokenizer version and that this is not comprehension.
+- `/reading`: four original graded passages with kana above each line, glosses for new words/grammar, translation toggle and comprehension questions with answer keys.
+- `/listening`: local `speechSynthesis` with Japanese-voice detection, speed control, transcript toggle and the same comprehension questions. With no voice installed the exercise explains the limitation and the transcript still works. Nothing is downloaded.
+- `/speaking`: shadowing with optional local `getUserMedia`/`MediaRecorder` recording, playback and delete. No upload, no pronunciation score, no mandatory microphone.
+- Dashboard and Profile show real queue/passage counts; sidebar routes are enabled. UI follows the approved direction in `docs/superpowers/unslop-m8-ui.md`.
+
+### Japanese content review
+
+A read-only review of the four passages found no Critical errors and confirmed all readings, translations and answer keys. Fixed: removed a false "only familiar words" claim, added kana for every line (including kanji words), glossed と and それから, improved a vague prompt and weak distractors.
+
+### Verification
+
+lint clean, typecheck exit 0, **45 files / 288 tests**, Python suite 23 tests, packaged successfully. Live CDP on WSLg: v5→v6 upgrade with a pre-migration backup; pasted `猫が すきです` produced five offline tokens with 猫 resolved and が/space/です correctly excluded from the coverage denominator; mining added exactly one queue row on a repeated submission; reading comprehension answered and showed a rationale; `/listening` showed the honest no-Japanese-voice fallback; `/speaking` loaded shadowing; the stale "planned modules" footnote disappeared. A separate real-IPADIC test tokenized Japanese using the generated assets.
+
+### Known limitations
+
+Tokenization is approximate; unmapped and inflected forms are reported rather than guessed. No OCR, browser extension, automatic caption acquisition, speech recognition or cloud sync. Listening requires an installed Japanese OS voice; none is bundled. Recordings are local blobs only and are lost on reload. Windows CI and native installer verification remain pending for this change.
+
+Final checks: lint clean, typecheck exit 0, **45 files / 288 tests**, packaged successfully.
+
+### Final review fixes
+
+A fresh code review found two Critical and several Important issues; all fixed with regression tests:
+
+- Mined items used `jmdict:` entry ids while vocabulary snapshots used stripped source ids, so introduced words never left the queue and per-skill coverage was always false for real dictionary data. Ids are now canonicalized at every boundary; a regression test uses `id !== sourceId`.
+- Listening comprehension was unreachable because passage lookup was restricted to `reading`. Both skills now resolve the passage, validate the answer against that exercise's choices, and replay stores the original correctness in the event payload.
+- Mining now dedupes against already-introduced words and uses the selected dictionary candidate rather than always the first one.
+- Subtitle import is a non-persisting preview; the user explicitly saves it afterwards. Reading lines have an on-demand offline word lookup. Mined context comes from the containing sentence, not the first 500 characters of the document.
+- The renderer CSP now permits local `blob:` media playback and the main process allows only the `media` permission for its own window after a user action. Queue counts are no longer truncated at 50 rows.
+
+Final checks after fixes: lint clean, typecheck exit 0, **45 files / 288 tests**, packaged successfully. CDP confirmed a listening answer is accepted, a mined word already introduced is not queued again, unmapped tokens are labelled honestly, and reading word lookup works.

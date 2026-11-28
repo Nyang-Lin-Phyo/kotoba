@@ -14,7 +14,7 @@ const config: ForgeConfig = {
     executableName: 'kotoba',
     // Generated dictionary.db is immutable runtime data, not JS. It is copied
     // outside the ASAR so it can be opened read-only with node:sqlite.
-    extraResource: ['resources/dictionaries', 'resources/notices'],
+    extraResource: ['resources/dictionaries', 'resources/tokenizer', 'resources/notices'],
   },
   rebuildConfig: {},
   makers: [

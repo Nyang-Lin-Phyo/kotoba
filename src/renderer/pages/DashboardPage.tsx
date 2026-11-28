@@ -5,6 +5,7 @@ import { formatDayKey } from '../../shared/date';
 import { ACTIVITY_LABELS, PHASE_LABELS } from '../../shared/goals';
 import { ExternalLogCard } from '../features/immersion/ExternalLogCard';
 import { M7Summary } from '../features/progress/M7Summary';
+import { M8Summary } from '../features/progress/M8Summary';
 import { useAsync } from '../lib/useAsync';
 
 export function DashboardPage() {
@@ -259,6 +260,8 @@ export function DashboardPage() {
       )}
 
       <M7Summary />
+
+      <M8Summary />
 
       <ExternalLogCard />
 

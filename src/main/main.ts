@@ -3,7 +3,7 @@ import path from 'node:path';
 import { app, BrowserWindow, dialog, powerMonitor, session } from 'electron';
 import started from 'electron-squirrel-startup';
 import { DatabaseManager } from './database/manager';
-import { resolveDictionaryPath } from './dictionary/paths';
+import { resolveDictionaryPath, resolveTokenizerDir } from './dictionary/paths';
 import { registerIpcHandlers } from './ipc';
 import { resolveDataRoot, type ResolvedDataRoot } from './paths';
 import { isTrustedSender, windowOptions } from './security.mts';
@@ -11,6 +11,7 @@ import { createBackup } from './services/backup';
 import { DictionaryService } from './services/dictionary';
 import { createCardFactory } from './services/fsrsScheduler';
 import { TimerService } from './services/timer';
+import { TokenizerService } from './services/tokenizer';
 
 // Windows installer/uninstaller shortcuts must quit immediately.
 if (started) {
@@ -72,8 +73,12 @@ function bootstrap(): void {
   });
 
   app.whenReady().then(async () => {
-    session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => {
-      callback(false);
+    session.defaultSession.setPermissionRequestHandler((contents, permission, callback) => {
+      // Only the app's own window may request microphone access, and only
+      // because the user explicitly pressed Record. All other requests stay denied.
+      const allowed =
+        permission === 'media' && mainWindow !== null && contents.id === mainWindow.webContents.id;
+      callback(allowed);
     });
 
     let opened: { database: DatabaseManager; resolved: ResolvedDataRoot };
@@ -116,6 +121,14 @@ function bootstrap(): void {
       }
     }
 
+    const tokenizer = new TokenizerService(
+      resolveTokenizerDir({
+        isPackaged: app.isPackaged,
+        appPath: app.getAppPath(),
+        resourcesPath: process.resourcesPath,
+      }),
+    );
+
     timer = new TimerService(() => opened.database.get());
     // A session still marked running at boot was interrupted by a crash.
     timer.recover();
@@ -144,6 +157,7 @@ function bootstrap(): void {
       now: () => Date.now(),
       timer,
       dictionary,
+      tokenizer,
       makeCardFactory: createCardFactory,
     });
 

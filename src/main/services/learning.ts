@@ -31,6 +31,7 @@ import {
   updateUserVocabulary,
   type DailyNewItemRow,
 } from '../database/repositories/vocabulary';
+import { markMinedIntroducedForEntry } from '../database/repositories/minedItems';
 import { getCardForSkill, insertCard, listCards } from '../database/repositories/reviewCards';
 import { getActiveProfile } from '../database/repositories/profiles';
 
@@ -250,6 +251,9 @@ export function introduceWord(
       createdAt: nowIso,
       updatedAt: nowIso,
     });
+
+    markMinedIntroducedForEntry(db, profile.id, snapshot.id);
+    markMinedIntroducedForEntry(db, profile.id, snapshot.sourceId);
 
     for (const skill of ['meaning', 'reading'] as const) {
       const card = createCard(input.itemId, skill, nowMs);

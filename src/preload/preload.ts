@@ -78,6 +78,16 @@ const api: KotobaApi = {
     getKana: (input) => invoke(CHANNELS.dictionaryGetKana, input),
     metadata: () => invoke(CHANNELS.dictionaryMetadata),
   },
+  immersionStudy: {
+    analyze: (input) => invoke(CHANNELS.immersionAnalyze, input),
+    analysis: (input) => invoke(CHANNELS.immersionAnalysis, input),
+    mine: (input) => invoke(CHANNELS.immersionMine, input),
+    queue: (input) => invoke(CHANNELS.immersionQueue, input),
+    queueCount: () => invoke(CHANNELS.immersionQueueCount),
+    dismiss: (input) => invoke(CHANNELS.immersionDismiss, input),
+    importFile: () => invoke(CHANNELS.mediaImport),
+    comprehension: (input) => invoke(CHANNELS.comprehensionSubmit, input),
+  },
   kanji: {
     list: () => invoke(CHANNELS.kanjiList),
     detail: (input) => invoke(CHANNELS.kanjiDetail, input),

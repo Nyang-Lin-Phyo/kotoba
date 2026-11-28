@@ -1,8 +1,8 @@
 # Third-party licences
 
 This file records the licences of software and data bundled with or required to build Kotoba.
-Dictionary and corpus data are not bundled yet; when they are, every source version, hash and
-redistribution right will be listed here and in `data/manifest.json`.
+Dictionary and corpus data are bundled; every source version, hash and redistribution right is
+recorded here and in `data/manifest.json`.
 
 ## Runtime / bundled dependencies
 
@@ -10,6 +10,7 @@ redistribution right will be listed here and in `data/manifest.json`.
 |---|---|---|---|---|
 | WanaKana | 5.3.1 | MIT | Romaji/IME input normalization for kana quizzes | https://github.com/WaniKani/WanaKana |
 | ts-fsrs | 6.0.1 | MIT | FSRS-7 spaced-repetition scheduling for word reviews | https://github.com/open-spaced-repetition/ts-fsrs |
+| kuromoji | 0.1.2 | Apache-2.0 | Offline Japanese tokenization | https://github.com/takuyaa/kuromoji.js |
 | React | 19.3.1 | MIT | Renderer UI | https://react.dev/ |
 | React DOM | 19.3.1 | MIT | Renderer DOM binding | https://react.dev/ |
 | React Router | 7.18.7 | MIT | Hash routing that works from `file://` | https://reactrouter.com/ |
@@ -53,6 +54,17 @@ invented: the `jlpt_tags` table exists but is empty.
 ## Original data
 
 `data/curriculum/kana.json`, `data/curriculum/beginner_words.json`,
-`data/curriculum/kana_words.json`, `data/curriculum/grammar_units.json` and
+`data/curriculum/kana_words.json`, `data/curriculum/grammar_units.json`,
+`data/curriculum/reading_passages.json` and
 `data/fixtures/dictionary_fixture.json` are original data authored for this project. The fixture is
 synthetic and must never be shipped in a packaged build.
+
+
+## Offline tokenizer data
+
+Kuromoji.js bundles mecab-ipadic-2.7.0-20070801 (Copyright 2000–2003 Nara Institute of Science
+and Technology). Use, reproduction and distribution are permitted provided the copyright notice and
+IPADIC/ICOT warranty paragraphs accompany the data. The installer includes
+`resources/notices/IPADIC-NOTICE.txt` and `resources/notices/APACHE-2.0-kuromoji.txt`, and the
+`resources/tokenizer/dict` assets are generated from the pinned npm package by
+`npm run prepare:tokenizer`; they are not committed. No network access is needed at runtime.

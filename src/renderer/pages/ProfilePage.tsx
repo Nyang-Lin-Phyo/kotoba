@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { addDays, endDateExclusive, formatDayKey, todayInZone } from '../../shared/date';
 import { INTEREST_LABELS } from '../../shared/enums';
 import { M7Summary } from '../features/progress/M7Summary';
+import { M8Summary } from '../features/progress/M8Summary';
 import { useProfile } from '../lib/profileContext';
 import { useAsync } from '../lib/useAsync';
 
@@ -273,6 +274,8 @@ export function ProfilePage() {
       </article>
 
       <M7Summary />
+
+      <M8Summary />
 
       <article className="card card--wide">
         <h2>Progress</h2>

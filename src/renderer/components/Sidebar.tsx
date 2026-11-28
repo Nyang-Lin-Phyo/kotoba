@@ -92,9 +92,11 @@ export function Sidebar() {
         </div>
       ))}
 
-      <p className="sidebar-footnote">
-        Greyed items are planned modules, not working features.
-      </p>
+      {NAV_GROUPS.some((group) => group.entries.some((entry) => entry.kind === 'planned')) && (
+        <p className="sidebar-footnote">
+          Greyed items are planned modules, not working features.
+        </p>
+      )}
     </nav>
   );
 }

@@ -222,6 +222,37 @@ export const grammarAttemptSchema = z.object({
   answerIndex: z.number().int().min(0).max(20),
 });
 
+export const immersionAnalyzeSchema = z.object({
+  text: z.string().min(1).max(20000),
+  title: z.string().max(120),
+  sourceName: z.string().max(120),
+  kind: z.enum(['paste', 'subtitle', 'text']),
+  persist: z.boolean().optional(),
+});
+
+export const mediaIdSchema = z.object({ id: z.string().min(1).max(64) });
+
+export const immersionMineSchema = z.object({
+  eventId: z.string().uuid(),
+  entryId: z.string().min(1).max(64),
+  reading: z.string().max(80),
+  sentence: z.string().min(1).max(500),
+  sourceTitle: z.string().max(120),
+  sourceType: z.enum(['paste', 'subtitle', 'passage']),
+});
+
+export const comprehensionSchema = z.object({
+  eventId: z.string().uuid(),
+  skill: z.enum(['reading', 'listening']),
+  materialId: z.string().min(1).max(64),
+  exerciseId: z.string().min(1).max(64),
+  answerIndex: z.number().int().min(0).max(20),
+});
+
+export type ImmersionAnalyzeInput = z.infer<typeof immersionAnalyzeSchema>;
+export type MediaIdInput = z.infer<typeof mediaIdSchema>;
+export type ImmersionMineInput = z.infer<typeof immersionMineSchema>;
+export type ComprehensionInput = z.infer<typeof comprehensionSchema>;
 export type KanjiAttemptInput = z.infer<typeof kanjiAttemptSchema>;
 export type GrammarAttemptInput = z.infer<typeof grammarAttemptSchema>;
 export type StudyStartInput = z.infer<typeof studyStartSchema>;

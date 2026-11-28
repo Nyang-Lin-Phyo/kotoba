@@ -66,6 +66,7 @@ secrets/
 data/raw/
 data/processed/
 resources/dictionaries/
+resources/tokenizer/
 
 # ------------------
 # Local databases, backups and runtime data

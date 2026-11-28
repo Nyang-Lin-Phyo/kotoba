@@ -1,0 +1,265 @@
+{
+  "note": "Original beginner material authored for Kotoba. New words and grammar are glossed in context, and a kana reading is provided for every line. Romaji is a temporary hint. These are learning materials, not JLPT sample questions or translations of copyrighted texts.",
+  "passages": [
+    {
+      "id": "self-introduction",
+      "title": "Self introduction",
+      "order": 1,
+      "level": "beginner-1",
+      "sourceNote": "Original curriculum content authored for Kotoba.",
+      "lines": [
+        {
+          "japanese": "はじめまして。わたしは 李です。",
+          "reading": "hajimemashite. watashi wa ri desu",
+          "english": "Nice to meet you. I am Ri.",
+          "kana": "はじめまして。わたしは りです。"
+        },
+        {
+          "japanese": "わたしは がくせいです。",
+          "reading": "watashi wa gakusei desu",
+          "english": "I am a student.",
+          "kana": "わたしは がくせいです。"
+        },
+        {
+          "japanese": "よろしく おねがいします。",
+          "reading": "yoroshiku onegai shimasu",
+          "english": "I look forward to it.",
+          "kana": "よろしく おねがいします。"
+        },
+        {
+          "japanese": "あなたは がくせいですか。",
+          "reading": "anata wa gakusei desu ka",
+          "english": "Are you a student?",
+          "kana": "あなたは がくせいですか。"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "self-introduction-q1",
+          "prompt": "What is the speaker's occupation?",
+          "choices": [
+            "A student",
+            "A teacher",
+            "A doctor"
+          ],
+          "answerIndex": 0,
+          "rationale": "わたしは がくせいです means 'I am a student'."
+        },
+        {
+          "id": "self-introduction-q2",
+          "prompt": "Which phrase is used when meeting someone for the first time?",
+          "choices": [
+            "こんばんは",
+            "はじめまして",
+            "さようなら"
+          ],
+          "answerIndex": 1,
+          "rationale": "はじめまして is used at a first meeting. こんばんは is an evening greeting and さようなら means goodbye."
+        }
+      ],
+      "glosses": [
+        {
+          "term": "はじめまして",
+          "gloss": "used when meeting someone for the first time"
+        },
+        {
+          "term": "よろしく おねがいします",
+          "gloss": "a polite phrase said when beginning a relationship"
+        }
+      ]
+    },
+    {
+      "id": "my-cat",
+      "title": "My cat",
+      "order": 2,
+      "level": "beginner-1",
+      "sourceNote": "Original curriculum content authored for Kotoba.",
+      "lines": [
+        {
+          "japanese": "わたしの うちに 猫が います。",
+          "reading": "watashi no uchi ni neko ga imasu",
+          "english": "There is a cat at my home.",
+          "kana": "わたしの うちに ねこが います。"
+        },
+        {
+          "japanese": "名前は ミケです。",
+          "reading": "namae wa mike desu",
+          "english": "Its name is Mike.",
+          "kana": "なまえは みけです。"
+        },
+        {
+          "japanese": "猫は おとなしいです。",
+          "reading": "neko wa otonashii desu",
+          "english": "The cat is gentle.",
+          "kana": "ねこは おとなしいです。"
+        },
+        {
+          "japanese": "わたしは 毎日 猫と あそびます。",
+          "reading": "watashi wa mainichi neko to asobimasu",
+          "english": "I play with the cat every day.",
+          "kana": "わたしは まいにち ねこと あそびます。"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "my-cat-q1",
+          "prompt": "What is the cat's name?",
+          "choices": [
+            "ミケ",
+            "クロ",
+            "シロ"
+          ],
+          "answerIndex": 0,
+          "rationale": "名前は ミケです means 'Its name is Mike'."
+        },
+        {
+          "id": "my-cat-q2",
+          "prompt": "What does the speaker do every day?",
+          "choices": [
+            "Reads a book",
+            "Plays with the cat",
+            "Goes to the library"
+          ],
+          "answerIndex": 1,
+          "rationale": "猫と あそびます means 'plays with the cat'."
+        }
+      ],
+      "glosses": [
+        {
+          "term": "と",
+          "gloss": "with (a companion)"
+        },
+        {
+          "term": "おとなしい",
+          "gloss": "gentle"
+        },
+        {
+          "term": "あそびます",
+          "gloss": "play"
+        }
+      ]
+    },
+    {
+      "id": "school-day",
+      "title": "A school day",
+      "order": 3,
+      "level": "beginner-2",
+      "sourceNote": "Original curriculum content authored for Kotoba.",
+      "lines": [
+        {
+          "japanese": "毎日 学校に 行きます。",
+          "reading": "mainichi gakkou ni ikimasu",
+          "english": "I go to school every day.",
+          "kana": "まいにち がっこうに いきます。"
+        },
+        {
+          "japanese": "図書館で 本を 読みます。",
+          "reading": "toshokan de hon o yomimasu",
+          "english": "I read books at the library.",
+          "kana": "としょかんで ほんを よみます。"
+        },
+        {
+          "japanese": "日本語を 勉強します。",
+          "reading": "nihongo o benkyou shimasu",
+          "english": "I study Japanese.",
+          "kana": "にほんごを べんきょうします。"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "school-day-q1",
+          "prompt": "Where does the speaker read books?",
+          "choices": [
+            "At school",
+            "At the library",
+            "At home"
+          ],
+          "answerIndex": 1,
+          "rationale": "図書館で 本を 読みます means 'reads books at the library'."
+        },
+        {
+          "id": "school-day-q2",
+          "prompt": "What does the speaker study?",
+          "choices": [
+            "English",
+            "Japanese",
+            "Math"
+          ],
+          "answerIndex": 1,
+          "rationale": "日本語を 勉強します means 'studies Japanese'."
+        }
+      ],
+      "glosses": [
+        {
+          "term": "図書館",
+          "gloss": "library"
+        },
+        {
+          "term": "勉強します",
+          "gloss": "study"
+        }
+      ]
+    },
+    {
+      "id": "morning",
+      "title": "Morning",
+      "order": 4,
+      "level": "beginner-2",
+      "sourceNote": "Original curriculum content authored for Kotoba.",
+      "lines": [
+        {
+          "japanese": "おはようございます。",
+          "reading": "ohayou gozaimasu",
+          "english": "Good morning.",
+          "kana": "おはようございます。"
+        },
+        {
+          "japanese": "朝、ごはんを たべます。",
+          "reading": "asa, gohan o tabemasu",
+          "english": "In the morning I eat a meal.",
+          "kana": "あさ、ごはんを たべます。"
+        },
+        {
+          "japanese": "それから 学校に 行きます。",
+          "reading": "sorekara gakkou ni ikimasu",
+          "english": "Then I go to school.",
+          "kana": "それから がっこうに いきます。"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "morning-q1",
+          "prompt": "What does the speaker do after eating?",
+          "choices": [
+            "Goes to school",
+            "Sleeps",
+            "Reads a book"
+          ],
+          "answerIndex": 0,
+          "rationale": "それから 学校に 行きます means 'then I go to school'."
+        },
+        {
+          "id": "morning-q2",
+          "prompt": "Which greeting fits this passage?",
+          "choices": [
+            "こんばんは",
+            "おはようございます",
+            "さようなら"
+          ],
+          "answerIndex": 1,
+          "rationale": "The passage is about the morning, so おはようございます fits."
+        }
+      ],
+      "glosses": [
+        {
+          "term": "それから",
+          "gloss": "then, after that"
+        },
+        {
+          "term": "朝",
+          "gloss": "morning"
+        }
+      ]
+    }
+  ]
+}

@@ -53,6 +53,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prepare offline tokenizer dictionary
+        run: npm run prepare:tokenizer
+
+      - name: Verify tokenizer assets
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dict = Join-Path 'resources' 'tokenizer' 'dict'
+          foreach ($file in @('base.dat.gz', 'tid.dat.gz', 'unk_pos.dat.gz')) {
+            if (-not (Test-Path (Join-Path $dict $file))) {
+              throw "Tokenizer dictionary file $file is missing; refusing to package."
+            }
+          }
+          if (-not (Test-Path (Join-Path 'resources' 'notices' 'IPADIC-NOTICE.txt'))) {
+            throw 'IPADIC notice is missing; refusing to package.'
+          }
+
       - name: Lint
         run: npm run lint
 

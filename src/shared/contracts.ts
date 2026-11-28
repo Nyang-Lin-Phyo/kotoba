@@ -91,6 +91,14 @@ export const CHANNELS = {
   grammarList: 'grammar:list',
   grammarDetail: 'grammar:detail',
   grammarAttempt: 'grammar:attempt',
+  immersionAnalyze: 'immersion:analyze',
+  immersionAnalysis: 'immersion:analysis',
+  immersionMine: 'immersion:mine',
+  immersionQueue: 'immersion:queue',
+  immersionQueueCount: 'immersion:queue-count',
+  immersionDismiss: 'immersion:dismiss',
+  mediaImport: 'media:import',
+  comprehensionSubmit: 'comprehension:submit',
   learningGetLesson: 'learning:get-lesson',
   learningIntroduce: 'learning:introduce',
   learningSetFamiliar: 'learning:set-familiar',
@@ -525,6 +533,93 @@ export type GrammarAttemptResult = {
   readonly correctCount: number;
 };
 
+export type TokenDTO = {
+  readonly position: number;
+  readonly surface: string;
+  readonly basicForm: string;
+  readonly reading: string;
+  readonly pos: string;
+  readonly wordType: string;
+  readonly entryId: string | null;
+  readonly candidates: readonly DictionaryResult[];
+  readonly knownReading: boolean;
+  readonly knownMeaning: boolean;
+};
+
+export type CoverageSummaryDTO = {
+  readonly eligible: number;
+  readonly excludedFunctionTokens: number;
+  readonly otherTokens: number;
+  readonly known: number;
+  readonly learning: number;
+  readonly unseen: number;
+  readonly unknown: number;
+  readonly readingCoverage: number;
+  readonly meaningCoverage: number;
+  readonly denominatorNote: string;
+};
+
+export type AnalysisDTO = {
+  readonly mediaId: string;
+  readonly title: string;
+  readonly sourceText: string;
+  readonly kind: 'paste' | 'subtitle' | 'text';
+  readonly tokens: readonly TokenDTO[];
+  readonly coverage: CoverageSummaryDTO;
+  readonly dictionaryRelease: string;
+  readonly tokenizerVersion: string;
+};
+
+export type ImmersionAnalyzeInput = {
+  readonly text: string;
+  readonly title: string;
+  readonly sourceName: string;
+  readonly kind: 'paste' | 'subtitle' | 'text';
+  readonly persist?: boolean;
+};
+
+export type ImmersionMineInput = {
+  readonly eventId: string;
+  readonly entryId: string;
+  readonly reading: string;
+  readonly sentence: string;
+  readonly sourceTitle: string;
+  readonly sourceType: 'paste' | 'subtitle' | 'passage';
+};
+
+export type MinedItemDTO = {
+  readonly id: string;
+  readonly entryId: string;
+  readonly itemKey: string;
+  readonly snapshot: DictionaryEntry;
+  readonly sentence: string;
+  readonly sourceTitle: string;
+  readonly sourceType: 'paste' | 'subtitle' | 'passage';
+  readonly createdDayKey: string;
+  readonly status: string;
+};
+
+export type MineResultDTO = {
+  readonly mined: boolean;
+  readonly duplicate: boolean;
+  readonly capReached: boolean;
+  readonly queueCount: number;
+  readonly item: MinedItemDTO | null;
+};
+
+export type ComprehensionInput = {
+  readonly eventId: string;
+  readonly skill: 'reading' | 'listening';
+  readonly materialId: string;
+  readonly exerciseId: string;
+  readonly answerIndex: number;
+};
+
+export type ComprehensionResultDTO = {
+  readonly correct: boolean;
+  readonly rationale: string;
+};
+
 export type LessonItem = {
   readonly itemKey: string;
   readonly form: string;
@@ -708,6 +803,16 @@ export type KotobaApi = {
     list(): Promise<Result<readonly GrammarUnitDTO[]>>;
     detail(input: DictionaryIdInput): Promise<Result<GrammarDetailDTO | null>>;
     attempt(input: GrammarAttemptInput): Promise<Result<GrammarAttemptResult>>;
+  };
+  immersionStudy: {
+    analyze(input: ImmersionAnalyzeInput): Promise<Result<AnalysisDTO>>;
+    analysis(input: { readonly id: string }): Promise<Result<AnalysisDTO | null>>;
+    mine(input: ImmersionMineInput): Promise<Result<MineResultDTO>>;
+    queue(input: { readonly offset: number; readonly limit: number }): Promise<Result<readonly MinedItemDTO[]>>;
+    queueCount(): Promise<Result<number>>;
+    dismiss(input: { readonly id: string }): Promise<Result<boolean>>;
+    importFile(): Promise<Result<AnalysisDTO | null>>;
+    comprehension(input: ComprehensionInput): Promise<Result<ComprehensionResultDTO>>;
   };
   learning: {
     getLesson(): Promise<Result<LessonResult>>;

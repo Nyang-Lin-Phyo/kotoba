@@ -6,7 +6,8 @@ const BASE_DIRECTIVES = [
   "base-uri 'none'",
   "form-action 'none'",
   "frame-ancestors 'none'",
-  "img-src 'self' data:",
+  "img-src 'self' data: blob:",
+  "media-src 'self' blob:",
   "font-src 'self'",
   "style-src 'self' 'unsafe-inline'",
 ];

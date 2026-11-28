@@ -16,6 +16,10 @@ import {
   type ImmersionCorrectDTO,
   type KanjiAttemptInput,
   type GrammarAttemptInput,
+  type ImmersionAnalyzeInput,
+  type ImmersionMineInput,
+  type ComprehensionInput,
+  type AnalysisDTO,
   type GoalVersion,
   type PlanPreview,
   type ProfileState,
@@ -33,6 +37,10 @@ import {
   immersionCorrectSchema,
   kanjiAttemptSchema,
   grammarAttemptSchema,
+  immersionAnalyzeSchema,
+  immersionMineSchema,
+  mediaIdSchema,
+  comprehensionSchema,
   paginationSchema,
   goalInputSchema,
   calendarDaySchema,
@@ -61,6 +69,7 @@ import {
   type RatingInput,
   type ReviewCardIdInput,
   type UndoReviewInput,
+  type MediaIdInput,
   type KanaLessonInput,
   type StudyStartInput,
   type AcknowledgeInterruptedInput,
@@ -81,9 +90,20 @@ import { createProfile, getProfileState, updateProfile } from './services/profil
 import { getDashboard, previewPlan, setGoalVersion } from './services/planner';
 import { getCalendarDay, getStats } from './services/stats';
 import type { TimerService } from './services/timer';
+import type { TokenizerService } from './services/tokenizer';
 import type { DictionaryService } from './services/dictionary';
 import type { CardFactory } from './services/learning';
 import { clearSchedulerCache } from './services/fsrsScheduler';
+import {
+  analyzeText,
+  dismissMined,
+  getAnalysis,
+  importSubtitleFile,
+  listMiningQueue,
+  countMiningQueue,
+  mineToken,
+  submitComprehension,
+} from './services/immersionStudy';
 import {
   getKanjiDetail,
   listPersonalKanji,
@@ -140,6 +160,7 @@ export type IpcDeps = {
   readonly now: () => number;
   readonly timer: TimerService;
   readonly dictionary: DictionaryService;
+  readonly tokenizer: TokenizerService;
   readonly makeCardFactory: (retention?: number) => Promise<CardFactory>;
 };
 
@@ -481,6 +502,70 @@ export function registerIpcHandlers(deps: IpcDeps): void {
     schema: grammarAttemptSchema,
     allowedOrigins,
     run: (input) => submitGrammarAttempt(db(), input, deps.now()),
+  });
+
+  registerHandler<ImmersionAnalyzeInput, ReturnType<typeof analyzeText>>({
+    channel: CHANNELS.immersionAnalyze,
+    schema: immersionAnalyzeSchema,
+    allowedOrigins,
+    run: (input) => analyzeText(db(), deps.dictionary, deps.tokenizer, input, deps.now()),
+  });
+
+  registerHandler<MediaIdInput, ReturnType<typeof getAnalysis>>({
+    channel: CHANNELS.immersionAnalysis,
+    schema: mediaIdSchema,
+    allowedOrigins,
+    run: (input) => getAnalysis(db(), deps.dictionary, input.id),
+  });
+
+  registerHandler<ImmersionMineInput, ReturnType<typeof mineToken>>({
+    channel: CHANNELS.immersionMine,
+    schema: immersionMineSchema,
+    allowedOrigins,
+    run: (input) => mineToken(db(), deps.dictionary, input, deps.now()),
+  });
+
+  registerHandler<{ readonly offset: number; readonly limit: number }, ReturnType<typeof listMiningQueue>>({
+    channel: CHANNELS.immersionQueue,
+    schema: paginationSchema,
+    allowedOrigins,
+    run: (input) => listMiningQueue(db(), input.offset, input.limit),
+  });
+
+  registerHandler<undefined, number>({
+    channel: CHANNELS.immersionQueueCount,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => countMiningQueue(db()),
+  });
+
+  registerHandler<MediaIdInput, boolean>({
+    channel: CHANNELS.immersionDismiss,
+    schema: mediaIdSchema,
+    allowedOrigins,
+    run: (input) => dismissMined(db(), input.id),
+  });
+
+  registerHandler<undefined, AnalysisDTO | null>({
+    channel: CHANNELS.mediaImport,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: async () => {
+      const result = await dialog.showOpenDialog({
+        title: 'Import Japanese text or subtitles',
+        filters: [{ name: 'Text and subtitles', extensions: ['srt', 'ass', 'txt'] }],
+        properties: ['openFile'],
+      });
+      if (result.canceled || result.filePaths.length !== 1) return null;
+      return importSubtitleFile(db(), deps.dictionary, deps.tokenizer, result.filePaths[0] ?? '', deps.now());
+    },
+  });
+
+  registerHandler<ComprehensionInput, ReturnType<typeof submitComprehension>>({
+    channel: CHANNELS.comprehensionSubmit,
+    schema: comprehensionSchema,
+    allowedOrigins,
+    run: (input) => submitComprehension(db(), input, deps.now()),
   });
 
   registerHandler<DictionarySearchInput, ReturnType<DictionaryService['search']>>({

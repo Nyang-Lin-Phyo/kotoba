@@ -61,6 +61,13 @@ The integration tests create their own temporary data directories; they never to
 
 ## Build
 
+Tokenizer assets are generated from the pinned kuromoji package before packaging:
+
+```bash
+npm run prepare:tokenizer
+```
+
+
 ```bash
 npm run package         # unpacked app in out/
 npm run make            # installer for the current OS (Windows: Squirrel)
@@ -142,6 +149,18 @@ recognition needs at least three unhinted correct answers on at least two days, 
 interval of seven days or more; a miss resets the streak. **Grammar** contains six original beginner units, opened in order as
 prerequisites are completed. Each unit has explanations, examples and multiple-choice exercises with
 answer explanations. Neither screen assigns a JLPT level.
+
+## Immersion and reading
+
+**Immersion** tokenizes pasted Japanese text or an imported local `.srt`/`.ass`/`.txt` file with the
+bundled offline tokenizer. Tap a token to see dictionary candidates and add at most three items a
+day to the mining queue; mined words leave the queue when you introduce them. Coverage counts
+content words only, reports unmapped tokens and is not a comprehension score.
+
+**Reading** has original graded passages with kana support and comprehension questions.
+**Listening** uses an installed Japanese OS voice when present and otherwise explains that audio is
+unavailable; the transcript and questions still work. **Speaking** offers shadowing with optional
+local recording that never leaves the computer.
 
 ## Building the dictionary
 

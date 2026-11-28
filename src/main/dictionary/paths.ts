@@ -24,3 +24,20 @@ export function resolveDictionaryPath(options: {
   }
   return path.resolve(options.appPath, 'resources', 'dictionaries', 'dictionary.db');
 }
+
+/** Directory holding the kuromoji.js IPADIC assets, bundled as an extra resource. */
+export function resolveTokenizerDir(options: {
+  readonly isPackaged: boolean;
+  readonly appPath: string;
+  readonly resourcesPath: string;
+  readonly env?: NodeJS.ProcessEnv;
+}): string {
+  const override = (options.env ?? process.env).KOTOBA_TOKENIZER_PATH?.trim();
+  if (override !== undefined && override.length > 0) {
+    return path.resolve(override);
+  }
+  if (options.isPackaged) {
+    return path.resolve(options.resourcesPath, 'tokenizer', 'dict');
+  }
+  return path.resolve(options.appPath, 'resources', 'tokenizer', 'dict');
+}

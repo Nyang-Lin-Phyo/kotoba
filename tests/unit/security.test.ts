@@ -36,6 +36,11 @@ describe('content security policy', () => {
     expect(directive(prod, 'frame-ancestors')).toBe("'none'");
   });
 
+  it('permits local blob playback for optional recordings but no remote media', () => {
+    expect(directive(prod, 'media-src')).toBe("'self' blob:");
+    expect(directive(prod, 'media-src')).not.toContain('https:');
+  });
+
   it('relaxes only the dev policy for Vite HMR', () => {
     const dev = cspFor(true);
     expect(directive(dev, 'connect-src')).toContain('ws://localhost');

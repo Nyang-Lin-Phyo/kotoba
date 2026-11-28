@@ -25,9 +25,17 @@ describe('sidebar model', () => {
     }
   });
 
+  it('exposes the M8 immersion routes as ready', () => {
+    const paths = entries
+      .filter((entry) => entry.kind === 'ready')
+      .map((entry) => (entry.kind === 'ready' ? entry.path : ''));
+    expect(paths).toEqual(
+      expect.arrayContaining(['/immersion', '/reading', '/listening', '/speaking']),
+    );
+  });
+
   it('tags every planned entry with the milestone that will implement it', () => {
     const planned = entries.filter((entry) => entry.kind === 'planned');
-    expect(planned.length).toBeGreaterThan(0);
     for (const entry of planned) {
       expect(entry.kind === 'planned' ? entry.milestone : '').toMatch(/^M\d+[a-z]?$/);
     }

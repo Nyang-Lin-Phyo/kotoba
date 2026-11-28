@@ -41,10 +41,10 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     title: 'Practice',
     entries: [
       { kind: 'ready', id: 'reviews', label: 'Reviews', path: '/reviews' },
-      { kind: 'planned', id: 'reading', label: 'Reading', milestone: 'M8' },
-      { kind: 'planned', id: 'listening', label: 'Listening', milestone: 'M8' },
-      { kind: 'planned', id: 'speaking', label: 'Speaking', milestone: 'M8' },
-      { kind: 'planned', id: 'immersion', label: 'Immersion', milestone: 'M8' },
+      { kind: 'ready', id: 'reading', label: 'Reading', path: '/reading' },
+      { kind: 'ready', id: 'listening', label: 'Listening', path: '/listening' },
+      { kind: 'ready', id: 'speaking', label: 'Speaking', path: '/speaking' },
+      { kind: 'ready', id: 'immersion', label: 'Immersion', path: '/immersion' },
     ],
   },
   {
