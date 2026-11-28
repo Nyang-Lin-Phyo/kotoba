@@ -8,6 +8,8 @@ import { OnboardingWizard } from './features/onboarding/OnboardingWizard';
 import { ProfileContext } from './lib/profileContext';
 import { CalendarPage } from './features/calendar/CalendarPage';
 import { DictionaryPage } from './features/dictionary/DictionaryPage';
+import { GrammarPage } from './features/grammar/GrammarPage';
+import { KanjiPage } from './features/kanji/KanjiPage';
 import { ReviewsPage } from './features/reviews/ReviewsPage';
 import { VocabularyPage } from './features/vocabulary/VocabularyPage';
 import { KanaPage } from './features/kana/KanaPage';
@@ -102,6 +104,8 @@ export function App() {
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/statistics" element={<StatisticsPage />} />
                 <Route path="/vocabulary" element={<VocabularyPage />} />
+                <Route path="/kanji" element={<KanjiPage />} />
+                <Route path="/grammar" element={<GrammarPage />} />
                 <Route path="/reviews" element={<ReviewsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="*" element={<NotFoundPage />} />

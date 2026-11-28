@@ -1,0 +1,180 @@
+{
+  "note": "Original beginner Japanese grammar units written for Kotoba. Explanations, examples and answer keys are authored here, not copied from any textbook or commercial curriculum. Readings are plain Hepburn romaji without macrons. These are approximations for learning, not JLPT level claims.",
+  "units": [
+    {
+      "id": "greetings",
+      "title": "Greetings and set phrases",
+      "order": 1,
+      "prerequisites": [],
+      "explanation": "Japanese has fixed, polite phrases used at particular times of day. こんにちは is used from late morning until around sunset, おはようございます in the morning, and こんばんは in the evening. ありがとうございます thanks someone, and すみません gets attention or apologizes. Learn these as whole phrases first; you do not need to analyse their grammar yet.",
+      "examples": [
+        { "japanese": "こんにちは。", "reading": "konnichiwa", "english": "Hello / Good day." },
+        { "japanese": "おはようございます。", "reading": "ohayou gozaimasu", "english": "Good morning." },
+        { "japanese": "ありがとうございます。", "reading": "arigatou gozaimasu", "english": "Thank you." },
+        { "japanese": "すみません。", "reading": "sumimasen", "english": "Excuse me / Sorry." }
+      ],
+      "exercises": [
+        {
+          "id": "greetings-q1",
+          "prompt": "Which phrase means \"thank you\"?",
+          "choices": ["こんにちは", "ありがとうございます", "さようなら"],
+          "answerIndex": 1,
+          "rationale": "ありがとうございます (arigatou gozaimasu) is the polite way to say thank you. こんにちは is a greeting and さようなら means goodbye."
+        },
+        {
+          "id": "greetings-q2",
+          "prompt": "It is 8 in the morning. Which greeting fits?",
+          "choices": ["こんばんは", "おはようございます", "こんにちは"],
+          "answerIndex": 1,
+          "rationale": "おはようございます is the morning greeting. こんばんは is for the evening and こんにちは for later in the day."
+        }
+      ],
+      "sourceNote": "Original curriculum content authored for Kotoba."
+    },
+    {
+      "id": "desu-masu",
+      "title": "です and ます: polite sentences",
+      "order": 2,
+      "prerequisites": ["greetings"],
+      "explanation": "です (desu) is a polite ending that means roughly 'to be'. It follows a noun: 学生です means 'is a student'. ます (masu) is the polite ending for many verbs: たべます means 'eat'. Putting です or ます at the end of a sentence makes it polite without changing its basic meaning.",
+      "examples": [
+        { "japanese": "わたしは 学生です。", "reading": "watashi wa gakusei desu", "english": "I am a student." },
+        { "japanese": "毎日 ごはんを たべます。", "reading": "mainichi gohan o tabemasu", "english": "I eat meals every day." },
+        { "japanese": "これは 本です。", "reading": "kore wa hon desu", "english": "This is a book." }
+      ],
+      "exercises": [
+        {
+          "id": "desu-masu-q1",
+          "prompt": "Which ending makes a noun sentence polite?",
+          "choices": ["です", "でも", "から"],
+          "answerIndex": 0,
+          "rationale": "です is the polite 'to be' ending. でも means 'but' and から means 'because', so neither ends a polite noun sentence."
+        },
+        {
+          "id": "desu-masu-q2",
+          "prompt": "How do you say \"I am a student\" politely?",
+          "choices": ["わたしは 学生ます", "わたしは 学生です", "わたしが 学生だ"],
+          "answerIndex": 1,
+          "rationale": "学生 is a noun, so it takes です, not the verb ending ます. The plain form だ is not polite."
+        }
+      ],
+      "sourceNote": "Original curriculum content authored for Kotoba."
+    },
+    {
+      "id": "wa-ga",
+      "title": "は and が: topic and subject",
+      "order": 3,
+      "prerequisites": ["desu-masu"],
+      "explanation": "は (pronounced 'wa') marks the topic: what the sentence is about. が marks a grammatical subject with verbs, often something new or the direct answer to 'who?' or 'what?'. With すきです, が also marks the thing liked rather than a subject: in わたしは 猫が すきです, わたし is the topic and 猫 is what is liked.",
+      "examples": [
+        { "japanese": "わたしは 猫が すきです。", "reading": "watashi wa neko ga suki desu", "english": "I like cats." },
+        { "japanese": "誰が 来ましたか。", "reading": "dare ga kimashita ka", "english": "Who came?" },
+        { "japanese": "李さんが 来ました。", "reading": "ri-san ga kimashita", "english": "Mr. Ri came." }
+      ],
+      "exercises": [
+        {
+          "id": "wa-ga-q1",
+          "prompt": "In わたしは 猫が すきです, what does は mark?",
+          "choices": ["the topic, わたし", "the thing liked, 猫", "the adjective すき"],
+          "answerIndex": 0,
+          "rationale": "は marks the topic of the sentence, which here is わたし (I). 猫 takes が because it is what is liked. すき is a な-adjective, not a verb."
+        },
+        {
+          "id": "wa-ga-q2",
+          "prompt": "You are giving the neutral answer to \"Who came?\". Which particle marks the person?",
+          "choices": ["は", "が", "を"],
+          "answerIndex": 1,
+          "rationale": "When answering a 'who?' question, the new information is marked with が: 李さんが 来ました。"
+        }
+      ],
+      "sourceNote": "Original curriculum content authored for Kotoba."
+    },
+    {
+      "id": "particles-o-ni-de",
+      "title": "を, に and で",
+      "order": 4,
+      "prerequisites": ["desu-masu"],
+      "explanation": "を (pronounced 'o') marks the direct object of an action verb, に marks a destination or a point in time, and で marks the place where something happens or the means used. Compare 本を 読みます (read a book), 学校に 行きます (go to school) and 図書館で 勉強します (study at the library).",
+      "examples": [
+        { "japanese": "本を 読みます。", "reading": "hon o yomimasu", "english": "I read a book." },
+        { "japanese": "学校に 行きます。", "reading": "gakkou ni ikimasu", "english": "I go to school." },
+        { "japanese": "図書館で 勉強します。", "reading": "toshokan de benkyou shimasu", "english": "I study at the library." }
+      ],
+      "exercises": [
+        {
+          "id": "particles-o-ni-de-q1",
+          "prompt": "Which particle marks the object of たべます (eat)?",
+          "choices": ["に", "を", "で"],
+          "answerIndex": 1,
+          "rationale": "The thing eaten is the direct object, so it takes を: ごはんを たべます。"
+        },
+        {
+          "id": "particles-o-ni-de-q2",
+          "prompt": "学校___行きます (\"go to school\"). Which particle fits?",
+          "choices": ["を", "で", "に"],
+          "answerIndex": 2,
+          "rationale": "学校 is a destination, and destinations take に: 学校に 行きます。"
+        }
+      ],
+      "sourceNote": "Original curriculum content authored for Kotoba."
+    },
+    {
+      "id": "questions-demonstratives",
+      "title": "Questions and これ / それ / あれ",
+      "order": 5,
+      "prerequisites": ["wa-ga"],
+      "explanation": "これ means 'this' (near the speaker), それ means 'that' (near the listener) and あれ means 'that over there'. A polite question is made by adding か at the end of a sentence: これは 何ですか means 'What is this?'. In casual speech a rising intonation can replace か.",
+      "examples": [
+        { "japanese": "これは 何ですか。", "reading": "kore wa nan desu ka", "english": "What is this?" },
+        { "japanese": "それは 本です。", "reading": "sore wa hon desu", "english": "That (near you) is a book." },
+        { "japanese": "あそこに 猫が います。", "reading": "asoko ni neko ga imasu", "english": "There is a cat over there." }
+      ],
+      "exercises": [
+        {
+          "id": "questions-demonstratives-q1",
+          "prompt": "Which word means 'this', near the speaker?",
+          "choices": ["それ", "これ", "あれ"],
+          "answerIndex": 1,
+          "rationale": "これ is near the speaker, それ is near the listener and あれ is far from both."
+        },
+        {
+          "id": "questions-demonstratives-q2",
+          "prompt": "Which ending marks a question?",
+          "choices": ["Add か at the end", "Add です at the start", "Add ね at the end"],
+          "answerIndex": 0,
+          "rationale": "か marks a question, and です makes it polite: これは 本ですか。 ね asks for agreement rather than information."
+        }
+      ],
+      "sourceNote": "Original curriculum content authored for Kotoba."
+    },
+    {
+      "id": "adjectives",
+      "title": "い and な adjectives",
+      "order": 6,
+      "prerequisites": ["wa-ga"],
+      "explanation": "い-adjectives end in い and change their ending: おいしい (delicious), おいしくない (not delicious), おいしかった (was delicious). な-adjectives such as げんき use な before a noun: げんきな 子 (an energetic child). げんき can also mean 'fine or healthy'. Both adjective types can end a polite sentence with です.",
+      "examples": [
+        { "japanese": "この 料理は おいしいです。", "reading": "kono ryouri wa oishii desu", "english": "This dish is delicious." },
+        { "japanese": "あの 料理は おいしくないです。", "reading": "ano ryouri wa oishikunai desu", "english": "That dish is not delicious." },
+        { "japanese": "げんきな 子です。", "reading": "genki na ko desu", "english": "He or she is an energetic child." }
+      ],
+      "exercises": [
+        {
+          "id": "adjectives-q1",
+          "prompt": "What is the negative form of the い-adjective おいしい?",
+          "choices": ["おいしくない", "おいしない", "おいしいない"],
+          "answerIndex": 0,
+          "rationale": "い-adjectives become negative by changing い to くない: おいしくない."
+        },
+        {
+          "id": "adjectives-q2",
+          "prompt": "Which word needs な before a noun?",
+          "choices": ["おいしい", "げんき", "たかい"],
+          "answerIndex": 1,
+          "rationale": "げんき is a な-adjective: げんきな 子. おいしい and たかい are い-adjectives and go straight before a noun."
+        }
+      ],
+      "sourceNote": "Original curriculum content authored for Kotoba."
+    }
+  ]
+}

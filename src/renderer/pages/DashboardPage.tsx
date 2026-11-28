@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { formatDayKey } from '../../shared/date';
 import { ACTIVITY_LABELS, PHASE_LABELS } from '../../shared/goals';
 import { ExternalLogCard } from '../features/immersion/ExternalLogCard';
+import { M7Summary } from '../features/progress/M7Summary';
 import { useAsync } from '../lib/useAsync';
 
 export function DashboardPage() {
@@ -256,6 +257,8 @@ export function DashboardPage() {
           </p>
         </article>
       )}
+
+      <M7Summary />
 
       <ExternalLogCard />
 

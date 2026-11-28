@@ -52,6 +52,7 @@ invented: the `jlpt_tags` table exists but is empty.
 
 ## Original data
 
-`data/curriculum/kana.json`, `data/curriculum/beginner_words.json` and
+`data/curriculum/kana.json`, `data/curriculum/beginner_words.json`,
+`data/curriculum/kana_words.json`, `data/curriculum/grammar_units.json` and
 `data/fixtures/dictionary_fixture.json` are original data authored for this project. The fixture is
 synthetic and must never be shipped in a packaged build.

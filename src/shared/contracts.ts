@@ -85,6 +85,12 @@ export const CHANNELS = {
   dictionaryGetKanji: 'dictionary:get-kanji',
   dictionaryGetKana: 'dictionary:get-kana',
   dictionaryMetadata: 'dictionary:metadata',
+  kanjiList: 'kanji:list',
+  kanjiDetail: 'kanji:detail',
+  kanjiAttempt: 'kanji:attempt',
+  grammarList: 'grammar:list',
+  grammarDetail: 'grammar:detail',
+  grammarAttempt: 'grammar:attempt',
   learningGetLesson: 'learning:get-lesson',
   learningIntroduce: 'learning:introduce',
   learningSetFamiliar: 'learning:set-familiar',
@@ -444,6 +450,81 @@ export type ImmersionCorrectDTO = {
 
 export type ExportInput = { readonly format: 'json' | 'csv'; readonly includeNotes: boolean };
 
+export type PersonalKanjiDTO = {
+  readonly literal: string;
+  readonly wordContext: string;
+  readonly status: 'encountered' | 'learning' | 'verified' | 'struggling';
+  readonly verified: boolean;
+  readonly dueDay: string | null;
+  readonly intervalDays: number;
+  readonly reps: number;
+  readonly lapses: number;
+  readonly firstDayKey: string;
+};
+
+export type KanjiAttemptDTO = {
+  readonly dayKey: string;
+  readonly correct: boolean;
+  readonly hintUsed: boolean;
+  readonly responseMs: number;
+  readonly wordContext: string;
+};
+
+export type KanjiDetailDTO = PersonalKanjiDTO & {
+  readonly dictionary: DictionaryKanji | null;
+  readonly attempts: readonly KanjiAttemptDTO[];
+  readonly quiz: { readonly word: string; readonly reading: string; readonly meaning: string } | null;
+  readonly ruleNote: string;
+};
+
+export type KanjiAttemptInput = {
+  readonly eventId: string;
+  readonly literal: string;
+  readonly correct: boolean;
+  readonly hintUsed: boolean;
+  readonly responseMs: number;
+  readonly wordContext: string;
+};
+
+export type GrammarUnitDTO = {
+  readonly id: string;
+  readonly title: string;
+  readonly order: number;
+  readonly prerequisites: readonly string[];
+  readonly explanation: string;
+  readonly unlocked: boolean;
+  readonly status: 'available' | 'in-progress' | 'completed' | 'locked';
+  readonly correctExerciseIds: readonly string[];
+};
+
+export type GrammarAttemptDTO = {
+  readonly exerciseId: string;
+  readonly dayKey: string;
+  readonly correct: boolean;
+  readonly answer: string;
+};
+
+export type GrammarDetailDTO = GrammarUnitDTO & {
+  readonly unit: import('./grammarData').GrammarUnit;
+  readonly attempts: readonly GrammarAttemptDTO[];
+};
+
+export type GrammarAttemptInput = {
+  readonly eventId: string;
+  readonly unitId: string;
+  readonly exerciseId: string;
+  readonly answerIndex: number;
+};
+
+export type GrammarAttemptResult = {
+  readonly correct: boolean;
+  readonly correctIndex: number;
+  readonly rationale: string;
+  readonly status: 'available' | 'in-progress' | 'completed';
+  readonly attempts: number;
+  readonly correctCount: number;
+};
+
 export type LessonItem = {
   readonly itemKey: string;
   readonly form: string;
@@ -617,6 +698,16 @@ export type KotobaApi = {
     getKanji(input: DictionaryIdInput): Promise<Result<DictionaryKanji | null>>;
     getKana(input: DictionaryIdInput): Promise<Result<DictionaryKana | null>>;
     metadata(): Promise<Result<DictionaryMetadata>>;
+  };
+  kanji: {
+    list(): Promise<Result<readonly PersonalKanjiDTO[]>>;
+    detail(input: DictionaryIdInput): Promise<Result<KanjiDetailDTO | null>>;
+    attempt(input: KanjiAttemptInput): Promise<Result<PersonalKanjiDTO>>;
+  };
+  grammar: {
+    list(): Promise<Result<readonly GrammarUnitDTO[]>>;
+    detail(input: DictionaryIdInput): Promise<Result<GrammarDetailDTO | null>>;
+    attempt(input: GrammarAttemptInput): Promise<Result<GrammarAttemptResult>>;
   };
   learning: {
     getLesson(): Promise<Result<LessonResult>>;

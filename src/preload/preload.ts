@@ -78,6 +78,16 @@ const api: KotobaApi = {
     getKana: (input) => invoke(CHANNELS.dictionaryGetKana, input),
     metadata: () => invoke(CHANNELS.dictionaryMetadata),
   },
+  kanji: {
+    list: () => invoke(CHANNELS.kanjiList),
+    detail: (input) => invoke(CHANNELS.kanjiDetail, input),
+    attempt: (input) => invoke(CHANNELS.kanjiAttempt, input),
+  },
+  grammar: {
+    list: () => invoke(CHANNELS.grammarList),
+    detail: (input) => invoke(CHANNELS.grammarDetail, input),
+    attempt: (input) => invoke(CHANNELS.grammarAttempt, input),
+  },
 };
 
 contextBridge.exposeInMainWorld('kotoba', api);

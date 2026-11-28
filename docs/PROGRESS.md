@@ -962,3 +962,44 @@ A fresh reviewer found one Critical and three Important issues, all fixed with t
 - The tracking disclosure now states that deliberate manual logs are included and passive ones excluded. SQL ranges were made half-open so tomorrow's activity cannot leak into today's stats.
 
 Final checks: lint clean, typecheck exit 0, **34 files / 245 tests**, packaged successfully. CDP confirmed Dashboard and Statistics both report 40 deliberate minutes for the current day.
+
+---
+
+## M7 — Kanji from vocabulary and original grammar
+
+Status: complete on Linux; Windows CI not re-run for this change. Profile schema version **5**.
+
+### Implemented
+
+- Migration v5: `user_kanji`, `kanji_attempts`, `grammar_progress`, `grammar_attempts` with profile-scoped unique keys and indexes.
+- Kanji are discovered from the learner's introduced vocabulary snapshots, not from an isolated list. Each character shows its source word, dictionary readings/meanings when present, and an honest "not listed" message when absent.
+- Recognition check: type the source word's reading in kana or romaji (WanaKana normalization); correct/hinted state is recorded with response time and a UUID `eventId` for idempotent replay. `kanji-interval-v1` ladder: 1, 1, 3, 7, 14, 30 days, based on the current unhinted streak; a miss or hinted answer resets it to one day.
+- `kanjiRules.ts` keeps encountered separate from verified. Verified recognition requires at least three unhinted correct answers on at least two distinct days, the latest correct, and an interval of at least seven days. A lapse resets both the streak and the interval. This is slightly stricter than the two-success wording in the design note; the UI states the actual rule.
+- Original grammar curriculum: six beginner units (`data/curriculum/grammar_units.json`) with explanations, examples, answer keys, rationales and prerequisites. Units unlock only when all prerequisites are complete; exercises persist and completion requires every exercise correct. No JLPT claims.
+- New `/kanji` and `/grammar` routes, enabled sidebar entries, Dashboard/Profile summary with real counts and next actions. UI follows the existing neutral design language (`docs/superpowers/unslop-m7-ui.md`).
+
+### Japanese content review
+
+A read-only review of the six units found no Critical issues and confirmed all answer keys and romaji readings. One Important issue was fixed: が with すきです marks the thing liked, not a grammatical subject, and すき is a な-adjective rather than a verb. Polish fixes: こんにちは time range, neutral-answer wording, か vs です question marking, げんき meanings, natural あそこに 猫が います, and ごはん as meals.
+
+### Verification
+
+lint clean, typecheck exit 0, **39 files / 265 tests**, Python suite 23 tests, packaged successfully. Live CDP on WSLg: v4→v5 upgrade with a pre-migration backup; `/kanji` discovered 御 and 願 from the dev profile's introduced word お願いします; a typed-reading attempt was stored once (0→1) with status `learning` and survived an app restart; `/grammar` showed unit 1 available and units 2–6 locked, an exercise attempt was stored as `in-progress`, and unit 2 stayed locked after only one of two correct answers.
+
+### Known limitations
+
+Stroke-order animation is deferred (optional in AGENTS.md). Kanji verification uses a documented fixed ladder rather than FSRS; no optimizer. Grammar exercises are multiple-choice with curated keys, not free-text grading. Windows CI and native installer verification remain pending for this change.
+
+Final checks: lint clean, typecheck exit 0, **39 files / 265 tests**, packaged successfully.
+
+### Final review fixes
+
+A fresh code review found three Important issues, all fixed with regression tests:
+
+- After the kanji answer was revealed, Check remained live and could record another unhinted success. Check and Show answer are now disabled once an attempt is submitted or the answer is revealed, and any revealed answer is submitted as hinted.
+- The interval ladder counted lifetime successes, so one success after a lapse immediately restored "verified recognition" with a long interval. It now uses the current unhinted streak; a miss or hinted answer resets it to one day.
+- There was no automated v4→v5 upgrade-with-data or profile-isolation test. A seeded v4 database with two profiles and an immersion log now verifies data preservation, a pre-upgrade backup and per-profile kanji isolation.
+
+Minors fixed: attempts for characters not discovered in introduced words are rejected, replayed event ids are type-checked, the submit response uses the same status as list/detail, `firstDayKey` comes from the word's introduction day, the Dashboard next-kanji action is due-aware, and the summary has a real error state. The rule note in the app now discloses lapse behavior.
+
+Final checks after fixes: lint clean, typecheck exit 0, **39 files / 265 tests**, packaged successfully.

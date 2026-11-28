@@ -206,6 +206,24 @@ export const libraryQuerySchema = z.object({
   limit: z.number().int().min(1).max(100),
 });
 
+export const kanjiAttemptSchema = z.object({
+  eventId: z.string().uuid(),
+  literal: z.string().regex(/^[\u3400-\u9FFF]$/),
+  correct: z.boolean(),
+  hintUsed: z.boolean(),
+  responseMs: z.number().int().min(0).max(600000),
+  wordContext: z.string().max(80),
+});
+
+export const grammarAttemptSchema = z.object({
+  eventId: z.string().uuid(),
+  unitId: z.string().min(1).max(64),
+  exerciseId: z.string().min(1).max(64),
+  answerIndex: z.number().int().min(0).max(20),
+});
+
+export type KanjiAttemptInput = z.infer<typeof kanjiAttemptSchema>;
+export type GrammarAttemptInput = z.infer<typeof grammarAttemptSchema>;
 export type StudyStartInput = z.infer<typeof studyStartSchema>;
 export type AcknowledgeInterruptedInput = z.infer<typeof acknowledgeInterruptedSchema>;
 export type DictionarySearchInput = z.infer<typeof dictionarySearchSchema>;

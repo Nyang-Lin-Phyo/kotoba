@@ -1344,3 +1344,198 @@ body {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- kanji and grammar (M7) ---------- */
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.page-count {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.jp-text {
+  font-family: var(--font-jp);
+  font-size: 18px;
+}
+
+.unhinted-mark {
+  margin-left: var(--space-2);
+  color: var(--accent-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+
+.kanji-status {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.kanji-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.kanji-glyph {
+  flex: 0 0 auto;
+  width: 72px;
+  font-family: var(--font-jp);
+  font-size: 64px;
+  line-height: 1;
+  text-align: center;
+}
+
+.kanji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-2);
+}
+
+.kanji-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-start;
+  min-height: 132px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.kanji-cell:hover,
+.kanji-cell--selected {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.kanji-cell-glyph {
+  font-family: var(--font-jp);
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.kanji-cell-word {
+  font-family: var(--font-jp);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.quiz-block {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.kanji-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.lesson-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.lesson-explanation,
+.lesson-examples {
+  margin-top: var(--space-4);
+}
+
+.lesson-jp {
+  font-size: 19px;
+}
+
+.lesson-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.lesson-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 36px;
+  padding: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lesson-row:hover:not(:disabled),
+.lesson-row--selected {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.lesson-row:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.lesson-order {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.lesson-title {
+  font-size: 14px;
+}
+
+.lesson-status {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.lesson-lock {
+  margin: 0 0 var(--space-2) 40px;
+  font-size: 12px;
+}
+
+.lesson-choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.lesson-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 32px;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.lesson-choice:hover {
+  border-color: var(--accent);
+}

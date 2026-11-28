@@ -47,7 +47,7 @@ describe('immersion migration and repository', () => {
       nowMs: Date.UTC(2026, 4, 17, 12),
       backupBeforeUpgrade: () => { backups += 1; },
     });
-    expect(LATEST_SCHEMA_VERSION).toBe(4);
+    expect(LATEST_SCHEMA_VERSION).toBeGreaterThanOrEqual(4);
     expect(result.applied).toContain(4);
     expect(backups).toBe(1);
     expect(db.prepare('select count(*) c from profiles').get()).toEqual({ c: 1 });

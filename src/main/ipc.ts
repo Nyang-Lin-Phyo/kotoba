@@ -14,6 +14,8 @@ import {
   type ExportInput,
   type ImmersionAddDTO,
   type ImmersionCorrectDTO,
+  type KanjiAttemptInput,
+  type GrammarAttemptInput,
   type GoalVersion,
   type PlanPreview,
   type ProfileState,
@@ -29,6 +31,8 @@ import {
   exportInputSchema,
   immersionAddSchema,
   immersionCorrectSchema,
+  kanjiAttemptSchema,
+  grammarAttemptSchema,
   paginationSchema,
   goalInputSchema,
   calendarDaySchema,
@@ -80,6 +84,16 @@ import type { TimerService } from './services/timer';
 import type { DictionaryService } from './services/dictionary';
 import type { CardFactory } from './services/learning';
 import { clearSchedulerCache } from './services/fsrsScheduler';
+import {
+  getKanjiDetail,
+  listPersonalKanji,
+  submitKanjiAttempt,
+} from './services/kanjiStudy';
+import {
+  getGrammarDetail,
+  listGrammarUnits,
+  submitGrammarAttempt,
+} from './services/grammarStudy';
 import { addExternalLog, correctExternalLog, listExternalLogs } from './services/immersion';
 import { buildExportPayload, writeProgressExport } from './services/progressExport';
 import {
@@ -425,6 +439,48 @@ export function registerIpcHandlers(deps: IpcDeps): void {
       writeProgressExport(payload, input.format, input.includeNotes, result.filePath);
       return { saved: true };
     },
+  });
+
+  registerHandler<undefined, ReturnType<typeof listPersonalKanji>>({
+    channel: CHANNELS.kanjiList,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => listPersonalKanji(db(), deps.now()),
+  });
+
+  registerHandler<DictionaryIdInput, ReturnType<typeof getKanjiDetail>>({
+    channel: CHANNELS.kanjiDetail,
+    schema: dictionaryIdSchema,
+    allowedOrigins,
+    run: (input) => getKanjiDetail(db(), (literal) => deps.dictionary.getKanji(literal), input.id, deps.now()),
+  });
+
+  registerHandler<KanjiAttemptInput, ReturnType<typeof submitKanjiAttempt>>({
+    channel: CHANNELS.kanjiAttempt,
+    schema: kanjiAttemptSchema,
+    allowedOrigins,
+    run: (input) => submitKanjiAttempt(db(), input, deps.now()),
+  });
+
+  registerHandler<undefined, ReturnType<typeof listGrammarUnits>>({
+    channel: CHANNELS.grammarList,
+    schema: noInputSchema,
+    allowedOrigins,
+    run: () => listGrammarUnits(db()),
+  });
+
+  registerHandler<DictionaryIdInput, ReturnType<typeof getGrammarDetail>>({
+    channel: CHANNELS.grammarDetail,
+    schema: dictionaryIdSchema,
+    allowedOrigins,
+    run: (input) => getGrammarDetail(db(), input.id),
+  });
+
+  registerHandler<GrammarAttemptInput, ReturnType<typeof submitGrammarAttempt>>({
+    channel: CHANNELS.grammarAttempt,
+    schema: grammarAttemptSchema,
+    allowedOrigins,
+    run: (input) => submitGrammarAttempt(db(), input, deps.now()),
   });
 
   registerHandler<DictionarySearchInput, ReturnType<DictionaryService['search']>>({

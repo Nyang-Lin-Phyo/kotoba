@@ -134,6 +134,15 @@ logged but never count as verified recall. Undo restores prior state and keeps a
 Desired retention is a per-profile setting in Settings (0.80–0.95); it affects future scheduling only
 and never reschedules cards you already have.
 
+## Kanji and grammar
+
+**Kanji** collects characters from words you have introduced, with their source word and dictionary
+readings when available. Practise a character by typing the reading of its source word; verified
+recognition needs at least three unhinted correct answers on at least two days, with a current
+interval of seven days or more; a miss resets the streak. **Grammar** contains six original beginner units, opened in order as
+prerequisites are completed. Each unit has explanations, examples and multiple-choice exercises with
+answer explanations. Neither screen assigns a JLPT level.
+
 ## Building the dictionary
 
 No Python packages beyond the standard library are needed. From the repo root:

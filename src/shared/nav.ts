@@ -32,8 +32,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { kind: 'ready', id: 'hiragana', label: 'Hiragana', path: '/hiragana' },
       { kind: 'ready', id: 'katakana', label: 'Katakana', path: '/katakana' },
       { kind: 'ready', id: 'vocabulary', label: 'Vocabulary', path: '/vocabulary' },
-      { kind: 'planned', id: 'kanji', label: 'Kanji', milestone: 'M7' },
-      { kind: 'planned', id: 'grammar', label: 'Grammar', milestone: 'M7' },
+      { kind: 'ready', id: 'kanji', label: 'Kanji', path: '/kanji' },
+      { kind: 'ready', id: 'grammar', label: 'Grammar', path: '/grammar' },
     ],
   },
   {
